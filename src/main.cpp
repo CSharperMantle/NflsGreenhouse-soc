@@ -20,6 +20,9 @@ static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 static LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 static DHT *airSensor = new DHT();
 
+// For reminder
+void pinTwoInterruptHandler();
+
 void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
