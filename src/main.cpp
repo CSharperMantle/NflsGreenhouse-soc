@@ -39,7 +39,7 @@ void initSerial() {
 void initEthernet() {
     Serial.println("Initializing Ethernet");
     for (int index = 1; index <= 5; index++) {
-        if (Ethernet.begin(mac) == 0) 
+        if (Ethernet.begin(mac) == 0)
             Serial.println("DHCP failed. Retry " + index);
         else {
             Serial.println("DHCP OK.");
@@ -54,12 +54,12 @@ void initEthernet() {
             Serial.println("Test connection established.");
             ethernetClient->stop();
             Serial.println("Test connection closed.");
-        } 
+        }
         else
         {
             Serial.println("Test connection broken. Retry " + index);
         }
-        
+
     }
     ethernetClient->flush();
     Serial.println("Done.");
@@ -82,7 +82,8 @@ void initDht() {
 
 void readEthernet() {
     Serial.println("Reading Ethernet");
-    
+    //TODO: Complete method.
+    Serial.println("Done.");
 }
 
 //Main methods
@@ -102,4 +103,3 @@ void setup() {
 void loop() {
     // put your main code here, to run repeatedly:
 }
-
