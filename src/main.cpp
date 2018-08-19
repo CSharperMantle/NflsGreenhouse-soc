@@ -9,6 +9,13 @@
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 
+struct SensorValue {
+    float airHumidity;
+    float airTemperature;
+    int lightValue;
+    int groundHumValue;
+} sensorValue;
+
 static const int InterruptDetectPin = 2;
 static const int relayOnePin = 22;
 static const int relayTwoPin = 23;
@@ -54,14 +61,14 @@ void initEthernet() {
             Serial.println("Test connection established.");
             ethernetClient->stop();
             Serial.println("Test connection closed.");
+            ethernetClient->flush();
+            Serial.println("Test connection flushed.");
         }
         else
         {
             Serial.println("Test connection broken. Retry " + index);
         }
-
     }
-    ethernetClient->flush();
     Serial.println("Done.");
 }
 
@@ -83,6 +90,25 @@ void initDht() {
 void readEthernet() {
     Serial.println("Reading Ethernet");
     //TODO: Complete method.
+    
+    if (!ethernetClient->connected()) {
+        Serial.println("Not connected.");
+        Serial.println("Done.");
+        return;
+    }
+
+    if (ethernetClient->available()) {
+        byte begin[1];
+        ethernetClient->readBytes(begin, 1);
+        
+        if (begin[0] == 0xf1) {
+            /* code */
+        }
+
+        
+        
+    }
+    
     Serial.println("Done.");
 }
 
