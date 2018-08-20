@@ -104,8 +104,6 @@ void readEthernet() {
         if (begin[0] == 0xf1) {
             /* code */
         }
-
-        
         
     }
     
