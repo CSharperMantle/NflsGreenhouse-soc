@@ -1,7 +1,10 @@
+#define DEBUG
+
 #define PT_USE_SEM
 #define PT_USE_TIMER
 
 #include <Arduino.h>
+#include <WString.h>
 #include <utility/w5100.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
@@ -24,8 +27,8 @@ static const int dhtPin = 25;
 static const int lightSensorPin = A0;
 static const int groundHumSensorPin = A1;
 
-static const char *serverAddress = "192.168.1.101";
-static const int serverPort = 80;
+static const char *serverAddress = "192.168.1.102";
+static const int serverPort = 20000;
 static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 static LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
@@ -38,18 +41,22 @@ void pinTwoInterruptHandler() {
 }
 
 void initSerial() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.flush();
-    Serial.println("Initializing");
+    Serial.println("Serial opened.");
 }
 
 void initEthernet() {
     Serial.println("Initializing Ethernet");
     for (int index = 1; index <= 5; index++) {
         if (Ethernet.begin(mac) == 0)
-            Serial.println("DHCP failed. Retry " + index);
+            Serial.println(String("DHCP failed. Retry ") + String(index));
         else {
             Serial.println("DHCP OK.");
+            Serial.println("    Ethernet information: IP, DNS, Gateway");
+            Serial.println(Ethernet.localIP());
+            Serial.println(Ethernet.dnsServerIP());
+            Serial.println(Ethernet.gatewayIP());
             break;
         }
     }
@@ -63,10 +70,11 @@ void initEthernet() {
             Serial.println("Test connection closed.");
             ethernetClient->flush();
             Serial.println("Test connection flushed.");
+            break;
         }
         else
         {
-            Serial.println("Test connection broken. Retry " + index);
+            Serial.println(String("Test connection broken. Retry ") + String(index));
         }
     }
     Serial.println("Done.");
@@ -90,7 +98,9 @@ void initDht() {
 void readEthernet() {
     Serial.println("Reading Ethernet");
     //TODO: Complete method.
-    
+#ifdef DEBUG
+    Serial.println(ethernetClient->readStringUntil('\n'));
+#elif defined(RELEASE) /* DEBUG */
     if (!ethernetClient->connected()) {
         Serial.println("Not connected.");
         Serial.println("Done.");
@@ -102,12 +112,26 @@ void readEthernet() {
         ethernetClient->readBytes(begin, 1);
         
         if (begin[0] == 0xf1) {
-            /* code */
+            /* TODO: Handle data packet. */
         }
-        
+      
     }
-    
+#endif /* defined(RELEASE) */      
     Serial.println("Done.");
+}
+
+void writeEthernet(const byte *buffer) {
+    Serial.println("Writing Ethernet");
+#ifdef DEBUG
+    ethernetClient->print("Hello world!");
+#elif defined(RELEASE) /* DEBUG */
+    ethernetClient->write(buffer, sizeof(buffer));
+#endif /* defined(RELEASE) */
+    Serial.println("Done.");
+}
+
+void maintainEthernet() {
+    Ethernet.maintain();
 }
 
 //Main methods
@@ -121,9 +145,16 @@ void setup() {
 
     initDht();
 
-    attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
+    //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
+
+    Serial.println("Init done.");
 }
 
 void loop() {
-    // put your main code here, to run repeatedly:
+    byte buffer[1] = {0xFF};
+    writeEthernet(buffer);
+    readEthernet();
+
+    delay(5000);
+    maintainEthernet();
 }
