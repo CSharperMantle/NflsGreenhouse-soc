@@ -189,9 +189,9 @@ void setup() {
 }
 
 void loop() {
-    byte buffer[1] = {0xFF};
-    writeEthernet(buffer);
-    readEthernet();
+    //byte buffer[1] = {0xFF};
+    //writeEthernet(buffer);
+    //readEthernet();
 
     delay(5000);
     maintainEthernet();
