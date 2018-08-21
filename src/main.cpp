@@ -45,11 +45,53 @@ static bool isConnected = false;
 
 static const byte startupPacket[] = {0xF1, 0x01, 0x00, 0x00, 0x00, 0x01, 0xF2};
 
-
-
 //User methods
 void pinTwoInterruptHandler() {
 
+}
+
+void readEthernet() {
+    Serial.println("Reading Ethernet");
+    if (!ethernetClient->connected()) {
+        Serial.println("Not connected.");
+        Serial.println("Done.");
+        return;
+    }
+
+    if (ethernetClient->available()) {
+        byte begin;
+        ethernetClient->read(&begin, sizeof(byte));
+        if (begin != 0xF1) {
+            Serial.println("Wrong begin flag received! Is the data correct?");
+            goto TERMINATE_readEthernet;
+        } 
+        
+        byte length;
+        ethernetClient->read(&length, sizeof(byte));
+        if (!(length >= 0)) {
+            Serial.println(String("Packet size unavailable. is") + String(length));
+            goto TERMINATE_readEthernet;
+        } 
+        byte realData[length + 3];
+        ethernetClient->readBytes(realData, length);
+        byte end;
+        ethernetClient->read(&end, sizeof(byte));
+        
+        if (end != 0xF2) {
+            Serial.println("Data packet ending wrong.");
+            goto TERMINATE_readEthernet;
+        } 
+        //TODO: Complete method.
+    }
+    
+    TERMINATE_readEthernet:
+    Serial.println("Done.");
+}
+
+void writeEthernet(const byte *buffer) {
+    Serial.println("Writing Ethernet");
+    ethernetClient->write(buffer, sizeof(buffer));
+    Serial.println("Done.");
 }
 
 void initSerial() {
@@ -121,50 +163,6 @@ void initDht() {
     airSensor->setup(dhtPin, DHT::DHT_MODEL_t::DHT11);
     Serial.println(airSensor->getStatusString());
     isDhtOk = true;
-    Serial.println("Done.");
-}
-
-void readEthernet() {
-    Serial.println("Reading Ethernet");
-    if (!ethernetClient->connected()) {
-        Serial.println("Not connected.");
-        Serial.println("Done.");
-        return;
-    }
-
-    if (ethernetClient->available()) {
-        byte begin;
-        ethernetClient->read(&begin, sizeof(byte));
-        if (begin != 0xF1) {
-            Serial.println("Wrong begin flag received! Is the data correct?");
-            goto TERMINATE_readEthernet;
-        } 
-        
-        byte length;
-        ethernetClient->read(&length, sizeof(byte));
-        if (!(length >= 0)) {
-            Serial.println(String("Packet size unavailable. is") + String(length));
-            goto TERMINATE_readEthernet;
-        } 
-        byte realData[length + 3];
-        ethernetClient->readBytes(realData, length);
-        byte end;
-        ethernetClient->read(&end, sizeof(byte));
-        
-        if (end != 0xF2) {
-            Serial.println("Data packet ending wrong.");
-            goto TERMINATE_readEthernet;
-        } 
-        //TODO: Complete method.
-    }
-    
-    TERMINATE_readEthernet:
-    Serial.println("Done.");
-}
-
-void writeEthernet(const byte *buffer) {
-    Serial.println("Writing Ethernet");
-    ethernetClient->write(buffer, sizeof(buffer));
     Serial.println("Done.");
 }
 
