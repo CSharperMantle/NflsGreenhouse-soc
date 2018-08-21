@@ -8,6 +8,7 @@
 #include <utility/w5100.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
+#include <SD.h>
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
@@ -34,6 +35,17 @@ static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 static LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 static DHT *airSensor = new DHT();
 static EthernetClient *ethernetClient = new EthernetClient();
+static SDFile *configFile = new SDFile();
+
+static bool isEthernetOk = false;
+static bool isSdOk = false;
+static bool isDhtOk = false;
+static bool isLcdOk = false;
+static bool isConnected = false;
+
+static const byte startupPacket[] = {0xF1, 0x01, 0x00, 0x00, 0x00, 0x01, 0xF2};
+
+
 
 //User methods
 void pinTwoInterruptHandler() {
@@ -57,6 +69,7 @@ void initEthernet() {
             Serial.println(Ethernet.localIP());
             Serial.println(Ethernet.dnsServerIP());
             Serial.println(Ethernet.gatewayIP());
+            isEthernetOk = true;
             break;
         }
     }
@@ -66,6 +79,7 @@ void initEthernet() {
     for (int index = 1; index <= 5; index++) {
         if (ethernetClient->connect(serverAddress, serverPort)) {
             Serial.println("Test connection established.");
+            writeEthernet(startupPacket);
             ethernetClient->stop();
             Serial.println("Test connection closed.");
             ethernetClient->flush();
@@ -80,11 +94,25 @@ void initEthernet() {
     Serial.println("Done.");
 }
 
+void initSd() {
+    Serial.println("Initializing SD");
+    if (!SD.begin()) {
+        Serial.println("SD Card init failed.");
+    } else isSdOk = true;
+
+    if (!SD.exists("config.ini")) {
+        Serial.println("Config file not found.");
+    }
+
+    Serial.println("Done.");
+}
+
 void initLcd() {
     Serial.println("Initializing LCD");
     screen->begin(16, 2);
     screen->clear();
     screen->setBacklight(false);
+    isLcdOk = true;
     Serial.println("Done.");
 }
 
@@ -92,15 +120,12 @@ void initDht() {
     Serial.println("Initializing DHT");
     airSensor->setup(dhtPin, DHT::DHT_MODEL_t::DHT11);
     Serial.println(airSensor->getStatusString());
+    isDhtOk = true;
     Serial.println("Done.");
 }
 
 void readEthernet() {
     Serial.println("Reading Ethernet");
-    //TODO: Complete method.
-#ifdef DEBUG
-    Serial.println(ethernetClient->readStringUntil('\n'));
-#elif defined(RELEASE) /* DEBUG */
     if (!ethernetClient->connected()) {
         Serial.println("Not connected.");
         Serial.println("Done.");
@@ -108,30 +133,45 @@ void readEthernet() {
     }
 
     if (ethernetClient->available()) {
-        byte begin[1];
-        ethernetClient->readBytes(begin, 1);
+        byte begin;
+        ethernetClient->read(&begin, sizeof(byte));
+        if (begin != 0xF1) {
+            Serial.println("Wrong begin flag received! Is the data correct?");
+            goto TERMINATE_readEthernet;
+        } 
         
-        if (begin[0] == 0xf1) {
-            /* TODO: Handle data packet. */
-        }
-      
+        byte length;
+        ethernetClient->read(&length, sizeof(byte));
+        if (!(length >= 0)) {
+            Serial.println(String("Packet size unavailable. is") + String(length));
+            goto TERMINATE_readEthernet;
+        } 
+        byte realData[length + 3];
+        ethernetClient->readBytes(realData, length);
+        byte end;
+        ethernetClient->read(&end, sizeof(byte));
+        
+        if (end != 0xF2) {
+            Serial.println("Data packet ending wrong.");
+            goto TERMINATE_readEthernet;
+        } 
+        //TODO: Complete method.
     }
-#endif /* defined(RELEASE) */      
+    
+    TERMINATE_readEthernet:
     Serial.println("Done.");
 }
 
 void writeEthernet(const byte *buffer) {
     Serial.println("Writing Ethernet");
-#ifdef DEBUG
-    ethernetClient->print("Hello world!");
-#elif defined(RELEASE) /* DEBUG */
     ethernetClient->write(buffer, sizeof(buffer));
-#endif /* defined(RELEASE) */
     Serial.println("Done.");
 }
 
 void maintainEthernet() {
+    Serial.println("Maintaining Ethernet connection");
     Ethernet.maintain();
+    Serial.println("Done.");
 }
 
 //Main methods

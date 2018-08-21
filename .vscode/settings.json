@@ -4,7 +4,8 @@
         "PLATFORMIO_CALLER": "vscode"
     },
     "files.associations": {
-        "wiring_private.h": "c"
+        "wiring_private.h": "c",
+        "list": "cpp"
     },
     "cSpell.language": "en",
     "cSpell.words": [
