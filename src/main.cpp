@@ -3,6 +3,7 @@
 #define PT_USE_SEM
 #define PT_USE_TIMER
 
+#include <stdlib.h>
 #include <Arduino.h>
 #include <WString.h>
 #include <utility/w5100.h>
@@ -50,7 +51,7 @@ void pinTwoInterruptHandler() {
 
 }
 
-void readEthernet() {
+byte *readEthernet() {
     Serial.println("Reading Ethernet");
     if (!ethernetClient->connected()) {
         Serial.println("Not connected.");
@@ -58,34 +59,18 @@ void readEthernet() {
         return;
     }
 
-    if (ethernetClient->available()) {
-        byte begin;
-        ethernetClient->read(&begin, sizeof(byte));
-        if (begin != 0xF1) {
-            Serial.println("Wrong begin flag received! Is the data correct?");
-            goto TERMINATE_readEthernet;
-        } 
-        
-        byte length;
-        ethernetClient->read(&length, sizeof(byte));
-        if (!(length >= 0)) {
-            Serial.println(String("Packet size unavailable. is") + String(length));
-            goto TERMINATE_readEthernet;
-        } 
-        byte realData[length + 3];
-        ethernetClient->readBytes(realData, length);
-        byte end;
-        ethernetClient->read(&end, sizeof(byte));
-        
-        if (end != 0xF2) {
-            Serial.println("Data packet ending wrong.");
-            goto TERMINATE_readEthernet;
-        } 
-        //TODO: Complete method.
-    }
+    size_t packet_size = 1;
+    byte *packet = (byte *)malloc(packet_size * sizeof(byte));
+
+    do
+    {
+        packet[packet_size - 1] = ethernetClient->read();
+        packet_size ++;
+        packet = (byte *)realloc(packet, packet_size * sizeof(byte));
+    } while (ethernetClient->available());
     
-    TERMINATE_readEthernet:
     Serial.println("Done.");
+    return packet;
 }
 
 void writeEthernet(const byte *buffer) {
