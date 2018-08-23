@@ -14,8 +14,6 @@
 
 #include "packet_defs.h"
 
-#define PACKET_SIZE(packet, type) (sizeof(packet) / sizeof(type))
-
 bool isPacket(byte *packet);
 
 PacketType parsePacketType(byte *packet);
