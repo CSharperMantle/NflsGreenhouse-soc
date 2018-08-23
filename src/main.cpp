@@ -13,6 +13,7 @@
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
+#include <packet_parser.h>
 
 struct SensorValue {
     float airHumidity;
@@ -60,13 +61,13 @@ byte *readEthernet() {
     }
 
     size_t packet_size = 1;
-    byte *packet = (byte *)malloc(packet_size * sizeof(byte));
+    byte *packet = MALLOC_HEAP(packet_size, byte);
 
     do
     {
         packet[packet_size - 1] = ethernetClient->read();
         packet_size ++;
-        packet = (byte *)realloc(packet, packet_size * sizeof(byte));
+        packet = REALLOC_HEAP(packet, packet_size, byte);
     } while (ethernetClient->available());
     
     Serial.println("Done.");

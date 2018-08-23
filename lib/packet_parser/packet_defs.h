@@ -1,7 +1,24 @@
+/**
+ * Copyright (c)2018 Ningbo Foreign Language School
+ * Written by Mantle Jonse and Jones Ma.
+ * Defined neccesary headers and types and consts that may need by packet
+ * processing.
+ * Dependencies:
+ * <stdint.h>
+ * <stdlib.h>
+ * <stddef.h>
+*/
+
 #pragma once
 #ifndef __PACKET_DEFS_H__
 #define __PACKET_DEFS_H__
 #include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+
+#define PACKET_SIZE(packet, type) (sizeof(packet) / sizeof(type))
+#define MALLOC_HEAP(size, type) ((type *)malloc(size * sizeof(type)))
+#define REALLOC_HEAP(pointer, size, type) ((type *)realloc(pointer, size * sizeof(type)))
 
 typedef enum {
     pSystemOn = 0x00,
