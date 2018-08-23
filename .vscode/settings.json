@@ -10,5 +10,7 @@
     "cSpell.language": "en",
     "cSpell.words": [
         "Arduino"
-    ]
+    ],
+    "python.jediEnabled": false,
+    "python.pythonPath": "E:\\Programs\\Python\\Python37\\python.exe"
 }

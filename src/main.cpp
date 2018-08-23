@@ -1,5 +1,3 @@
-#define DEBUG
-
 #define PT_USE_SEM
 #define PT_USE_TIMER
 
@@ -40,12 +38,10 @@ static EthernetClient *ethernetClient = new EthernetClient();
 static SDFile *configFile = new SDFile();
 
 static bool isEthernetOk = false;
+static bool isConnectionOk = false;
 static bool isSdOk = false;
 static bool isDhtOk = false;
 static bool isLcdOk = false;
-static bool isConnected = false;
-
-static const byte startupPacket[] = {0xF1, 0x01, 0x00, 0x00, 0x00, 0x01, 0xF2};
 
 //User methods
 void pinTwoInterruptHandler() {
@@ -57,7 +53,7 @@ byte *readEthernet() {
     if (!ethernetClient->connected()) {
         Serial.println("Not connected.");
         Serial.println("Done.");
-        return;
+        return NULL;
     }
 
     size_t packet_size = 1;
@@ -107,11 +103,19 @@ void initEthernet() {
     for (int index = 1; index <= 5; index++) {
         if (ethernetClient->connect(serverAddress, serverPort)) {
             Serial.println("Test connection established.");
-            writeEthernet(startupPacket);
-            ethernetClient->stop();
-            Serial.println("Test connection closed.");
+            writeEthernet(systemOnPacket);
+            byte *buffer = readEthernet();
+            if (buffer != NULL) {
+                PacketType type = parsePacketType(buffer);
+                Serial.println(parsePacketTypeString(buffer));
+                //TODO: Handle pAccepted
+            } else Serial.println("buffer is null! Something must gone wrong.");
+            free(buffer);
             ethernetClient->flush();
             Serial.println("Test connection flushed.");
+            ethernetClient->stop();
+            Serial.println("Test connection closed.");
+            isConnectionOk = true;
             break;
         }
         else
@@ -120,6 +124,15 @@ void initEthernet() {
         }
     }
     Serial.println("Done.");
+
+    if (isConnectionOk) {
+        Serial.println("Estimating real connection");
+        ethernetClient->connect(serverAddress, serverPort);
+        Serial.println("Done.");
+    } else {
+        Serial.println("Won't connect again because the test connection broke.");
+    }
+    
 }
 
 void initSd() {

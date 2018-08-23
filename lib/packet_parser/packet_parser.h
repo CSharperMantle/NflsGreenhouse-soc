@@ -1,5 +1,6 @@
 /**
- * Copyright (c)2018 Ningbo Foreign Language Schoo;
+ * packet_parse.h
+ * Copyright (c)2018 Ningbo Foreign Language School. All rights reserved.
  * Written by Mantle Jonse and Jones Ma.
  * Declared methods for packet processing.
  * Dependencies:
@@ -7,6 +8,7 @@
  * |--<stdint.h>
  * |--<stddef.h>
  * |--<stdlib.h>
+ * Licensed under GNU GPLv3
 */
 #pragma once
 #ifndef __PACKET_PARSER_H__
@@ -17,6 +19,8 @@
 bool isPacket(byte *packet);
 
 PacketType parsePacketType(byte *packet);
+
+String parsePacketTypeString(byte *packet);
 
 byte *getPacketContent(byte *packet);
 
