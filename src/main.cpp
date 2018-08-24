@@ -8,16 +8,17 @@
 #include <Ethernet.h>
 #include <EthernetClient.h>
 #include <SD.h>
-#include "DHT.h"
-#include "LiquidCrystal_I2C.h"
+#include <DHT.h>
+#include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <packet_parser.h>
 
 struct SensorValue {
-    float airHumidity;
-    float airTemperature;
-    int lightValue;
-    int groundHumValue;
+    float airHumidity = 0F;
+    float airTemperature = 0F;
+    int lightValue = 0;
+    int groundHumValue = 0;
+    bool isCompeleted = false;
 } sensorValue;
 
 static const int InterruptDetectPin = 2;
@@ -172,7 +173,14 @@ void maintainEthernet() {
 }
 
 void checkSensors() {
-
+    Serial.println("Reading sensors");
+    sensorValue.isCompeleted = false;
+    sensorValue.lightValue = analogRead(lightSensorPin);
+    sensorValue.airHumidity = airSensor->getHumidity();
+    sensorValue.airTemperature = airSensor->getTemperature();
+    sensorValue.groundHumValue = analogRead(groundHumSensorPin);
+    sensorValue.isCompeleted = true;
+    Serial.println("Done.");
 }
 
 //Main methods
