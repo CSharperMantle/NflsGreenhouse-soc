@@ -8,8 +8,8 @@
 #include <Ethernet.h>
 #include <EthernetClient.h>
 #include <SD.h>
-#include <DHT.h>
-#include <LiquidCrystal_I2C.h>
+#include "DHT.h"
+#include "LiquidCrystal_I2C.h"
 #include <pt.h>
 #include <packet_parser.h>
 
@@ -172,7 +172,7 @@ void maintainEthernet() {
 }
 
 void checkSensors() {
-    
+
 }
 
 //Main methods
