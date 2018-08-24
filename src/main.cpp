@@ -171,6 +171,10 @@ void maintainEthernet() {
     Serial.println("Done.");
 }
 
+void checkSensors() {
+    
+}
+
 //Main methods
 void setup() {
     //Startup scripts

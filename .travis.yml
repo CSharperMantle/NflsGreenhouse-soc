@@ -60,6 +60,8 @@ env:
 install:
     - pip install -U platformio
     - platformio update
+    - platformio lib install 1671 # DHT libs
+    - platformio lib install 576 # LiquidCrystal_I2C libs
 
 script:
     - platformio ci --lib="." --board=megaatmega2560
