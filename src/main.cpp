@@ -14,8 +14,8 @@
 #include <packet_parser.h>
 
 struct SensorValue {
-    float airHumidity = 0F;
-    float airTemperature = 0F;
+    float airHumidity = 0;
+    float airTemperature = 0;
     int lightValue = 0;
     int groundHumValue = 0;
     bool isCompeleted = false;
