@@ -64,4 +64,4 @@ install:
     - platformio lib install 576 # LiquidCrystal_I2C libs
 
 script:
-    - platformio ci --lib="." --board=megaatmega2560
+    - platformio ci --board=megaatmega2560
