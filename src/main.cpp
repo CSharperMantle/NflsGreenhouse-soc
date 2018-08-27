@@ -109,6 +109,7 @@ void initEthernet() {
             if (buffer != NULL) {
                 PacketType type = parsePacketType(buffer);
                 Serial.println(parsePacketTypeString(buffer));
+                if (type == PacketType::pAccepted) Serial.println("Packet accepted!");
                 //TODO: Handle pAccepted
             } else Serial.println("buffer is null! Something must gone wrong.");
             free(buffer);
