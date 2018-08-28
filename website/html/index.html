@@ -3,6 +3,7 @@
 
   try {
     $db = new PDO($dbdsn, $username, $passwd);
+
     $stmt = $db->prepare($FETCH_SQL);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -10,16 +11,22 @@
     $air_hum = $result['air_hum'];
     $air_light = $result['air_light'];
     $ground_hum = $result['ground_hum'];
+
     $stmt = $db->prepare($FETCH_TOTAL_COUNT_SQL);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total_commits = $result['MAX(id)'];
+
+    $stmt = $db->prepare($FETCH_ALL_SQL);
+    $stmt->execute();
+    $all_commits = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
   catch (PDOException $e) {
     $air_temp = 'None';
     $air_hum = 'None';
     $air_light = 'None';
     $ground_hum = 'None';
+    $total_commits = 0;
   }
 ?>
 <!DOCTYPE html>
@@ -308,30 +315,25 @@
                         <td class="center">C</td>
                       </tr> 
                     -->
-                    <tr class="even">
-                      <td>2018-08-31 09:23</td>
-                      <td>收到数据上传</td>
-                      <td>30</td>
-                      <td>41</td>
-                      <td>547</td>
-                      <td>326</td>
-                    </tr>
-                    <tr class="odd">
-                      <td>2018-08-31 09:28</td>
-                      <td>收到数据上传</td>
-                      <td>30</td>
-                      <td>42</td>
-                      <td>558</td>
-                      <td>328</td>
-                    </tr>
-                    <tr class="even">
-                      <td>2018-08-31 09:35</td>
-                      <td>收到数据上传</td>
-                      <td>31</td>
-                      <td>41</td>
-                      <td>521</td>
-                      <td>334</td>
-                    </tr>
+                    <?php
+                      foreach ($all_commits as $key => $value) {
+                        $_air_temp = $value['air_temp'];
+                        $_air_light = $value['air_light'];
+                        $_air_hum = $value['air_hum'];
+                        $_ground_hum = $value['ground_hum'];
+                        $_timestamp = $value['timestamp'];
+                        print "
+                        <tr class=\"even\">
+                          <td>$_timestamp</td>
+                          <td>收到数据上传</td>
+                          <td>$_air_temp</td>
+                          <td>$_air_hum</td>
+                          <td>$_air_light</td>
+                          <td>$_ground_hum</td>
+                        </tr>
+                        ";
+                      } 
+                    ?>
                     </tbody>
                   </table>
                 </div>
