@@ -6,20 +6,17 @@
     air_light 空气亮度
     ground_hum 地面湿度
   */
-  require 'dbcommon.php';
+  require 'scripts\\shared.php';
 
   $air_temp = purifyData($_GET['air_temp']);
   $air_hum = purifyData($_GET['air_hum']);
-  $light = purifyData($_GET['air_light']);
+  $air_light = purifyData($_GET['air_light']);
   $ground_hum = purifyData($_GET['ground_hum']);
 
   try {
-    $db = new PDO('mysql:host=$host;dbname=$dbname', $username, $passwd);
+    $db = new PDO($dbdsn, $username, $passwd);
     $statement = $db->prepare($INSERT_SQL);
-    $statement->bind_param("ssss", $air_temp, $air_hum, $air_light, $ground_hum);
-    $statement->execute();
-    $statement->close();
-    $db->close();
+    $statement->execute(array($air_temp, $air_hum, $air_light, $ground_hum));
   }
   catch (PDOException $e) {
     exit(500);

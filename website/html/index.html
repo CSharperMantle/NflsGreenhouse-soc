@@ -1,9 +1,8 @@
 <?php
-  require 'scripts\\dbcommon.php';
-  require 'scripts\\constcommon.php';
+  require 'scripts\\shared.php';
 
-  try {
-    $db = new PDO('mysql:host=$host;dbname=$dbname', $username, $passwd);
+  #try {
+    $db = new PDO($dbdsn, $username, $passwd);
     $stmt = $db->prepare($FETCH_SQL);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -11,15 +10,17 @@
     $air_hum = $result['air_hum'];
     $air_light = $result['air_light'];
     $ground_hum = $result['ground_hum'];
-    $stmt->close();
-    $db->close();
-  }
-  catch (PDOException $e) {
-    $air_temp = 'None';
-    $air_hum = 'None';
-    $air_light = 'None';
-    $ground_hum = 'None';
-  }
+    $stmt = $db->prepare($FETCH_TOTAL_COUNT_SQL);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_commits = $result['MAX(id)'];
+  #}
+  #catch (PDOException $e) {
+  #  $air_temp = 'None';
+  #  $air_hum = 'None';
+  #  $air_light = 'None';
+  #  $ground_hum = 'None';
+  #}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -159,8 +160,8 @@
                         <div class="widget widget-tile">
                           <div id="spark1" class="chart sparkline"></div>
                           <div class="data-info">
-                            <div class="desc">访问数</div>
-                            <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter" data-end="113" class="number">0</span>
+                            <div class="desc">上传数</div>
+                            <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter" data-end="<?php print $total_commits + 1?>" class="number">0</span>
                             </div>
                           </div>
                         </div>
@@ -235,11 +236,11 @@
                   </div>
                   <div class="widget-counter-group widget-counter-group-right">
                     <div class="counter counter-big">
-                      <div class="value"><?php print $air_temp; ?></div>
+                      <div class="value"><?php print $air_temp . '°C'; ?></div>
                       <div class="desc">空气温度</div>
                     </div>
                     <div class="counter counter-big">
-                      <div class="value"><?php print $air_hum; ?></div>
+                      <div class="value"><?php print $air_hum . '%'; ?></div>
                       <div class="desc">空气湿度</div>
                     </div>
                     <div class="counter counter-big">
