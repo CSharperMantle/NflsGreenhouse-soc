@@ -1,7 +1,7 @@
 <?php
   require 'scripts\\shared.php';
 
-  #try {
+  try {
     $db = new PDO($dbdsn, $username, $passwd);
     $stmt = $db->prepare($FETCH_SQL);
     $stmt->execute();
@@ -14,13 +14,13 @@
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total_commits = $result['MAX(id)'];
-  #}
-  #catch (PDOException $e) {
-  #  $air_temp = 'None';
-  #  $air_hum = 'None';
-  #  $air_light = 'None';
-  #  $ground_hum = 'None';
-  #}
+  }
+  catch (PDOException $e) {
+    $air_temp = 'None';
+    $air_hum = 'None';
+    $air_light = 'None';
+    $ground_hum = 'None';
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
