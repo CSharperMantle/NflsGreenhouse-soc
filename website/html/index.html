@@ -273,7 +273,7 @@
 
             <div class="col-sm-12">
               <div class="card card-table">
-                <div class="card-header">历史数据
+                <div class="card-header">活动记录
                   <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
                     <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another action</a><a href="#" class="dropdown-item">Something else here</a>
                       <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
@@ -288,8 +288,8 @@
                         <th>类型</th>
                         <th>空气温度 (°C)</th>
                         <th>空气湿度 (%)</th>
-                        <th>地面湿度 (1-1024)</th>
-                        <th>光强度 (1-1024)</th>
+                        <th>地面湿度</th>
+                        <th>光强度</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -322,8 +322,9 @@
                         $_air_hum = $value['air_hum'];
                         $_ground_hum = $value['ground_hum'];
                         $_timestamp = $value['timestamp'];
+                        $oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
                         print "
-                        <tr class=\"even\">
+                        <tr class=\"$oddity\">
                           <td>$_timestamp</td>
                           <td>收到数据上传</td>
                           <td>$_air_temp</td>
