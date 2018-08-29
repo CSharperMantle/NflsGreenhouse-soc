@@ -8,15 +8,14 @@
   */
   require 'scripts\\shared.php';
 
-  $air_temp = purifyData($_GET['air_temp']);
-  $air_hum = purifyData($_GET['air_hum']);
-  $air_light = purifyData($_GET['air_light']);
-  $ground_hum = purifyData($_GET['ground_hum']);
+  $air_temp = purify_data($_GET['air_temp']);
+  $air_hum = purify_data($_GET['air_hum']);
+  $air_light = purify_data($_GET['air_light']);
+  $ground_hum = purify_data($_GET['ground_hum']);
 
   try {
     $db = new PDO($dbdsn, $username, $passwd);
-    $statement = $db->prepare($INSERT_SQL);
-    $statement->execute(array($air_temp, $air_hum, $air_light, $ground_hum));
+    run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
   }
   catch (PDOException $e) {
     exit(500);

@@ -4,22 +4,16 @@
   try {
     $db = new PDO($dbdsn, $username, $passwd);
 
-    $stmt = $db->prepare($FETCH_SQL);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = run_query($db, $FETCH_LATEST_SQL);
     $air_temp = $result['air_temp'];
     $air_hum = $result['air_hum'];
     $air_light = $result['air_light'];
     $ground_hum = $result['ground_hum'];
 
-    $stmt = $db->prepare($FETCH_TOTAL_COUNT_SQL);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = run_query($db, $FETCH_TOTAL_COUNT_SQL);
     $total_commits = $result['MAX(id)'];
 
-    $stmt = $db->prepare($FETCH_ALL_SQL);
-    $stmt->execute();
-    $all_commits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $all_commits = run_query_fetch_all($db, $FETCH_ALL_SQL);
   }
   catch (PDOException $e) {
     $air_temp = 'None';
@@ -322,17 +316,8 @@
                         $_air_hum = $value['air_hum'];
                         $_ground_hum = $value['ground_hum'];
                         $_timestamp = $value['timestamp'];
-                        $oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
-                        print "
-                        <tr class=\"$oddity\">
-                          <td>$_timestamp</td>
-                          <td>收到数据上传</td>
-                          <td>$_air_temp</td>
-                          <td>$_air_hum</td>
-                          <td>$_air_light</td>
-                          <td>$_ground_hum</td>
-                        </tr>
-                        ";
+                        $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
+                        print_all_commits_each_item($_timestamp, $_oddity, '收到数据', $_air_temp, $_air_hum, $_air_light, $_ground_hum);
                       } 
                     ?>
                     </tbody>
