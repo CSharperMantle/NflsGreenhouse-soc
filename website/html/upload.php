@@ -15,12 +15,11 @@
 
   try {
     $db = new PDO($dbdsn, $username, $passwd);
-    run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
+    $rows = run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
   }
   catch (PDOException $e) {
     exit(500);
   }
-  // array($air_temp, $air_hum, $air_light, $ground_hum)
 ?>
 
 <!DOCTYPE html>
@@ -33,14 +32,14 @@
 </head>
 <body>
   <?php
-    print "<div>air_temp: " . $air_temp . "</div>";
-    print "<br />";
-    print "<div>air_hum: " . $air_hum . "</div>";
-    print "<br />";
-    print "<div>air_light: " . $air_light . "</div>";
-    print "<br />";
-    print "<div>ground_hum: " . $ground_hum . "</div>";
-    print "<br />";
+    print '<div>air_temp: ' . $air_temp . '</div>';
+    print '<br />';
+    print '<div>air_hum: ' . $air_hum . '</div>';
+    print '<br />';
+    print '<div>air_light: ' . $air_light . '</div>';
+    print '<br />';
+    print '<div>ground_hum: ' . $ground_hum . '</div>';
+    print '<br />';
   ?>
 </body>
 </html>

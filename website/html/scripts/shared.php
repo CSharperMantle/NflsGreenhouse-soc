@@ -5,10 +5,14 @@
     $username = 'plant_client';
     $dbdsn = "mysql:host=$host;dbname=$dbname";
 
-    $INSERT_DATA_SQL = "INSERT INTO data (air_temp, air_hum, air_light, ground_hum) VALUES (?, ?, ?, ?);";
+    $INSERT_DATA_SQL = "SET @max = (SELECT MAX(id) FROM data); INSERT INTO data (id, air_temp, air_hum, air_light, ground_hum) VALUES (@max + 1, ?, ?, ?, ?);";
     $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data);";
     $FETCH_TOTAL_COUNT_SQL = "SELECT MAX(id) FROM data;";
     $FETCH_ALL_SQL = "SELECT * FROM data;";
+    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp FROM data;";
+    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data;";
+    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data;";
+    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data;";
 
     $lightSwitchValve = 500;
     $groundHumSwitchValve = 500;

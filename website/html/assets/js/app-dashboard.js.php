@@ -1,3 +1,9 @@
+<?php
+  require '../../scripts/shared.php';
+
+  $db = new PDO($dbdsn, $username, $passwd);
+?>
+
 var App = (function () {
   'use strict';
   
@@ -127,51 +133,47 @@ var App = (function () {
 	  var color4 = tinycolor( App.color.primary ).lighten( 20 ).toString();
 
       var data = [
-        [1, 35],
-        [2, 60],
-        [3, 40],
-        [4, 65],
-        [5, 45],
-        [6, 75],
-        [7, 35],
-        [8, 40],
-        [9, 60]
+        <?php
+          $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_TEMP_SQL);
+          foreach ($air_temp_query as $id => $array) {
+            $_id = $array['id'];
+            $_temp = $array['air_temp'];
+            print "[$_id, $_temp], \r\n";
+          }
+        ?>
       ];
 
       var data2 = [
-        [1, 20],
-        [2, 40],
-        [3, 25],
-        [4, 45],
-        [5, 25],
-        [6, 50],
-        [7, 35],
-        [8, 60],
-        [9, 30]
+        <?php
+          $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_HUM_SQL);
+          foreach ($air_temp_query as $id => $array) {
+            $_id = $array['id'];
+            $_hum = $array['air_hum'];
+            print "[$_id, $_hum], \r\n";
+          }
+        ?>
       ];
 
       var data3 = [
-        [1, 35],
-        [2, 15],
-        [3, 20],
-        [4, 30],
-        [5, 15],
-        [6, 18],
-        [7, 28],
-        [8, 10],
-        [9, 30]
+        <?php
+          $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_LIGHT_SQL);
+          foreach ($air_temp_query as $id => $array) {
+            $_id = $array['id'];
+            $_light = $array['air_light'] / 100;
+            print "[$_id, $_light], \r\n";
+          }
+        ?>
       ];
 	  
 	  var data4 = [
-        [1, 12],
-        [2, 8],
-        [3, 8],
-        [4, 8],
-        [5, 8],
-        [6, 15],
-        [7, 12],
-        [8, 8],
-        [9, 12]
+        <?php
+          $air_temp_query = run_query_fetch_all($db, $FETCH_GROUND_HUM_SQL);
+          foreach ($air_temp_query as $id => $array) {
+            $_id = $array['id'];
+            $_hum = $array['ground_hum'] / 100;
+            print "[$_id, $_hum], \r\n";
+          }
+      ?>
       ];
 
       var plot_statistics = $.plot($("#main-chart"), [{
