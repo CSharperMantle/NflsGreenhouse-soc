@@ -6,7 +6,7 @@
     air_light 空气亮度
     ground_hum 地面湿度
   */
-  require 'scripts\\shared.php';
+  require 'assets\\php\\shared.php';
 
   $air_temp = purify_data($_GET['air_temp']);
   $air_hum = purify_data($_GET['air_hum']);

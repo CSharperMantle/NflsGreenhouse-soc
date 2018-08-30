@@ -1,5 +1,5 @@
 <?php
-  require '../../scripts/shared.php';
+  require '../php/shared.php';
 
   $db = new PDO($dbdsn, $username, $passwd);
 ?>
