@@ -11,7 +11,7 @@ class EchoHandler(StreamRequestHandler):
         for line in self.rfile:
             content.append(line)
             # self.wfile.write(line)
-            self.wfile.write(accepted)
+            # self.wfile.write(accepted)
         pprint(content)
         
 

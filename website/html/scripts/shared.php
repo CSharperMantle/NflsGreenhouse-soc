@@ -9,10 +9,10 @@
     $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data);";
     $FETCH_TOTAL_COUNT_SQL = "SELECT MAX(id) FROM data;";
     $FETCH_ALL_SQL = "SELECT * FROM data;";
-    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp FROM data;";
-    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data;";
-    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data;";
-    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data;";
+    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data ORDER BY id DESC LIMIT 100;";
 
     $lightSwitchValve = 500;
     $groundHumSwitchValve = 500;

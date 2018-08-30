@@ -14,8 +14,8 @@
 #include <packet_parser.h>
 
 struct SensorValue {
-    int airHumidity = 0;
-    int airTemperature = 0;
+    float airHumidity = 0;
+    float airTemperature = 0;
     int lightValue = 0;
     int groundHumValue = 0;
     bool isCompeleted = false;
@@ -28,10 +28,9 @@ static const int relayThreePin = 24;
 static const int dhtPin = 25;
 static const int lightSensorPin = A0;
 static const int groundHumSensorPin = A1;
-static const int uploadInterval = 3600000;
 
 static const char *serverAddress = "192.168.1.102";
-static const int serverPort = 81;
+static const int serverPort = 20000;
 static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 static LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
@@ -72,29 +71,9 @@ byte *readEthernet() {
     return packet;
 }
 
-void writeEthernet() {
+void writeEthernet(const byte *buffer) {
     Serial.println("Writing Ethernet");
-    ethernetClient->connect(serverAddress, serverPort);
-    String request = String("GET /upload.php?air_temp=") + String(sensorValue.airTemperature) \
-        + String("&air_hum=") + String(sensorValue.airHumidity) \
-        + String("&air_light=") + String(sensorValue.lightValue) \
-        + String("&ground_hum=") + String(sensorValue.groundHumValue) \
-        + String(" HTTP/1.1\r\n" \
-        "Accept: */*\r\n" \
-        "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String(
-        "User-Agent: arduino/mega2560\r\n" \
-        "Connection: close\r\n" \
-        "\r\n" \
-        "");
-        Serial.println(request);
-    ethernetClient->print(request);
-    
-    do
-    {
-        Serial.println(ethernetClient->readString());
-    } while (ethernetClient->available());
-    
-    ethernetClient->stop();
+    ethernetClient->write(buffer, sizeof(buffer));
     Serial.println("Done.");
 }
 
@@ -125,6 +104,15 @@ void initEthernet() {
     for (int index = 1; index <= 5; index++) {
         if (ethernetClient->connect(serverAddress, serverPort)) {
             Serial.println("Test connection established.");
+            writeEthernet(systemOnPacket);
+            byte *buffer = readEthernet();
+            if (buffer != NULL) {
+                PacketType type = parsePacketType(buffer);
+                Serial.println(parsePacketTypeString(buffer));
+                if (type == PacketType::pAccepted) Serial.println("Packet accepted!");
+                //TODO: Handle pAccepted
+            } else Serial.println("buffer is null! Something must gone wrong.");
+            free(buffer);
             ethernetClient->flush();
             Serial.println("Test connection flushed.");
             ethernetClient->stop();
@@ -214,10 +202,9 @@ void setup() {
 
 void loop() {
     //byte buffer[1] = {0xFF};
-    checkSensors();
-    writeEthernet();
+    //writeEthernet(buffer);
     //readEthernet();
 
-    delay(uploadInterval);
+    delay(5000);
     maintainEthernet();
 }

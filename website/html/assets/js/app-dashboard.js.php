@@ -130,9 +130,9 @@ var App = (function () {
       var color1 = App.color.primary;
       var color2 = tinycolor( App.color.primary ).lighten( 10 ).toString();
       var color3 = tinycolor( App.color.primary ).lighten( 15 ).toString();
-	  var color4 = tinycolor( App.color.primary ).lighten( 20 ).toString();
+	    var color4 = tinycolor( App.color.primary ).lighten( 20 ).toString();
 
-      var data = [
+      var temp_data = [
         <?php
           $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_TEMP_SQL);
           foreach ($air_temp_query as $id => $array) {
@@ -143,10 +143,10 @@ var App = (function () {
         ?>
       ];
 
-      var data2 = [
+      var hum_data = [
         <?php
-          $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_HUM_SQL);
-          foreach ($air_temp_query as $id => $array) {
+          $air_hum_query = run_query_fetch_all($db, $FETCH_AIR_HUM_SQL);
+          foreach ($air_hum_query as $id => $array) {
             $_id = $array['id'];
             $_hum = $array['air_hum'];
             print "[$_id, $_hum], \r\n";
@@ -154,37 +154,37 @@ var App = (function () {
         ?>
       ];
 
-      var data3 = [
+      var light_data = [
         <?php
-          $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_LIGHT_SQL);
-          foreach ($air_temp_query as $id => $array) {
+          $air_light_query = run_query_fetch_all($db, $FETCH_AIR_LIGHT_SQL);
+          foreach ($air_light_query as $id => $array) {
             $_id = $array['id'];
-            $_light = $array['air_light'] / 100;
+            $_light = $array['air_light'];
             print "[$_id, $_light], \r\n";
           }
         ?>
       ];
 	  
-	  var data4 = [
+	    var gnd_hum_data = [
         <?php
-          $air_temp_query = run_query_fetch_all($db, $FETCH_GROUND_HUM_SQL);
-          foreach ($air_temp_query as $id => $array) {
+          $ground_hum_query = run_query_fetch_all($db, $FETCH_GROUND_HUM_SQL);
+          foreach ($ground_hum_query as $id => $array) {
             $_id = $array['id'];
-            $_hum = $array['ground_hum'] / 100;
+            $_hum = $array['ground_hum'];
             print "[$_id, $_hum], \r\n";
           }
       ?>
       ];
 
       var plot_statistics = $.plot($("#main-chart"), [{
-        data: data, showLabels: true, label: "空气温度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
+        data: hum_data, showLabels: true, label: "空气湿度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
       },{
-        data: data2, showLabels: true, label: "空气湿度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
-      },{
+        data: temp_data, showLabels: true, label: "空气温度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
+      }/*,{
         data: data3, showLabels: true, label: "空气亮度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
       },{
         data: data4, showLabels: true, label: "地面湿度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
-      }],
+      }*/],
       {
         series: {
           lines: {
