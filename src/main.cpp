@@ -18,7 +18,6 @@ struct SensorValue {
     int airTemperature = 0;
     int lightValue = 0;
     int groundHumValue = 0;
-    bool isCompeleted = false;
 } sensorValue;
 
 static const int InterruptDetectPin = 2;
@@ -28,7 +27,13 @@ static const int relayThreePin = 24;
 static const int dhtPin = 25;
 static const int lightSensorPin = A0;
 static const int groundHumSensorPin = A1;
-static const int uploadInterval = 3600000;
+static const int uploadInterval = 1000 * 60 * 60 * 0.5; //MS->S S->M M->H
+static const int maintainEthernetInterval = 1000 * 60 * 60 * 2;
+
+static struct pt ctrlSensorDataUpload;
+static struct pt ctrlOnlinePacketUpload;
+static struct pt ctrlCheckSensors;
+static struct pt ctrlMaintainEthernet;
 
 static const char *serverAddress = "192.168.1.102";
 static const int serverPort = 81;
@@ -48,6 +53,17 @@ static bool isLcdOk = false;
 //User methods
 void pinTwoInterruptHandler() {
 
+}
+
+static int checkSensors(struct pt *pt) {
+    PT_BEGIN(pt);
+    Serial.println("Reading sensors");
+    sensorValue.lightValue = analogRead(lightSensorPin);
+    sensorValue.airHumidity = airSensor->getHumidity();
+    sensorValue.airTemperature = airSensor->getTemperature();
+    sensorValue.groundHumValue = analogRead(groundHumSensorPin);
+    Serial.println("Done.");
+    PT_END(pt);
 }
 
 byte *readEthernet() {
@@ -72,10 +88,22 @@ byte *readEthernet() {
     return packet;
 }
 
-void writeEthernet() {
-    Serial.println("Writing Ethernet");
-    ethernetClient->connect(serverAddress, serverPort);
-    String request = String("GET /upload.php?air_temp=") + String(sensorValue.airTemperature) \
+static int uploadSensorData(struct pt *pt) {
+    PT_BEGIN(pt);
+    checkSensors(&ctrlCheckSensors);
+    Serial.println("Uploading sensor data");
+    for (static int index = 1; index <= 5; index++) {
+        if (ethernetClient->connect(serverAddress, serverPort)) {
+            Serial.println("Connection established.");
+            break;
+        }
+        else
+        {
+            Serial.println(String("Connection broken. Retry ") + String(index));
+            PT_YIELD(pt);
+        }
+    }
+    static String request = String("GET /upload.php?air_temp=") + String(sensorValue.airTemperature) \
         + String("&air_hum=") + String(sensorValue.airHumidity) \
         + String("&air_light=") + String(sensorValue.lightValue) \
         + String("&ground_hum=") + String(sensorValue.groundHumValue) \
@@ -86,7 +114,7 @@ void writeEthernet() {
         "Connection: close\r\n" \
         "\r\n" \
         "");
-        Serial.println(request);
+    Serial.println(request);
     ethernetClient->print(request);
     
     do
@@ -95,7 +123,9 @@ void writeEthernet() {
     } while (ethernetClient->available());
     
     ethernetClient->stop();
-    Serial.println("Done.");
+    Serial.println("Done. Connection closed.");
+    PT_TIMER_DELAY(pt, uploadInterval);
+    PT_END(pt);
 }
 
 void initSerial() {
@@ -138,15 +168,6 @@ void initEthernet() {
         }
     }
     Serial.println("Done.");
-
-    if (isConnectionOk) {
-        Serial.println("Estimating real connection");
-        ethernetClient->connect(serverAddress, serverPort);
-        Serial.println("Done.");
-    } else {
-        Serial.println("Won't connect again because the test connection broke.");
-    }
-    
 }
 
 void initSd() {
@@ -179,22 +200,15 @@ void initDht() {
     Serial.println("Done.");
 }
 
-void maintainEthernet() {
+static int maintainEthernet(struct pt *pt) {
+    PT_BEGIN(pt);
     Serial.println("Maintaining Ethernet connection");
     Ethernet.maintain();
     Serial.println("Done.");
+    PT_TIMER_DELAY(pt, maintainEthernetInterval);
+    PT_END(pt);
 }
 
-void checkSensors() {
-    Serial.println("Reading sensors");
-    sensorValue.isCompeleted = false;
-    sensorValue.lightValue = analogRead(lightSensorPin);
-    sensorValue.airHumidity = airSensor->getHumidity();
-    sensorValue.airTemperature = airSensor->getTemperature();
-    sensorValue.groundHumValue = analogRead(groundHumSensorPin);
-    sensorValue.isCompeleted = true;
-    Serial.println("Done.");
-}
 
 //Main methods
 void setup() {
@@ -206,18 +220,15 @@ void setup() {
     initLcd();
 
     initDht();
-
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
+    PT_INIT(&ctrlMaintainEthernet);
+    PT_INIT(&ctrlCheckSensors);
+    PT_INIT(&ctrlSensorDataUpload);
 
     Serial.println("Init done.");
 }
 
 void loop() {
-    //byte buffer[1] = {0xFF};
-    checkSensors();
-    writeEthernet();
-    //readEthernet();
-
-    delay(uploadInterval);
-    maintainEthernet();
+    uploadSensorData(&ctrlSensorDataUpload);
+    maintainEthernet(&ctrlMaintainEthernet);
 }
