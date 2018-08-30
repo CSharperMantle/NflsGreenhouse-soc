@@ -27,12 +27,10 @@ static const int relayThreePin = 24;
 static const int dhtPin = 25;
 static const int lightSensorPin = A0;
 static const int groundHumSensorPin = A1;
-static const int uploadInterval = 1000 * 60 * 60 * 0.5; //MS->S S->M M->H
-static const int maintainEthernetInterval = 1000 * 60 * 60 * 2;
+static const int uploadInterval = 1000 * 30;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
+static const int maintainEthernetInterval = 1000 * 60;//1000 * 60 * 60 * 2;
 
 static struct pt ctrlSensorDataUpload;
-static struct pt ctrlOnlinePacketUpload;
-static struct pt ctrlCheckSensors;
 static struct pt ctrlMaintainEthernet;
 
 static const char *serverAddress = "192.168.1.102";
@@ -55,15 +53,13 @@ void pinTwoInterruptHandler() {
 
 }
 
-static int checkSensors(struct pt *pt) {
-    PT_BEGIN(pt);
+inline void checkSensors() {
     Serial.println("Reading sensors");
     sensorValue.lightValue = analogRead(lightSensorPin);
     sensorValue.airHumidity = airSensor->getHumidity();
     sensorValue.airTemperature = airSensor->getTemperature();
     sensorValue.groundHumValue = analogRead(groundHumSensorPin);
     Serial.println("Done.");
-    PT_END(pt);
 }
 
 byte *readEthernet() {
@@ -90,7 +86,7 @@ byte *readEthernet() {
 
 static int uploadSensorData(struct pt *pt) {
     PT_BEGIN(pt);
-    checkSensors(&ctrlCheckSensors);
+    checkSensors();
     Serial.println("Uploading sensor data");
     for (static int index = 1; index <= 5; index++) {
         if (ethernetClient->connect(serverAddress, serverPort)) {
@@ -222,7 +218,6 @@ void setup() {
     initDht();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
     PT_INIT(&ctrlMaintainEthernet);
-    PT_INIT(&ctrlCheckSensors);
     PT_INIT(&ctrlSensorDataUpload);
 
     Serial.println("Init done.");
