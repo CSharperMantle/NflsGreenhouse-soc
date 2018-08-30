@@ -33,13 +33,13 @@
 <body>
   <?php
     print '<div>air_temp: ' . $air_temp . '</div>';
-    print '<br />';
+    print '<br/>';
     print '<div>air_hum: ' . $air_hum . '</div>';
-    print '<br />';
+    print '<br/>';
     print '<div>air_light: ' . $air_light . '</div>';
-    print '<br />';
+    print '<br/>';
     print '<div>ground_hum: ' . $ground_hum . '</div>';
-    print '<br />';
+    print '<br/>';
   ?>
 </body>
 </html>
