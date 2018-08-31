@@ -1,2 +1,2 @@
 # Deploy notes
-MUST SET __session.auto_start__ TO __1__
+___MUST SET session.auto_start TO 1__
