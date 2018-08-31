@@ -15,7 +15,7 @@ var App = (function () {
 
     //Remove search & paging dropdown
     $("#table2").dataTable({
-      pageLength: 6,
+      pageLength: 5,
       dom:  "<'row be-datatable-body'<'col-sm-12'tr>>" +
             "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
     });
