@@ -17,8 +17,8 @@ static const int relayOnePin = 22;
 static const int relayTwoPin = 23;
 static const int relayThreePin = 24;
 static const int dhtPin = 25;
-static const int lightSensorPin = A0;
-static const int groundHumSensorPin = A1;
+static const int lightSensorPin = A1;
+static const int groundHumSensorPin = A0;
 static const long uploadInterval = 300000L;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
 static const long maintainEthernetInterval = 1800000L;//1000 * 60 * 60 * 2;
 
