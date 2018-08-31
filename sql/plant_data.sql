@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-08-30 06:47:28
+-- Generation Time: 2018-08-31 02:23:37
 -- 服务器版本： 10.1.34-MariaDB
 -- PHP Version: 7.2.8
 
@@ -25,10 +25,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- 表的结构 `action`
+-- 表的结构 `actions`
 --
 
-CREATE TABLE `action` (
+CREATE TABLE `actions` (
   `id` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `type` int(11) DEFAULT NULL,
@@ -51,21 +51,27 @@ CREATE TABLE `data` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- 转存表中的数据 `data`
+-- 表的结构 `users`
 --
 
-INSERT INTO `data` (`id`, `air_temp`, `air_hum`, `air_light`, `ground_hum`, `timestamp`) VALUES
-(1, 26, 48, 110, 1018, '2018-08-30 04:45:27');
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(32) COLLATE latin1_general_ci NOT NULL,
+  `password` varchar(64) COLLATE latin1_general_ci DEFAULT '123456',
+  `register_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `action`
+-- Indexes for table `actions`
 --
-ALTER TABLE `action`
+ALTER TABLE `actions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -73,6 +79,13 @@ ALTER TABLE `action`
 --
 ALTER TABLE `data`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
