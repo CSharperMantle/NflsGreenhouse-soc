@@ -13,6 +13,10 @@
     $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=?;";
+
+    $USER_NOT_REGISTERED_MESSAGE = "用户不存在";
+    $USER_PASSWORD_WRONG_MESSAGE = "密码或用户名错误";
 
     $lightSwitchValve = 500;
     $groundHumSwitchValve = 500;
@@ -51,4 +55,45 @@
             </tr>
         ";
     }
+
+    function print_user_status (string $username, string $current_status) {
+        if ($current_status == 'online') $text = 'Available';
+        else $text = 'Offline';
+        print "
+            <div class=\"user-name\">$username</div>
+            <div class=\"user-position $current_status\">$text</div>
+        ";
+    }
+
+    function print_login_button () {
+        print "
+            <a href=\"pages-login.html\" class=\"dropdown-item\">
+                <span class=\"icon mdi mdi-power\"></span> Login
+            </a>
+        ";
+    }
+
+    function print_logoff_button () {
+        print "
+            <a href=\"pages-logoff.php\" class=\"dropdown-item\">
+                <span class=\"icon mdi mdi-power\"></span> Logout
+            </a>
+        ";
+    }
+
+    function set_session_logged_in (string $username) {
+        
+        $_SESSION['is_logged_in'] = true;
+        $_SESSION['username'] = $username;
+    }
+
+    function set_session_logged_off () {
+        unset($_SESSION['is_logged_in']);
+        unset($_SESSION['username']);
+    }
+    
+    function redirect_to (string $address) {
+        header('Content-type: text/html;charset=uft-8');
+        header("Location: $address");
+    } 
 ?>
