@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-08-31 02:23:37
+-- Generation Time: 2018-08-31 07:41:56
 -- 服务器版本： 10.1.34-MariaDB
 -- PHP Version: 7.2.8
 
@@ -35,6 +35,18 @@ CREATE TABLE `actions` (
   `action` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `info` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `alerts`
+--
+
+CREATE TABLE `alerts` (
+  `id` int(11) NOT NULL,
+  `message` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -72,6 +84,12 @@ CREATE TABLE `users` (
 -- Indexes for table `actions`
 --
 ALTER TABLE `actions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `alerts`
+--
+ALTER TABLE `alerts`
   ADD PRIMARY KEY (`id`);
 
 --
