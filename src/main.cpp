@@ -29,9 +29,9 @@ static const char *serverAddress = "192.168.1.102";
 static const int serverPort = 81;
 static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
-static LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
-static DHT *airSensor = new DHT();
-static EthernetClient *ethernetClient = new EthernetClient();
+LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
+DHT *airSensor = new DHT();
+EthernetClient *ethernetClient = new EthernetClient();
 
 static bool isEthernetOk = false;
 static bool isConnectionOk = false;
