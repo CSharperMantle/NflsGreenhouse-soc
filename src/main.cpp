@@ -18,9 +18,9 @@ const int relayThreePin = 24;
 const int dhtPin = 25;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
-const long uploadInterval = 1000 * 20;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
-const long maintainEthernetInterval = 1000 * 30;//1000 * 60 * 60 * 2;
-const long checkSensorInterval = 1000 * 10;
+const long uploadInterval = 1000 * 60 * 5; //MS->S S->M M->H
+const long maintainEthernetInterval = 1000 * 60 * 60 * 1;
+const long checkSensorInterval = 1000 * 60 * 1;
 
 const char *serverAddress = "192.168.1.102";
 const int serverPort = 81;
