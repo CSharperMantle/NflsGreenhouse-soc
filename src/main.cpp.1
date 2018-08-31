@@ -1,0 +1,22 @@
+#define PT_USE_TIMER
+#include <Arduino.h>
+#include <pt.h>
+static struct pt test;
+
+void setup() {
+    Serial.begin(9600);
+    PT_INIT(&test);
+}
+
+static int testEntry(struct pt *pt) {
+    PT_BEGIN(pt);
+    static int a = analogRead(A1);
+    static String s = a;
+    Serial.println(s);
+    PT_TIMER_DELAY(pt, 1000);
+    PT_END(pt);
+}
+
+void loop() {
+    testEntry(&test);
+}

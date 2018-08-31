@@ -1,4 +1,3 @@
-#define PT_USE_SEM
 #define PT_USE_TIMER
 
 #include <stdlib.h>
@@ -12,31 +11,38 @@
 #include <pt.h>
 #include <packet_parser.h>
 
-static const int InterruptDetectPin = 2;
-static const int relayOnePin = 22;
-static const int relayTwoPin = 23;
-static const int relayThreePin = 24;
-static const int dhtPin = 25;
-static const int lightSensorPin = A1;
-static const int groundHumSensorPin = A0;
-static const long uploadInterval = 300000L;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
-static const long maintainEthernetInterval = 1800000L;//1000 * 60 * 60 * 2;
+const int InterruptDetectPin = 2;
+const int relayOnePin = 22;
+const int relayTwoPin = 23;
+const int relayThreePin = 24;
+const int dhtPin = 25;
+const int lightSensorPin = A1;
+const int groundHumSensorPin = A0;
+const long uploadInterval = 1000 * 20;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
+const long maintainEthernetInterval = 1000 * 30;//1000 * 60 * 60 * 2;
+const long checkSensorInterval = 1000 * 10;
 
-static struct pt ctrlSensorDataUpload;
-static struct pt ctrlMaintainEthernet;
-
-static const char *serverAddress = "192.168.1.102";
-static const int serverPort = 81;
-static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
+const char *serverAddress = "192.168.1.102";
+const int serverPort = 81;
+byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *ethernetClient = new EthernetClient();
 
-static bool isEthernetOk = false;
-static bool isConnectionOk = false;
-static bool isDhtOk = false;
-static bool isLcdOk = false;
+bool isEthernetOk = false;
+bool isConnectionOk = false;
+bool isDhtOk = false;
+bool isLcdOk = false;
+
+volatile float currentAirTemp = 0;
+volatile float currentAirHum = 0;
+volatile int currentLightValue = 0;
+volatile int currentGroundHum = 0;
+
+struct pt uploadSensorData_ctrl;
+struct pt maintainEthernet_ctrl;
+struct pt readSensorData_ctrl;
 
 //User methods
 void pinTwoInterruptHandler() {
@@ -63,45 +69,6 @@ byte *readEthernet() {
     
     Serial.println("Done.");
     return packet;
-}
-
-static int uploadSensorData(struct pt *pt) {
-    PT_BEGIN(pt);
-    Serial.println("Uploading sensor data");
-    for (static int index = 1; index <= 5; index++) {
-        if (ethernetClient->connect(serverAddress, serverPort)) {
-            Serial.println("Connection established.");
-            break;
-        }
-        else
-        {
-            Serial.println(String("Connection broken. Retry ") + String(index));
-            PT_YIELD(pt);
-        }
-    }
-    static String request = String("GET /upload.php?air_temp=") + String(airSensor->getTemperature()) \
-        + String("&air_hum=") + String(airSensor->getHumidity()) \
-        + String("&air_light=") + String(analogRead(lightSensorPin)) \
-        + String("&ground_hum=") + String(analogRead(groundHumSensorPin)) \
-        + String(" HTTP/1.1\r\n" \
-        "Accept: */*\r\n" \
-        "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String(
-        "User-Agent: arduino/mega2560\r\n" \
-        "Connection: close\r\n" \
-        "\r\n" \
-        "");
-    Serial.println(request);
-    ethernetClient->print(request);
-    
-    do
-    {
-        Serial.println(ethernetClient->readString());
-    } while (ethernetClient->available());
-    
-    ethernetClient->stop();
-    Serial.println("Done. Connection closed.");
-    PT_TIMER_DELAY(pt, uploadInterval);
-    PT_END(pt);
 }
 
 void initSerial() {
@@ -163,7 +130,23 @@ void initDht() {
     Serial.println("Done.");
 }
 
-static int maintainEthernet(struct pt *pt) {
+PT_THREAD(readSensorData(struct pt *pt)) {
+    PT_BEGIN(pt);
+    Serial.println("Refreshing sensor data");
+    currentAirTemp = airSensor->getTemperature();
+    currentAirHum = airSensor->getHumidity();
+    currentGroundHum = analogRead(groundHumSensorPin);
+    currentLightValue = analogRead(lightSensorPin);
+    Serial.println(currentAirTemp);
+    Serial.println(currentAirHum);
+    Serial.println(currentGroundHum);
+    Serial.println(currentLightValue);
+    Serial.println("Done.");
+    PT_TIMER_DELAY(pt, checkSensorInterval);
+    PT_END(pt);
+}
+
+PT_THREAD(maintainEthernet(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Maintaining Ethernet connection");
     Ethernet.maintain();
@@ -172,6 +155,55 @@ static int maintainEthernet(struct pt *pt) {
     PT_END(pt);
 }
 
+PT_THREAD(uploadSensorData(struct pt *pt)) {
+    PT_BEGIN(pt);
+    Serial.println("Uploading sensor data");
+    for (static int index = 1; index <= 5; index++) {
+        if (ethernetClient->connect(serverAddress, serverPort)) {
+            Serial.println("Connection established.");
+            break;
+        }
+        else
+        {
+            Serial.println(String("Connection broken. Retry ") + String(index));
+        }
+    }
+    Serial.println(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
+            + String("&air_hum=") + currentAirHum \
+            + String("&air_light=") + currentLightValue \
+            + String("&ground_hum=") + currentGroundHum \
+            + String(" HTTP/1.1\r\n" \
+            "Accept: text/html, */*\r\n" \
+            "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String( \
+            "User-Agent: arduino/mega2560\r\n" \
+            "Connection: close\r\n" \
+            "\r\n" \
+            ""
+        )
+    );
+    ethernetClient->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
+            + String("&air_hum=") + currentAirHum \
+            + String("&air_light=") + currentLightValue \
+            + String("&ground_hum=") + currentGroundHum \
+            + String(" HTTP/1.1\r\n" \
+            "Accept: text/html, */*\r\n" \
+            "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String( \
+            "User-Agent: arduino/mega2560\r\n" \
+            "Connection: close\r\n" \
+            "\r\n" \
+            ""
+        ));
+    
+    do
+    {
+        Serial.println(ethernetClient->readString());
+    } while (ethernetClient->available());
+    
+    ethernetClient->stop();
+    Serial.println("Done. Connection closed.");
+    PT_TIMER_DELAY(pt, uploadInterval);
+    PT_END(pt);
+}
 
 //Main methods
 void setup() {
@@ -184,13 +216,15 @@ void setup() {
 
     initDht();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
-    PT_INIT(&ctrlMaintainEthernet);
-    PT_INIT(&ctrlSensorDataUpload);
+    PT_INIT(&uploadSensorData_ctrl);
+    PT_INIT(&maintainEthernet_ctrl);
+    PT_INIT(&readSensorData_ctrl);
 
     Serial.println("Init done.");
 }
 
 void loop() {
-    uploadSensorData(&ctrlSensorDataUpload);
-    maintainEthernet(&ctrlMaintainEthernet);
+    readSensorData(&readSensorData_ctrl);
+    uploadSensorData(&uploadSensorData_ctrl);
+    maintainEthernet(&maintainEthernet_ctrl);
 }
