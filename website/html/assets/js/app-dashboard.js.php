@@ -65,7 +65,14 @@ var App = (function () {
       var color3 = App.color.success;
       var color4 = App.color.danger;
 
-      $('#spark1').sparkline([0,5,3,7,5,10,3,6,5,10], { 
+      $('#spark1').sparkline([
+        <?php
+          $result = run_query_fetch_all($db, $FETCH_COMMITS_EACH_DAY_SQL);
+          foreach ($result as $key => $array) {
+            print $array['count'] . ',';
+          }
+        ?>
+      ], { 
         width: '85',
         height: '35',
         lineColor: color1,
@@ -78,12 +85,19 @@ var App = (function () {
         lineWidth: 1.15
       });
 	  
-	  $('#spark2').sparkline([0,5,3,7,5,10,3,6,5,10], { 
+    $('#spark2').sparkline([
+      <?php
+          $result = run_query_fetch_all($db, $FETCH_ALERTS_EACH_DAY_SQL);
+          foreach ($result as $key => $array) {
+            print $array['count'] . ',';
+          }
+      ?>
+    ], { 
         width: '85',
         height: '35',
-        lineColor: color2,
-        highlightSpotColor: color2,
-        highlightLineColor: color2,
+        lineColor: color4,
+        highlightSpotColor: color4,
+        highlightLineColor: color4,
         fillColor: false,
         spotColor: false,
         minSpotColor: false,
@@ -99,7 +113,7 @@ var App = (function () {
         barSpacing: 3,
         chartRangeMin: 0,
         barColor: color2 
-      });*/
+      });
 
       $('#spark3').sparkline([2,3,4,5,4,3,2,3,4,5,6,5,4,3,4,5,6,5,4,4,5], { 
         type: 'discrete', 
@@ -121,7 +135,7 @@ var App = (function () {
         minSpotColor: false,
         maxSpotColor: false,
         lineWidth: 1.15
-      });
+      });*/
     }
 
     //Main chart

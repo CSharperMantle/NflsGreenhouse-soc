@@ -14,6 +14,8 @@
     $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=?;";
+    $FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day";
+    $FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts GROUP BY day";
 
     $USER_NOT_REGISTERED_MESSAGE = "用户不存在";
     $USER_PASSWORD_WRONG_MESSAGE = "密码或用户名错误";
