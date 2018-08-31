@@ -1,3 +1,6 @@
+<?php
+  require 'assets\\php\\shared.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -29,9 +32,22 @@
               <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
                 <div role="menu" class="dropdown-menu">     
                   <div class="user-info">
-                    <div class="user-name">Túpac Amaru</div>
-                    <div class="user-position online">Available</div>
-                  </div><a href="pages-profile.html" class="dropdown-item"><span class="icon mdi mdi-face"></span> Account</a><a href="#" class="dropdown-item"><span class="icon mdi mdi-settings"></span> Settings</a><a href="pages-login.html" class="dropdown-item"><span class="icon mdi mdi-power"></span> Logout</a>
+                    <?php
+                      $exists = isset($_SESSION['is_logged_in']);
+                      if($exists) {
+                        print_user_status($_SESSION['username'], 'online');
+                      } else {
+                        print_user_status('Logged off', 'offline');
+                      }
+                    ?>
+                  </div>
+                  <?php
+                    if($exists && $_SESSION['is_logged_in'] == true) {
+                      print_logoff_button();
+                    } else {
+                      print_login_button();
+                    }
+                  ?>
                 </div>
               </li>
             </ul>

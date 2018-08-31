@@ -7,18 +7,10 @@
 #include <utility/w5100.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
-#include <SD.h>
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <packet_parser.h>
-
-static struct SensorValue {
-    int airHumidity = 0;
-    int airTemperature = 0;
-    int lightValue = 0;
-    int groundHumValue = 0;
-} sensorValue;
 
 static const int InterruptDetectPin = 2;
 static const int relayOnePin = 22;
@@ -27,7 +19,7 @@ static const int relayThreePin = 24;
 static const int dhtPin = 25;
 static const int lightSensorPin = A0;
 static const int groundHumSensorPin = A1;
-static const long uploadInterval = 1800000L;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
+static const long uploadInterval = 300000L;//1000 * 60 * 60 * 0.5; //MS->S S->M M->H
 static const long maintainEthernetInterval = 1800000L;//1000 * 60 * 60 * 2;
 
 static struct pt ctrlSensorDataUpload;
@@ -40,26 +32,15 @@ static byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 static LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 static DHT *airSensor = new DHT();
 static EthernetClient *ethernetClient = new EthernetClient();
-static SDFile *configFile = new SDFile();
 
 static bool isEthernetOk = false;
 static bool isConnectionOk = false;
-static bool isSdOk = false;
 static bool isDhtOk = false;
 static bool isLcdOk = false;
 
 //User methods
 void pinTwoInterruptHandler() {
 
-}
-
-inline void checkSensors() {
-    Serial.println("Reading sensors");
-    sensorValue.lightValue = analogRead(lightSensorPin);
-    sensorValue.airHumidity = airSensor->getHumidity();
-    sensorValue.airTemperature = airSensor->getTemperature();
-    sensorValue.groundHumValue = analogRead(groundHumSensorPin);
-    Serial.println("Done.");
 }
 
 byte *readEthernet() {
@@ -86,7 +67,6 @@ byte *readEthernet() {
 
 static int uploadSensorData(struct pt *pt) {
     PT_BEGIN(pt);
-    checkSensors();
     Serial.println("Uploading sensor data");
     for (static int index = 1; index <= 5; index++) {
         if (ethernetClient->connect(serverAddress, serverPort)) {
@@ -99,10 +79,10 @@ static int uploadSensorData(struct pt *pt) {
             PT_YIELD(pt);
         }
     }
-    static String request = String("GET /upload.php?air_temp=") + String(sensorValue.airTemperature) \
-        + String("&air_hum=") + String(sensorValue.airHumidity) \
-        + String("&air_light=") + String(sensorValue.lightValue) \
-        + String("&ground_hum=") + String(sensorValue.groundHumValue) \
+    static String request = String("GET /upload.php?air_temp=") + String(airSensor->getTemperature()) \
+        + String("&air_hum=") + String(airSensor->getHumidity()) \
+        + String("&air_light=") + String(analogRead(lightSensorPin)) \
+        + String("&ground_hum=") + String(analogRead(groundHumSensorPin)) \
         + String(" HTTP/1.1\r\n" \
         "Accept: */*\r\n" \
         "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String(
@@ -163,19 +143,6 @@ void initEthernet() {
             Serial.println(String("Test connection broken. Retry ") + String(index));
         }
     }
-    Serial.println("Done.");
-}
-
-void initSd() {
-    Serial.println("Initializing SD");
-    if (!SD.begin()) {
-        Serial.println("SD Card init failed.");
-    } else isSdOk = true;
-
-    if (!SD.exists("config.ini")) {
-        Serial.println("Config file not found.");
-    }
-
     Serial.println("Done.");
 }
 
