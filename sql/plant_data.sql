@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-08-31 07:41:56
+-- Generation Time: 2018-09-01 03:03:02
 -- 服务器版本： 10.1.34-MariaDB
 -- PHP Version: 7.2.8
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `plant_data`
 --
+CREATE DATABASE IF NOT EXISTS `plant_data` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
+USE `plant_data`;
 
 -- --------------------------------------------------------
 
@@ -104,6 +106,32 @@ ALTER TABLE `data`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
+
+
+--
+-- Metadata
+--
+USE `phpmyadmin`;
+
+--
+-- Metadata for table actions
+--
+
+--
+-- Metadata for table alerts
+--
+
+--
+-- Metadata for table data
+--
+
+--
+-- Metadata for table users
+--
+
+--
+-- Metadata for database plant_data
+--
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

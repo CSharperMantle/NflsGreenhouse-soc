@@ -46,13 +46,13 @@ var App = (function () {
     function toggleLoader(){
       $('.toggle-loading').on('click',function(){
         var parent = $(this).parents('.widget, .panel');
-
         if( parent.length ){
           parent.addClass('be-loading-active');
 
           setTimeout(function(){
+            this.document.location.reload();
             parent.removeClass('be-loading-active');
-          }, 3000);
+          }, 300);
         }
       });
     }
@@ -105,17 +105,7 @@ var App = (function () {
         lineWidth: 1.15
       });
 
-      /*$("#spark2").sparkline([5,8,7,10,9,10,8,6,4,6,8,7,6,8], { 
-        type: 'bar', 
-        width: '85',
-        height: '35',
-        barWidth: 3,
-        barSpacing: 3,
-        chartRangeMin: 0,
-        barColor: color2 
-      });
-
-      $('#spark3').sparkline([2,3,4,5,4,3,2,3,4,5,6,5,4,3,4,5,6,5,4,4,5], { 
+      /*$('#spark3').sparkline([2,3,4,5,4,3,2,3,4,5,6,5,4,3,4,5,6,5,4,4,5], { 
         type: 'discrete', 
         width: '85',
         height: '35',

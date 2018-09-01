@@ -17,8 +17,8 @@
     $FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day ASC LIMIT 10;";
     $FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts GROUP BY day ORDER BY day ASC LIMIT 10;";
 
-    $USER_NOT_REGISTERED_MESSAGE = "用户不存在";
-    $USER_PASSWORD_WRONG_MESSAGE = "密码或用户名错误";
+    $USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
+    $USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
 
     $lightSwitchValve = 500;
     $groundHumSwitchValve = 500;
