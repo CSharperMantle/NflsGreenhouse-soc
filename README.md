@@ -1,2 +1,3 @@
 # Deploy notes
-__MUST SET session.auto_start TO 1__
+__PHP 7__ needed.
+Must set __session.auto_start__ to __1__
