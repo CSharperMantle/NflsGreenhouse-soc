@@ -35,10 +35,10 @@ bool isConnectionOk = false;
 bool isDhtOk = false;
 bool isLcdOk = false;
 
-volatile float currentAirTemp = 0;
-volatile float currentAirHum = 0;
-volatile int currentLightValue = 0;
-volatile int currentGroundHum = 0;
+float currentAirTemp = 0;
+float currentAirHum = 0;
+int currentLightValue = 0;
+int currentGroundHum = 0;
 
 struct pt uploadSensorData_ctrl;
 struct pt maintainEthernet_ctrl;
@@ -225,6 +225,6 @@ void setup() {
 
 void loop() {
     readSensorData(&readSensorData_ctrl);
-    uploadSensorData(&uploadSensorData_ctrl);
-    maintainEthernet(&maintainEthernet_ctrl);
+    //uploadSensorData(&uploadSensorData_ctrl);
+    //maintainEthernet(&maintainEthernet_ctrl);
 }
