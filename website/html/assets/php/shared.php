@@ -6,16 +6,18 @@
     $dbdsn = "mysql:host=$host;dbname=$dbname";
 
     $INSERT_DATA_SQL = "SET @max = (SELECT MAX(id) FROM data); INSERT INTO data (id, air_temp, air_hum, air_light, ground_hum) VALUES (@max + 1, ?, ?, ?, ?);";
-    $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data);";
-    $FETCH_TOTAL_COUNT_SQL = "SELECT MAX(id) FROM data;";
-    $FETCH_ALL_SQL = "SELECT * FROM data;";
+    $INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, message) VALUES (@max + 1, ?);";
+    $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data) LIMIT 1;";
+    $FETCH_TOTAL_COUNT_SQL = "SELECT MAX(id) FROM data LIMIT 1;";
+    $FETCH_ALL_SQL = "SELECT * FROM data LIMIT 1000;";
     $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=?;";
+    $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=? LIMIT 1;";
     $FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day ASC LIMIT 10;";
     $FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts GROUP BY day ORDER BY day ASC LIMIT 10;";
+    $FETCH_LATEST_ALERT_SQL = "SELECT * FROM alerts WHERE alerts.id = (SELECT MAX(id) FROM alerts) LIMIT 1;";
 
     $USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
     $USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
