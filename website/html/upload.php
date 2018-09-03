@@ -20,7 +20,7 @@
     if ($air_temp > $airTempSwitchValveHigh) {
       run_query($db, $INSERT_ALERT_SQL, array("Air temperature too high"));
     }
-    if ($air_temp > $airTempSwitchValveLow) {
+    if ($air_temp < $airTempSwitchValveLow) {
       run_query($db, $INSERT_ALERT_SQL, array("Air temperature too low"));
     }
     //hum
