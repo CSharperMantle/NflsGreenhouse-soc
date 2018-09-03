@@ -74,6 +74,7 @@
                   </a> -->
                   <?php
                     if($exists && $_SESSION['is_logged_in'] == true) {
+                      print_settings_button();
                       print_logoff_button();
                     } else {
                       print_login_button();

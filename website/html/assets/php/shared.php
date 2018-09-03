@@ -85,6 +85,14 @@
         ";
     }
 
+    function print_settings_button () {
+        print "
+            <a href=\"#\" class=\"dropdown-item\">
+                <span class=\"icon mdi mdi-settings\"></span> Settings
+            </a>
+        ";
+    }
+
     function set_session_logged_in (string $username) {
         
         $_SESSION['is_logged_in'] = true;
