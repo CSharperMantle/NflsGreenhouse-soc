@@ -15,7 +15,27 @@
 
   try {
     $db = new PDO($dbdsn, $username, $passwd);
-    $rows = run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
+    run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
+    // Air checks - temp
+    if ($air_temp > $airTempSwitchValve) {
+      run_query($db, $INSERT_ALERT_SQL, array("Air temperature too high"));
+    }
+    //hum
+    if ($air_hum > $airHumSwitchValveHigh) {
+      run_query($db, $INSERT_DATA_SQL, array("Humidity of the air too high"));
+    }
+    if ($air_hum < $airHumSwitchValveLow) {
+      run_query($db, $INSERT_DATA_SQL, array("Humidity of the air too low"));
+    }
+    //light
+    
+    //Ground checks - hum
+    if ($ground_hum > $groundHumSwitchValveHigh) {
+      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soid too high"));
+    }
+    if ($ground_hum < $groundHumSwitchValveLow) {
+      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soid too low"));
+    }
   }
   catch (PDOException $e) {
     exit(500);
@@ -27,7 +47,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Result</title>
+  <title>Ningbo Foreign Language School - Uploader</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
