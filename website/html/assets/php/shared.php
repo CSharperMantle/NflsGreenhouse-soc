@@ -22,11 +22,14 @@
     $USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
     $USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
 
-    $airTempSwitchValve = 30;
+    $airTempSwitchValveLow = 10;
+    $airTempSwitchValveHigh = 30;
     $airHumSwitchValveLow = 35;
     $airHumSwitchValveHigh = 70;
     $lightSwitchValveLow = 100;
+    $airLightSwitchValveHigh = 600;
     $groundHumSwitchValveLow = 700;
+    $groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
 
     function purify_data (string $data) {

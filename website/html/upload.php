@@ -17,18 +17,26 @@
     $db = new PDO($dbdsn, $username, $passwd);
     run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
     // Air checks - temp
-    if ($air_temp > $airTempSwitchValve) {
+    if ($air_temp > $airTempSwitchValveHigh) {
       run_query($db, $INSERT_ALERT_SQL, array("Air temperature too high"));
+    }
+    if ($air_temp > $airTempSwitchValveLow) {
+      run_query($db, $INSERT_ALERT_SQL, array("Air temperature too low"));
     }
     //hum
     if ($air_hum > $airHumSwitchValveHigh) {
-      run_query($db, $INSERT_DATA_SQL, array("Humidity of the air too high"));
+      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the air too high"));
     }
     if ($air_hum < $airHumSwitchValveLow) {
-      run_query($db, $INSERT_DATA_SQL, array("Humidity of the air too low"));
+      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the air too low"));
     }
     //light
-    
+    if ($air_light > $airLightSwitchValveHigh) {
+      run_query($db, $INSERT_ALERT_SQL, array("Too bright"));
+    }
+    if ($air_light < $airLightSwitchValveLow) {
+      run_query($db, $INSERT_ALERT_SQL, array("Too dark"));
+    }
     //Ground checks - hum
     if ($ground_hum > $groundHumSwitchValveHigh) {
       run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soid too high"));
