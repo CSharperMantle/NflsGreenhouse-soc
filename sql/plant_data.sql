@@ -46,9 +46,10 @@ CREATE TABLE `actions` (
 
 CREATE TABLE `alerts` (
   `id` int(11) NOT NULL,
+  `alert_type` int(6) NOT NULL,
   `message` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
