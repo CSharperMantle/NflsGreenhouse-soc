@@ -39,10 +39,10 @@
     }
     //Ground checks - hum
     if ($ground_hum > $groundHumSwitchValveHigh) {
-      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soid too high"));
+      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soil too high"));
     }
     if ($ground_hum < $groundHumSwitchValveLow) {
-      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soid too low"));
+      run_query($db, $INSERT_ALERT_SQL, array("Humidity of the soil too low"));
     }
   }
   catch (PDOException $e) {
