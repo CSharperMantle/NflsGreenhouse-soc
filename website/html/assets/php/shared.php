@@ -1,14 +1,16 @@
 <?php
-    $host = 'localhost:3306';
+    $host = 'localhost';
+    $port = 3306;
     $dbname = 'plant_data';
     $passwd = 'plant_client';
     $username = 'plant_client';
-    $dbdsn = "mysql:host=$host;dbname=$dbname";
+    $dbdsn = "mysql:host=$host;port=$port;dbname=$dbname";
 
     $INSERT_DATA_SQL = "SET @max = (SELECT MAX(id) FROM data); INSERT INTO data (id, air_temp, air_hum, air_light, ground_hum) VALUES (@max + 1, ?, ?, ?, ?);";
     $INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, message) VALUES (@max + 1, ?);";
     $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data) LIMIT 1;";
-    $FETCH_TOTAL_COUNT_SQL = "SELECT MAX(id) FROM data LIMIT 1;";
+    $FETCH_TOTAL_COMMITS_SQL = "SELECT MAX(id) max FROM data LIMIT 1;";
+    $FETCH_TOTAL_ALERTS_SQL = "SELECT MAX(id) max FROM alerts LIMIT 1;";
     $FETCH_ALL_SQL = "SELECT * FROM data LIMIT 1000;";
     $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data ORDER BY id DESC LIMIT 100;";
@@ -17,6 +19,8 @@
     $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=? LIMIT 1;";
     $FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day ASC LIMIT 10;";
     $FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts GROUP BY day ORDER BY day ASC LIMIT 10;";
+    $FETCH_TODAY_COMMITS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day DESC LIMIT 1;";
+    $FETCH_TODAY_ALERTS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts GROUP BY day ORDER BY day DESC LIMIT 1;";
     $FETCH_LATEST_ALERT_SQL = "SELECT * FROM alerts WHERE alerts.id = (SELECT MAX(id) FROM alerts) LIMIT 1;";
 
     $USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
@@ -36,6 +40,7 @@
         $data = trim($data);
         $data = htmlspecialchars($data, ENT_COMPAT | ENT_HTML5);
         $data = stripslashes($data);
+        $data = htmlentities($data);
         return $data;
     }
 
