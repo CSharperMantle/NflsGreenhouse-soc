@@ -31,7 +31,8 @@
     $airHumSwitchValveLow = 35;
     $airHumSwitchValveHigh = 70;
     $lightSwitchValveLow = 100;
-    $airLightSwitchValveHigh = 600;
+    $airLightSwitchValveHigh = 500;
+    $airLightSwitchValveLow = 100;
     $groundHumSwitchValveLow = 700;
     $groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
