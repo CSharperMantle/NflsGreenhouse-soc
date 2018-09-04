@@ -22,8 +22,8 @@ const long uploadInterval = 1000L * 20; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
 const long checkSensorInterval = 1000L * 15;
 
-const char *serverAddress = "192.168.1.102";
-const int serverPort = 81;
+const char *serverAddress = "192.168.1.120";
+const int serverPort = 80;
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);

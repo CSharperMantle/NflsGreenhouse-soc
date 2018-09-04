@@ -11,6 +11,7 @@
     "cSpell.words": [
         "Arduino"
     ],
+    "php.suggest.basic": false,
     "python.jediEnabled": false,
     "python.pythonPath": "C:\\Users\\rong\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
 }
