@@ -105,6 +105,23 @@
         ";
     }
 
+    function print_alert (int $alert_info, string $strong, string $caption) {
+        switch ($alert_info) {
+            case AlertInfo::GOOD:
+                print " <div role=\"alert\" class=\"alert alert-primary alert-icon\">
+                            <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
+                            <div class=\"message\">
+                                <strong>$strong</strong> $caption
+                            </div>
+                        </div>";
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    }
+
     function set_session_logged_in (string $username) {
         
         $_SESSION['is_logged_in'] = true;
