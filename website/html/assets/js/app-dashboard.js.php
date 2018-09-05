@@ -92,7 +92,8 @@ var App = (function () {
             print $array['count'] . ',';
           }
       ?>
-    ], { 
+    ], {
+        /*
         width: '85',
         height: '35',
         lineColor: color4,
@@ -103,6 +104,15 @@ var App = (function () {
         minSpotColor: false,
         maxSpotColor: false,
         lineWidth: 1.15
+        */
+
+        type: 'bar', 
+        width: '85',
+        height: '35',
+        barWidth: 3,
+        barSpacing: 3,
+        chartRangeMin: 0,
+        barColor: color3,
       });
 
       /*$('#spark3').sparkline([2,3,4,5,4,3,2,3,4,5,6,5,4,3,4,5,6,5,4,4,5], { 

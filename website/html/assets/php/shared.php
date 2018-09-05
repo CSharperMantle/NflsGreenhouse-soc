@@ -7,7 +7,7 @@
     $dbdsn = "mysql:host=$host;port=$port;dbname=$dbname";
 
     $INSERT_DATA_SQL = "SET @max = (SELECT MAX(id) FROM data); INSERT INTO data (id, air_temp, air_hum, air_light, ground_hum) VALUES (@max + 1, ?, ?, ?, ?);";
-    $INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, message) VALUES (@max + 1, ?);";
+    $INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, alert_type, is_ok, message) VALUES (@max + 1, ?, ?, ?);";
     $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data) LIMIT 1;";
     $FETCH_TOTAL_COMMITS_SQL = "SELECT MAX(id) max FROM data LIMIT 1;";
     $FETCH_TOTAL_ALERTS_SQL = "SELECT MAX(id) max FROM alerts LIMIT 1;";
@@ -119,5 +119,23 @@
     function redirect_to (string $address) {
         header('Content-type: text/html;charset=uft-8');
         header("Location: $address");
-    } 
+    }
+
+    class AlertType {
+        public const AIR_TEMP = 0;
+        public const AIR_HUM = 1;
+        public const AIR_LIGHT = 2;
+        public const GROUND_HUM = 3;
+        public const OK = 0;
+        public const HIGH = 1;
+        public const LOW = 2;
+    }
+
+    class AlertInfo {
+        public const GOOD = 0;
+        public const INFO = 1;
+        public const WARNING = 2;
+        public const DANGER = 3;
+    }
+    
 ?>
