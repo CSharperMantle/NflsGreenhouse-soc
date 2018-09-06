@@ -7,15 +7,19 @@
     $dbdsn = "mysql:host=$host;port=$port;dbname=$dbname";
 
     $INSERT_DATA_SQL = "SET @max = (SELECT MAX(id) FROM data); INSERT INTO data (id, air_temp, air_hum, air_light, ground_hum) VALUES (@max + 1, ?, ?, ?, ?);";
-    $INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, alert_type, is_ok, message) VALUES (@max + 1, ?, ?, ?);";
+    $INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, alert_type, is_ok) VALUES (@max + 1, ?, ?);";
     $FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data) LIMIT 1;";
     $FETCH_TOTAL_COMMITS_SQL = "SELECT MAX(id) max FROM data LIMIT 1;";
     $FETCH_TOTAL_ALERTS_SQL = "SELECT MAX(id) max FROM alerts LIMIT 1;";
+    $FETCH_LATEST_AIR_TEMP_ALERT = "SELECT id, is_ok FROM alerts WHERE alert_type=0 ORDER BY id DESC LIMIT 1;";
+    $FETCH_LATEST_AIR_HUM_ALERT = "SELECT id, is_ok FROM alerts WHERE alert_type=1 ORDER BY id DESC LIMIT 1;";
+    $FETCH_LATEST_AIR_LIGHT_ALERT = "SELECT id, is_ok FROM alerts WHERE alert_type=2 ORDER BY id DESC LIMIT 1;";
+    $FETCH_LATEST_GROUND_HUM_ALERT = "SELECT id, is_ok FROM alerts WHERE alert_type=3 ORDER BY id DESC LIMIT 1;";
     $FETCH_ALL_SQL = "SELECT * FROM data LIMIT 5000;";
-    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp, timestamp FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum, timestamp FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light, timestamp FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum, timestamp FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=? LIMIT 1;";
     $FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day ASC LIMIT 10;";
     $FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts GROUP BY day ORDER BY day ASC LIMIT 10;";
@@ -108,7 +112,31 @@
     function print_alert (int $alert_info, string $strong, string $caption) {
         switch ($alert_info) {
             case AlertInfo::GOOD:
+                print " <div role=\"alert\" class=\"alert alert-success alert-icon\">
+                            <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
+                            <div class=\"message\">
+                                <strong>$strong</strong> $caption
+                            </div>
+                        </div>";
+                break;
+            case AlertInfo::INFO:
                 print " <div role=\"alert\" class=\"alert alert-primary alert-icon\">
+                            <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
+                            <div class=\"message\">
+                                <strong>$strong</strong> $caption
+                            </div>
+                        </div>";
+                break;
+            case AlertInfo::WARNING:
+                print " <div role=\"alert\" class=\"alert alert-warning alert-icon\">
+                            <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
+                            <div class=\"message\">
+                                <strong>$strong</strong> $caption
+                            </div>
+                        </div>";
+                break;
+            case AlertInfo::DANGER:
+                print " <div role=\"alert\" class=\"alert alert-danger alert-icon\">
                             <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
                             <div class=\"message\">
                                 <strong>$strong</strong> $caption
@@ -117,7 +145,7 @@
                 break;
             
             default:
-                # code...
+                throw new InvalidArgumentException("$alert_info");
                 break;
         }
     }
