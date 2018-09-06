@@ -26,9 +26,13 @@
     $air_light_is_ok = $result['is_ok'];
     $result = run_query($db, $FETCH_LATEST_GROUND_HUM_ALERT_SQL);
     $ground_hum_is_ok = $result['is_ok'];
+    $result = run_query($db, $FETCH_LATEST_ALERT_TIMESTAMP_SQL);
+    $latest_alert_timestamp = $result;
 
     $all_commits = run_query_fetch_all($db, $FETCH_ALL_SQL);
     
+    $now = new DateTime();
+
   }
   catch (PDOException $e) {
     $air_temp = 'None';
@@ -393,28 +397,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <!--
-                      <tr class="odd gradeX">
-                        <td>Trident</td>
-                        <td>
-                          Internet
-                          Explorer 4.0
-                        </td>
-                        <td>Win 95+</td>
-                        <td class="center"> 4</td>
-                        <td class="center"></td>
-                      </tr>
-                      <tr class="even gradeC">
-                        <td>Trident</td>
-                        <td>
-                          Internet
-                          Explorer 5.0
-                        </td>
-                        <td>Win 95+</td>
-                        <td class="center">5</td>
-                        <td class="center">C</td>
-                      </tr> 
-                    -->
                   <?php
                       foreach ($all_commits as $key => $value) {
                         $_air_temp = $value['air_temp'];
@@ -425,7 +407,7 @@
                         $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
                         print_all_commits_each_item($_timestamp, $_oddity, '收到数据', $_air_temp, $_air_hum, $_ground_hum, $_air_light);
                       } 
-                    ?>
+                  ?>
                 </tbody>
               </table>
             </div>

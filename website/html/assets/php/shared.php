@@ -27,6 +27,7 @@
     $FETCH_TODAY_COMMITS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day DESC LIMIT 1;";
     $FETCH_TODAY_ALERTS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts WHERE is_ok!=0 GROUP BY day ORDER BY day DESC LIMIT 1;";
     $FETCH_LATEST_ALERT_SQL = "SELECT * FROM alerts WHERE alerts.id = (SELECT MAX(id) FROM alerts) LIMIT 1;";
+    $FETCH_LATEST_ALERT_TIMESTAMP_SQL = "SET @max = (SELECT MAX(id) FROM alerts); SELECT timestamp FROM alerts WHERE id=@max;";
 
     $USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
     $USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
@@ -50,10 +51,10 @@
         return $data;
     }
 
-    function run_query (PDO $connection, string $sql, array $args = array()) {
+    function run_query (PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
         $stmt = $connection->prepare($sql);
         $stmt->execute($args);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch($fetch_style);
         return $result;
     }
 
@@ -188,4 +189,7 @@
         public const DANGER = 3;
     }
     
+    class ActionType {
+        public const OPEN_RELAY = 0;
+    }
 ?>
