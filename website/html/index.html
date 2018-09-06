@@ -18,6 +18,14 @@
     $today_uploads = $result['count'];
     $result = run_query($db, $FETCH_TODAY_ALERTS_COUNT_SQL);
     $today_alerts = $result['count'];
+    $result = run_query($db, $FETCH_LATEST_AIR_TEMP_ALERT_SQL);
+    $air_temp_is_ok = $result['is_ok'];
+    $result = run_query($db, $FETCH_LATEST_AIR_HUM_ALERT_SQL);
+    $air_hum_is_ok = $result['is_ok'];
+    $result = run_query($db, $FETCH_LATEST_AIR_LIGHT_ALERT_SQL);
+    $air_light_is_ok = $result['is_ok'];
+    $result = run_query($db, $FETCH_LATEST_GROUND_HUM_ALERT_SQL);
+    $ground_hum_is_ok = $result['is_ok'];
 
     $all_commits = run_query_fetch_all($db, $FETCH_ALL_SQL);
     
@@ -190,16 +198,51 @@
     </div>
     <div class="be-content">
       <div class="main-content container-fluid">
-
-        <div role="alert" class="alert alert-success alert-dismissible">
-          <!--alert-dismissible alert-primary alert-secondary 
-                      alert-light/dark/grey 
-                      alert-success alert-info alert-warning alert-danger -->
-          <div class="icon"><span class="mdi mdi-check"></span></div>
-          <div class="message"><strong>GOOD!</strong> 您的植物状态良好
-          </div>
           <?php
-
+            switch ($air_temp_is_ok) {
+              case AlertType::HIGH:
+                print_alert(AlertInfo::WARNING, '警告!', '空气温度过高。');
+                break;
+              case AlertType::LOW:
+                print_alert(AlertInfo::WARNING, '警告!', '空气温度过低。');
+                break;
+              default:
+                print_alert(AlertInfo::GOOD, '放心!', '空气温度正常。');
+                break;
+            }
+            switch ($air_hum_is_ok) {
+              case AlertType::HIGH:
+                print_alert(AlertInfo::WARNING, '警告!', '空气湿度过高。');
+                break;
+              case AlertType::LOW:
+                print_alert(AlertInfo::WARNING, '警告!', '空气湿度过低。');
+                break;
+              default:
+                print_alert(AlertInfo::GOOD, '放心!', '空气湿度正常。');
+                break;
+            }
+            switch ($air_light_is_ok) {
+              case AlertType::HIGH:
+                print_alert(AlertInfo::WARNING, '警告!', '光线过强。');
+                break;
+              case AlertType::LOW:
+                print_alert(AlertInfo::WARNING, '警告!', '光线过弱。');
+                break;
+              default:
+                print_alert(AlertInfo::GOOD, '放心!', '光线正常。');
+                break;
+            }
+            switch ($ground_hum_is_ok) {
+              case AlertType::HIGH:
+                print_alert(AlertInfo::WARNING, '警告!', '地面过湿。');
+                break;
+              case AlertType::LOW:
+                print_alert(AlertInfo::WARNING, '警告!', '地面过干。');
+                break;
+              default:
+                print_alert(AlertInfo::GOOD, '放心!', '地面湿度正常。');
+                break;
+            }
           ?>
         </div>
 
