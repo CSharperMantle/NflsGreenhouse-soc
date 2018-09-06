@@ -126,9 +126,12 @@
                         </div>";
                 break;
             case AlertInfo::INFO:
-                print " <div role=\"alert\" class=\"alert alert-primary alert-icon\">
+                print " <div role=\"alert\" class=\"alert alert-primary alert-icon alert-dismissible\">
                             <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
                             <div class=\"message\">
+                                <button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">
+                                    <span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>
+                                </button>
                                 <strong>$strong</strong> $caption
                             </div>
                         </div>";

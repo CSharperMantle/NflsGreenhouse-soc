@@ -93,49 +93,14 @@ var App = (function () {
           }
       ?>
     ], {
-        /*
-        width: '85',
-        height: '35',
-        lineColor: color4,
-        highlightSpotColor: color4,
-        highlightLineColor: color4,
-        fillColor: false,
-        spotColor: false,
-        minSpotColor: false,
-        maxSpotColor: false,
-        lineWidth: 1.15
-        */
-
         type: 'bar', 
         width: '85',
         height: '35',
-        barWidth: 3,
+        barWidth: 4,
         barSpacing: 3,
         chartRangeMin: 0,
         barColor: color3,
       });
-
-      /*$('#spark3').sparkline([2,3,4,5,4,3,2,3,4,5,6,5,4,3,4,5,6,5,4,4,5], { 
-        type: 'discrete', 
-        width: '85',
-        height: '35',
-        lineHeight: 20,
-        lineColor: color3,
-        xwidth: 18 
-      });
-
-      $('#spark4').sparkline([2,5,3,7,5,10,3,6,5,7], { 
-        width: '85',
-        height: '35',
-        lineColor: color4,
-        highlightSpotColor: color4,
-        highlightLineColor: color4,
-        fillColor: false,
-        spotColor: false,
-        minSpotColor: false,
-        maxSpotColor: false,
-        lineWidth: 1.15
-      });*/
     }
 
     //Main chart
