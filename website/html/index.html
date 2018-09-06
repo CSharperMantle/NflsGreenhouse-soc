@@ -11,9 +11,9 @@
     $ground_hum = $result['ground_hum'];
 
     $result = run_query($db, $FETCH_TOTAL_COMMITS_SQL);
-    $total_commits = $result['max'];
+    $total_commits = $result['count'];
     $result = run_query($db, $FETCH_TOTAL_ALERTS_SQL);
-    $total_alerts = $result['max'];
+    $total_alerts = $result['count'];
     $result = run_query($db, $FETCH_TODAY_COMMITS_COUNT_SQL);
     $today_uploads = $result['count'];
     $result = run_query($db, $FETCH_TODAY_ALERTS_COUNT_SQL);
