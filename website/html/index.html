@@ -234,13 +234,13 @@
             }
             switch ($ground_hum_is_ok) {
               case AlertType::HIGH:
-                print_alert(AlertInfo::WARNING, '警告!', '地面过湿。');
+                print_alert(AlertInfo::WARNING, '警告!', ' 土壤过湿。');
                 break;
               case AlertType::LOW:
-                print_alert(AlertInfo::WARNING, '警告!', '地面过干。');
+                print_alert(AlertInfo::WARNING, '警告!', '土壤过干。');
                 break;
               default:
-                print_alert(AlertInfo::GOOD, '放心!', '地面湿度正常。');
+                print_alert(AlertInfo::GOOD, '放心!', '土壤湿度正常。');
                 break;
             }
           ?>
