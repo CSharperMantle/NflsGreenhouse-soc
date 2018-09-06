@@ -24,6 +24,25 @@ var gnd_hum_data = [
         }
     ?>
 ];
+$('#spark2').sparkline([
+      <?php
+          $result = run_query_fetch_all($db, $FETCH_ALERTS_EACH_DAY_SQL);
+          foreach ($result as $key => $array) {
+            print $array['count'] . ',';
+          }
+      ?>
+    ], {
+        width: '85',
+        height: '35',
+        lineColor: color4,
+        highlightSpotColor: color4,
+        highlightLineColor: color4,
+        fillColor: false,
+        spotColor: false,
+        minSpotColor: false,
+        maxSpotColor: false,
+        lineWidth: 1.15
+      });
 ```
 ```js
 var plot_statistics = $.plot($("#main-chart"), [{
