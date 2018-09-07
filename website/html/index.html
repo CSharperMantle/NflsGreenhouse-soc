@@ -192,6 +192,11 @@
     </div>
     <div class="be-content">
       <div class="main-content container-fluid">
+        <noscript>
+          <?php
+            print_alert(AlertInfo::DANGER, '使用了不支持的设置！', '您的浏览器不支持JavaScript。大部分功能将不能正常工作。') 
+          ?>
+        </noscript>
         <?php
             if (date('H') >= 18 && date('H') < 24) {
               print_alert(AlertInfo::INFO, '晚上好！', '目前是UTC时间晚上。');
@@ -202,49 +207,57 @@
             elseif (date('H') >= 12 && date('H') < 18) {
               print_alert(AlertInfo::INFO, '下午好！', '目前是UTC时间下午。');
             }
+            $is_all_fine = true;
             switch ($air_temp_is_ok) {
               case AlertType::HIGH:
                 print_alert(AlertInfo::WARNING, '警告!', '空气温度过高。');
+                $is_all_fine = false;
                 break;
               case AlertType::LOW:
                 print_alert(AlertInfo::WARNING, '警告!', '空气温度过低。');
+                $is_all_fine = false;
                 break;
               default:
-                print_alert(AlertInfo::GOOD, '放心!', '空气温度正常。');
                 break;
             }
             switch ($air_hum_is_ok) {
               case AlertType::HIGH:
                 print_alert(AlertInfo::WARNING, '警告!', '空气湿度过高。');
+                $is_all_fine = false;
                 break;
               case AlertType::LOW:
                 print_alert(AlertInfo::WARNING, '警告!', '空气湿度过低。');
+                $is_all_fine = false;
                 break;
               default:
-                print_alert(AlertInfo::GOOD, '放心!', '空气湿度正常。');
                 break;
             }
             switch ($air_light_is_ok) {
               case AlertType::HIGH:
                 print_alert(AlertInfo::WARNING, '警告!', '光线过强。');
+                $is_all_fine = false;
                 break;
               case AlertType::LOW:
                 print_alert(AlertInfo::WARNING, '警告!', '光线过弱。');
+                $is_all_fine = false;
                 break;
               default:
-                print_alert(AlertInfo::GOOD, '放心!', '光线正常。');
                 break;
             }
             switch ($ground_hum_is_ok) {
               case AlertType::HIGH:
                 print_alert(AlertInfo::WARNING, '警告!', ' 土壤过湿。');
+                $is_all_fine = false;
                 break;
               case AlertType::LOW:
                 print_alert(AlertInfo::WARNING, '警告!', '土壤过干。');
+                $is_all_fine = false;
                 break;
               default:
-                print_alert(AlertInfo::GOOD, '放心!', '土壤湿度正常。');
                 break;
+            }
+            if ($is_all_fine) {
+              print_alert(AlertInfo::GOOD, '放心！', '一切正常。');
             }
           ?>
       </div>
