@@ -1,7 +1,8 @@
 # Deploy notes
-__PHP 7__ needed.
-Must set __session.auto_start__ to __1__
-Deserted code:
+## Requirements
+* PHP 7 needed.
+* session.auto_start=1
+## Deserted code
 ```php
 var light_data = [
     <?php
