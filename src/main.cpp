@@ -22,13 +22,17 @@ const long uploadInterval = 1000L * 20; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
 const long checkSensorInterval = 1000L * 15;
 
-const char *serverAddress = "192.168.1.120";
-const int serverPort = 80;
+const char *webServerAddress = "192.168.1.120";
+const int webServerPort = 80;
+const char *actionServerAddress = "192.168.1.120";
+const int actionServerPort = 20000;
+
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
-EthernetClient *ethernetClient = new EthernetClient();
+EthernetClient *webUploader = new EthernetClient();
+EthernetClient *actionsRequester = new EthernetClient();
 
 bool isEthernetOk = false;
 bool isConnectionOk = false;
@@ -43,6 +47,7 @@ int currentGroundHum = 0;
 struct pt uploadSensorData_ctrl;
 struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
+struct pt transmitActionData_ctrl;
 
 //User methods
 void pinTwoInterruptHandler() {
@@ -51,7 +56,7 @@ void pinTwoInterruptHandler() {
 
 byte *readEthernet() {
     Serial.println("Reading Ethernet");
-    if (!ethernetClient->connected()) {
+    if (!webUploader->connected()) {
         Serial.println("Not connected.");
         Serial.println("Done.");
         return NULL;
@@ -62,10 +67,10 @@ byte *readEthernet() {
 
     do
     {
-        packet[packet_size - 1] = ethernetClient->read();
+        packet[packet_size - 1] = webUploader->read();
         packet_size ++;
         packet = REALLOC_HEAP(packet, packet_size, byte);
-    } while (ethernetClient->available());
+    } while (webUploader->available());
     
     Serial.println("Done.");
     return packet;
@@ -96,11 +101,13 @@ void initEthernet() {
 
     Serial.println("Running tests on EthernetClient");
     for (int index = 1; index <= 5; index++) {
-        if (ethernetClient->connect(serverAddress, serverPort)) {
+        if (webUploader->connect(webServerAddress, webServerPort) && actionsRequester->connect(actionServerAddress, actionServerPort)) {
             Serial.println("Test connection established.");
-            ethernetClient->flush();
+            webUploader->flush();
+            actionsRequester->flush();
             Serial.println("Test connection flushed.");
-            ethernetClient->stop();
+            webUploader->stop();
+            actionsRequester->stop();
             Serial.println("Test connection closed.");
             isConnectionOk = true;
             break;
@@ -159,7 +166,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
     for (static int index = 1; index <= 5; index++) {
-        if (ethernetClient->connect(serverAddress, serverPort)) {
+        if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Connection established.");
             break;
         }
@@ -174,20 +181,20 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             + String("&ground_hum=") + currentGroundHum \
             + String(" HTTP/1.1\r\n" \
             "Accept: text/html, */*\r\n" \
-            "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String( \
+            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
             "User-Agent: arduino/mega2560\r\n" \
             "Connection: close\r\n" \
             "\r\n" \
             ""
         )
     );
-    ethernetClient->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
+    webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + currentAirHum \
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
             + String(" HTTP/1.1\r\n" \
             "Accept: text/html, */*\r\n" \
-            "Host: ") + String(serverAddress) + String(":") + String(serverPort) + String("\r\n") + String( \
+            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
             "User-Agent: arduino/mega2560\r\n" \
             "Connection: close\r\n" \
             "\r\n" \
@@ -196,12 +203,18 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     
     do
     {
-        Serial.println(ethernetClient->readString());
-    } while (ethernetClient->available());
+        Serial.println(webUploader->readString());
+    } while (webUploader->available());
     
-    ethernetClient->stop();
+    webUploader->stop();
     Serial.println("Done. Connection closed.");
     PT_TIMER_DELAY(pt, uploadInterval);
+    PT_END(pt);
+}
+
+PT_THREAD(transmitActionData(struct pt *pt)) {
+    PT_BEGIN(pt);
+    
     PT_END(pt);
 }
 
@@ -219,6 +232,7 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
     PT_INIT(&readSensorData_ctrl);
+    PT_INIT(&transmitActionData_ctrl);
 
     Serial.println("Init done.");
 }
@@ -227,4 +241,5 @@ void loop() {
     readSensorData(&readSensorData_ctrl);
     uploadSensorData(&uploadSensorData_ctrl);
     maintainEthernet(&maintainEthernet_ctrl);
+    transmitActionData(&transmitActionData_ctrl);
 }
