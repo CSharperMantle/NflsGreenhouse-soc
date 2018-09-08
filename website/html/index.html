@@ -39,10 +39,11 @@
     $ground_hum = 'None';
     $total_commits = 0;
     $total_alerts = 0;
+    $error_occured = true;
   }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cmn-Hans">
 
 <head>
   <meta charset="utf-8">
@@ -207,7 +208,6 @@
             elseif (date('H') >= 12 && date('H') < 18) {
               print_alert(AlertInfo::INFO, '下午好！', '目前是UTC时间下午。');
             }
-            $is_all_fine = true;
             switch ($air_temp_is_ok) {
               case AlertType::HIGH:
                 print_alert(AlertInfo::WARNING, '警告!', '空气温度过高。');
@@ -256,7 +256,7 @@
               default:
                 break;
             }
-            if ($is_all_fine) {
+            if (isset($is_all_fine)) {
               print_alert(AlertInfo::GOOD, '放心！', '一切正常。');
             }
           ?>
