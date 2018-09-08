@@ -199,6 +199,9 @@
           ?>
         </noscript>
         <?php
+            if (isset($error_occured)) {
+              print_alert(AlertInfo::DANGER, '错误！', '加载页面时出错。页面不会正常工作。');
+            }
             if (date('H') >= 18 && date('H') < 24) {
               print_alert(AlertInfo::INFO, '晚上好！', '目前是UTC时间晚上。');
             } 
