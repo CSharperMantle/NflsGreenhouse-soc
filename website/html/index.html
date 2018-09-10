@@ -260,7 +260,7 @@
               default:
                 break;
             }
-            if (isset($is_all_fine)) {
+            if (!isset($is_all_fine)) {
               print_alert(AlertInfo::GOOD, '放心！', '一切正常。');
             }
           ?>
