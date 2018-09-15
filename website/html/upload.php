@@ -66,25 +66,3 @@
     exit(500);
   }
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Ningbo Foreign Language School - Uploader</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-  <?php
-    print '<div>air_temp: ' . $air_temp . '</div>';
-    print '<br/>';
-    print '<div>air_hum: ' . $air_hum . '</div>';
-    print '<br/>';
-    print '<div>air_light: ' . $air_light . '</div>';
-    print '<br/>';
-    print '<div>ground_hum: ' . $ground_hum . '</div>';
-    print '<br/>';
-  ?>
-</body>
-</html>
