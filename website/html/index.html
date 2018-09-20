@@ -77,7 +77,7 @@
         <div class="be-right-navbar">
           <ul class="nav navbar-nav float-right be-user-nav">
             <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><img
-                  src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?php print $exists ? $_SESSION['username'] : 'John Doe'; ?></span></a>
+                  src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?= $exists ? $_SESSION['username'] : 'John Doe'; ?></span></a>
               <div role="menu" class="dropdown-menu">
                 <!--online away busy-->
                 <div class="user-info">
@@ -275,7 +275,7 @@
             <div class="data-info">
               <div class="desc">上传总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?php print $total_commits; ?>" class="number"><?php print $total_commits; ?></span>
+                  data-end="<?= $total_commits; ?>" class="number"><?= $total_commits; ?></span>
               </div>
             </div>
           </div>
@@ -287,7 +287,7 @@
             <div class="data-info">
               <div class="desc">报警总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?php print $total_alerts; ?>" class="number"><?php print $total_alerts; ?></span>
+                  data-end="<?= $total_alerts; ?>" class="number"><?= $total_alerts; ?></span>
               </div>
             </div>
           </div>
@@ -299,7 +299,7 @@
             <div class="data-info">
               <div class="desc">今日上传数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?php print $today_uploads; ?>" class="number"><?php print $today_uploads; ?></span>
+                  data-end="<?= $today_uploads; ?>" class="number"><?= $today_uploads; ?></span>
               </div>
             </div>
           </div>
@@ -310,7 +310,7 @@
             <div class="data-info">
               <div class="desc">今日报警数</div>
               <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-right"></span><span
-                  data-toggle="counter" data-end="<?php print $today_alerts; ?>" class="number">0</span>
+                  data-toggle="counter" data-end="<?= $today_alerts; ?>" class="number">0</span>
               </div>
             </div>
           </div>
@@ -356,25 +356,25 @@
               <div class="widget-counter-group widget-counter-group-right">
                 <div class="counter counter-big">
                   <div class="value">
-                    <?php print $air_temp . '°C'; ?>
+                    <?= $air_temp . '°C'; ?>
                   </div>
                   <div class="desc">空气温度</div>
                 </div>
                 <div class="counter counter-big">
                   <div class="value">
-                    <?php print $air_hum . '%'; ?>
+                    <?= $air_hum . '%'; ?>
                   </div>
                   <div class="desc">空气湿度</div>
                 </div>
                 <div class="counter counter-big">
                   <div class="value">
-                    <?php print $air_light; ?>
+                    <?= $air_light; ?>
                   </div>
                   <div class="desc">光强度</div>
                 </div>
                 <div class="counter counter-big">
                   <div class="value">
-                    <?php print $ground_hum; ?>
+                    <?= $ground_hum; ?>
                   </div>
                   <div class="desc">地面湿度</div>
                 </div>

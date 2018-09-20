@@ -43,7 +43,7 @@
     $groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
 
-    function purify_data (string $data) {
+    function purify_data (string $data) : string {
         $data = trim($data);
         $data = htmlspecialchars($data, ENT_COMPAT | ENT_HTML5);
         $data = stripslashes($data);
@@ -160,7 +160,6 @@
     }
 
     function set_session_logged_in (string $username) {
-        
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $username;
     }
@@ -194,5 +193,13 @@
     
     class ActionType {
         public const OPEN_RELAY = 0;
+        public const SHUTDOWN_RELAY = 1;
+        public const REBOOT_SYSTEM = -2;
+    }
+
+    class RetransmitType {
+        public const RETRANSMIT_NOT_REQUIRED = 0;
+        public const RETRANSMIT_SUGGESTED = 1;
+        public const RETRANSMIT_REQUIRED = 2;
     }
 ?>
