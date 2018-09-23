@@ -174,6 +174,36 @@
         header("Location: $address");
     }
 
+    function xml_print_header (string $version = '1.0', string $encoding = 'UTF-8') {
+        print "
+            <?xml version=\"$version\" encoding=\"$encoding\"?>
+        ";
+    }
+
+    function xml_print_root_begin () {
+        print "<root>";
+    }
+
+    function xml_print_root_end () {
+        print "</root>";
+    }
+
+    function xml_print_action (int $action_type) {
+        print "
+            <action>
+                $action_type
+            </action>
+        ";
+    }
+
+    function xml_print_retransmit (int $retransmit_type) {
+        print "
+            <retransmit>
+                $retransmit_type
+            </restansmit>
+        ";
+    }
+
     class AlertType {
         public const AIR_TEMP = 0;
         public const AIR_HUM = 1;
