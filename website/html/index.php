@@ -72,7 +72,7 @@
   <div class="be-wrapper be-fixed-sidebar">
     <nav class="navbar navbar-expand fixed-top be-top-header">
       <div class="container-fluid">
-        <div class="be-navbar-header"><a href="index.html" class="navbar-brand"></a>
+        <div class="be-navbar-header"><a href="index.php" class="navbar-brand"></a>
         </div>
         <div class="be-right-navbar">
           <ul class="nav navbar-nav float-right be-user-nav">
@@ -178,7 +178,7 @@
             <div class="left-sidebar-content">
               <ul class="sidebar-elements">
                 <li class="divider">菜单</li>
-                <li class="active"><a href="index.html"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
+                <li class="active"><a href="index.php"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
                 </li>
               </ul>
             </div>

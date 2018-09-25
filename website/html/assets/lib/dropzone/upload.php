@@ -1,6 +1,6 @@
 <?php
 
-$ds          = DIRECTORY_SEPARATOR;  
+$ds = DIRECTORY_SEPARATOR;  
  
 $storeFolder = 'uploads';
 $enable_upload = true;   

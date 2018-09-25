@@ -15,7 +15,7 @@
       }
       if ($result['password'] == $_passwd) {
         set_session_logged_in($result['username']);
-        redirect_to('index.html');
+        redirect_to('index.php');
       } else {
         $user_password_wrong = true;
       }
