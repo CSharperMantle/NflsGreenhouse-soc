@@ -10,6 +10,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <packet_parser.h>
+#include <tinyxml.h>
 
 const int InterruptDetectPin = 2;
 const int relayOnePin = 22;
