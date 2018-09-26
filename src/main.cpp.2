@@ -35,8 +35,6 @@ DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
 EthernetClient *actionsRequester = new EthernetClient();
 
-TiXmlDocument *respondXml = new TiXmlDocument();
-
 bool isEthernetOk = false;
 bool isConnectionOk = false;
 bool isDhtOk = false;
@@ -50,6 +48,7 @@ int currentGroundHum = 0;
 struct pt uploadSensorData_ctrl;
 struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
+struct pt transmitActionData_ctrl;
 
 //User methods
 void pinTwoInterruptHandler() {
@@ -214,6 +213,12 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_END(pt);
 }
 
+PT_THREAD(transmitActionData(struct pt *pt)) {
+    PT_BEGIN(pt);
+    
+    PT_END(pt);
+}
+
 //Main methods
 void setup() {
     //Startup scripts
@@ -228,6 +233,7 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
     PT_INIT(&readSensorData_ctrl);
+    PT_INIT(&transmitActionData_ctrl);
 
     Serial.println("Init done.");
 }
@@ -236,4 +242,5 @@ void loop() {
     readSensorData(&readSensorData_ctrl);
     uploadSensorData(&uploadSensorData_ctrl);
     maintainEthernet(&maintainEthernet_ctrl);
+    transmitActionData(&transmitActionData_ctrl);
 }
