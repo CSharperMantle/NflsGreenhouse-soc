@@ -17,10 +17,10 @@
     $FETCH_LATEST_GROUND_HUM_ALERT_SQL = "SELECT id, is_ok FROM alerts WHERE alert_type=3 ORDER BY id DESC LIMIT 1;";
     // SELECT * FROM alerts GROUP BY alert_type ORDER BY id DESC;
     $FETCH_ALL_SQL = "SELECT * FROM data LIMIT 1000;";
-    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp, timestamp FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum, timestamp FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light, timestamp FROM data ORDER BY id DESC LIMIT 100;";
-    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum, timestamp FROM data ORDER BY id DESC LIMIT 100;";
+    $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp, timestamp FROM data ORDER BY id DESC LIMIT 50;";
+    $FETCH_AIR_HUM_SQL = "SELECT id, air_hum, timestamp FROM data ORDER BY id DESC LIMIT 50;";
+    $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light, timestamp FROM data ORDER BY id DESC LIMIT 50;";
+    $FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum, timestamp FROM data ORDER BY id DESC LIMIT 50;";
     $FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=? LIMIT 1;";
     $FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day ASC LIMIT 10;";
     $FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts WHERE alerts.is_ok!=0 GROUP BY day ORDER BY day ASC LIMIT 10;";
