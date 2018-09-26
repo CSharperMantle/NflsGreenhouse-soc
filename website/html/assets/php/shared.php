@@ -16,7 +16,7 @@
     $FETCH_LATEST_AIR_LIGHT_ALERT_SQL = "SELECT id, is_ok FROM alerts WHERE alert_type=2 ORDER BY id DESC LIMIT 1;";
     $FETCH_LATEST_GROUND_HUM_ALERT_SQL = "SELECT id, is_ok FROM alerts WHERE alert_type=3 ORDER BY id DESC LIMIT 1;";
     // SELECT * FROM alerts GROUP BY alert_type ORDER BY id DESC;
-    $FETCH_ALL_SQL = "SELECT * FROM data LIMIT 5000;";
+    $FETCH_ALL_SQL = "SELECT * FROM data LIMIT 1000;";
     $FETCH_AIR_TEMP_SQL = "SELECT id, air_temp, timestamp FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_AIR_HUM_SQL = "SELECT id, air_hum, timestamp FROM data ORDER BY id DESC LIMIT 100;";
     $FETCH_AIR_LIGHT_SQL = "SELECT id, air_light, timestamp FROM data ORDER BY id DESC LIMIT 100;";
@@ -89,7 +89,7 @@
 
     function print_login_button () {
         print "
-            <a href=\"pages-login.html\" class=\"dropdown-item\">
+            <a href=\"pages-login.php\" class=\"dropdown-item\">
                 <span class=\"icon mdi mdi-power\"></span> Login
             </a>
         ";
@@ -175,33 +175,27 @@
     }
 
     function xml_print_header (string $version = '1.0', string $encoding = 'UTF-8') {
-        print "
-            <?xml version=\"$version\" encoding=\"$encoding\"?>
-        ";
+        print "<?xml version=\"$version\" encoding=\"$encoding\" ?>\r\n";
     }
 
     function xml_print_root_begin () {
-        print "<root>";
+        print "<root>\r\n";
     }
 
     function xml_print_root_end () {
-        print "</root>";
+        print "</root>\r\n";
     }
 
     function xml_print_action (int $action_type) {
-        print "
-            <action>
-                $action_type
-            </action>
-        ";
+        print "<action>\r\n" . 
+                "$action_type\r\n" .
+              "</action>\r\n";
     }
 
     function xml_print_retransmit (int $retransmit_type) {
-        print "
-            <retransmit>
-                $retransmit_type
-            </restansmit>
-        ";
+        print "<retransmit>\r\n" . 
+                "$retransmit_type\r\n" . 
+              "</retransmit>\r\n";
     }
 
     class AlertType {

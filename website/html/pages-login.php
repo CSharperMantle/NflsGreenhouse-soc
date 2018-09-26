@@ -1,5 +1,6 @@
 <?php
   require 'assets\\php\\shared.php';
+
   $user_not_registered = false;
   $user_password_wrong = false;
   if (array_key_exists('username', $_POST) && array_key_exists('password', $_POST)) {
@@ -53,7 +54,7 @@
                   else print "<div>请输入登录信息</div>"; 
                 ?></span></div>
               <div class="card-body">
-                <form action="pages-login.html" method="POST">
+                <form action="pages-login.php" method="POST">
                   <div class="form-group">
                     <input id="username" type="text" required="" placeholder="用户名" autocomplete="off" class="form-control" name="username" />
                   </div>
