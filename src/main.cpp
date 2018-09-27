@@ -139,6 +139,13 @@ void initDht() {
     Serial.println("Done.");
 }
 
+TiXmlElement *readXmlRootElementString(const char * str) {
+    TiXmlDocument *doc = new TiXmlDocument();
+    doc->Parse(str);
+    TiXmlElement *elem = doc->RootElement();
+    return elem;
+}
+
 PT_THREAD(readSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Refreshing sensor data");
@@ -207,7 +214,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     {
         Serial.println(webUploader->readString());
     } while (webUploader->available());
-    
+
     webUploader->stop();
     Serial.println("Done. Connection closed.");
     PT_TIMER_DELAY(pt, uploadInterval);
