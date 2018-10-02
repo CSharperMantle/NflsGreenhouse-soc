@@ -43,29 +43,29 @@
     $groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
 
-    function purify_data (string $data) : string {
-        $data = trim($data);
+    function purify_data(string $data) : string {
         $data = htmlspecialchars($data, ENT_COMPAT | ENT_HTML5);
-        $data = stripslashes($data);
         $data = htmlentities($data);
+        $data = trim($data);
+        $data = stripslashes($data);
         return $data;
     }
 
-    function run_query (PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
+    function run_query(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
         $stmt = $connection->prepare($sql);
         $stmt->execute($args);
         $result = $stmt->fetch($fetch_style);
         return $result;
     }
 
-    function run_query_fetch_all (PDO $connection, string $sql, array $args = array()) {
+    function run_query_fetch_all(PDO $connection, string $sql, array $args = array()) {
         $stmt = $connection->prepare($sql);
         $stmt->execute($args);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 
-    function print_all_commits_each_item (string $timestamp, string $oddity, string $type, string $air_temp, string $air_hum, string $air_light, string $ground_hum) {
+    function print_all_commits_each_item(string $timestamp, string $oddity, string $type, string $air_temp, string $air_hum, string $air_light, string $ground_hum) {
         print "
             <tr class=\"$oddity\">
                 <td>$timestamp</td>
@@ -78,7 +78,7 @@
         ";
     }
 
-    function print_user_status (string $username, string $current_status) {
+    function print_user_status(string $username, string $current_status) {
         if ($current_status == 'online') $text = 'Available';
         else $text = 'Offline';
         print "
@@ -87,7 +87,7 @@
         ";
     }
 
-    function print_login_button () {
+    function print_login_button() {
         print "
             <a href=\"pages-login.php\" class=\"dropdown-item\">
                 <span class=\"icon mdi mdi-power\"></span> Login
@@ -95,7 +95,7 @@
         ";
     }
 
-    function print_logoff_button () {
+    function print_logoff_button() {
         print "
             <a href=\"pages-logoff.php\" class=\"dropdown-item\">
                 <span class=\"icon mdi mdi-power\"></span> Logout
@@ -103,7 +103,7 @@
         ";
     }
 
-    function print_settings_button () {
+    function print_settings_button() {
         print "
             <a href=\"#\" class=\"dropdown-item\">
                 <span class=\"icon mdi mdi-settings\"></span> Settings
@@ -111,7 +111,7 @@
         ";
     }
 
-    function print_alert (int $alert_info, string $strong, string $caption) {
+    function print_alert(int $alert_info, string $strong, string $caption) {
         switch ($alert_info) {
             case AlertInfo::GOOD:
                 print " <div role=\"alert\" class=\"alert alert-success alert-icon alert-dismissible\">
@@ -159,40 +159,40 @@
         }
     }
 
-    function set_session_logged_in (string $username) {
+    function set_session_logged_in(string $username) {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $username;
     }
 
-    function set_session_logged_off () {
+    function set_session_logged_off() {
         unset($_SESSION['is_logged_in']);
         unset($_SESSION['username']);
     }
     
-    function redirect_to (string $address) {
+    function redirect_to(string $address) {
         header('Content-type: text/html;charset=uft-8');
         header("Location: $address");
     }
 
-    function xml_print_header (string $version = '1.0', string $encoding = 'UTF-8') {
+    function xml_print_header(string $version = '1.0', string $encoding = 'UTF-8') {
         print "<?xml version=\"$version\" encoding=\"$encoding\" ?>\r\n";
     }
 
-    function xml_print_root_begin () {
+    function xml_print_root_begin() {
         print "<root>\r\n";
     }
 
-    function xml_print_root_end () {
+    function xml_print_root_end() {
         print "</root>\r\n";
     }
 
-    function xml_print_action (int $action_type) {
+    function xml_print_action(int $action_type) {
         print "<action>\r\n" . 
                 "$action_type\r\n" .
               "</action>\r\n";
     }
 
-    function xml_print_retransmit (int $retransmit_type) {
+    function xml_print_retransmit(int $retransmit_type) {
         print "<retransmit>\r\n" . 
                 "$retransmit_type\r\n" . 
               "</retransmit>\r\n";
