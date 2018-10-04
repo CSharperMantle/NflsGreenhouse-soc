@@ -32,16 +32,21 @@
     $USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
     $USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
 
-    $airTempSwitchValveLow = 10;
-    $airTempSwitchValveHigh = 30;
-    $airHumSwitchValveLow = 35;
-    $airHumSwitchValveHigh = 70;
-    $lightSwitchValveLow = 100;
-    $airLightSwitchValveHigh = 500;
-    $airLightSwitchValveLow = 100;
-    $groundHumSwitchValveLow = 700;
-    $groundHumSwitchValveHigh = 1000;
+    const airTempSwitchValveLow = 10;
+    const airTempSwitchValveHigh = 30;
+    const airHumSwitchValveLow = 35;
+    const airHumSwitchValveHigh = 70;
+    const lightSwitchValveLow = 100;
+    const airLightSwitchValveHigh = 500;
+    const airLightSwitchValveLow = 100;
+    const groundHumSwitchValveLow = 700;
+    const groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
+
+    const skySheetOnePin = 22;
+    const skySheetTwoPin = 23;
+    const fanOnePin = 24;
+    const fanTwoPin = 25;
 
     function purify_data(string $data) : string {
         $data = htmlspecialchars($data, ENT_COMPAT | ENT_HTML5);
@@ -213,5 +218,10 @@
         public const RELAY_ACTION = 1;
         public const DEVICE_ACTION = 2;
         public const RETRANSMIT_ACTION = 3;
+    }
+
+    class RelayAction {
+        public const ON = 1;
+        public const OFF = 1;
     }
 ?>

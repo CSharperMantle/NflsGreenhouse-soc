@@ -14,10 +14,11 @@
 #include <packet_defs.h>
 
 const int InterruptDetectPin = 2;
-const int relayOnePin = 22;
-const int relayTwoPin = 23;
-const int relayThreePin = 24;
-const int dhtPin = 25;
+const int skySheetOnePin = 22;
+const int skySheetTwoPin = 23;
+const int fanOnePin = 24;
+const int fanTwoPin = 25;
+const int dhtPin = 26;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
 const long uploadInterval = 1000L * 20; //MS->S S->M M->H

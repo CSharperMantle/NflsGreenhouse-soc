@@ -393,14 +393,14 @@
 
         <div class="col-sm-12">
           <div class="card card-table">
-            <div class="card-header">活动记录
+            <div class="card-header">历史数据
               <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a href="#" role="button"
                   data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
                 <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another
                     action</a><a href="#" class="dropdown-item">Something else here</a>
                   <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
                 </div>
-              </div><span class="card-subtitle">系统历史活动</span>
+              </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">
               <table id="table2" class="table table-striped table-hover table-fw-widget">

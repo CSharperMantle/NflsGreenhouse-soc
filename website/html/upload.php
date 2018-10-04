@@ -25,44 +25,48 @@
     exit(500);
   }
 
+  $actions = array();
+
   run_query($db, $INSERT_DATA_SQL, array($air_temp, $air_hum, $air_light, $ground_hum));
   // Air checks - temp
-  if ($air_temp > $airTempSwitchValveHigh) {
+  if ($air_temp > airTempSwitchValveHigh) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_TEMP, AlertType::HIGH));
-    $action_air_temp = ActionType::OPEN_RELAY;
+    $actions[count($actions) + 1] = array(ActionType::RELAY_ACTION, fanOnePin, RelayAction::ON);
+    $actions[count($actions) + 1] = array(ActionType::RELAY_ACTION, fanTwoPin, RelayAction::ON);
   }
-  elseif ($air_temp < $airTempSwitchValveLow) {
+  elseif ($air_temp < airTempSwitchValveLow) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_TEMP, AlertType::LOW));
-    $action_air_temp = ActionType::SHUTDOWN_RELAY;
+    $actions[count($actions) + 1] = array(ActionType::RELAY_ACTION, fanOnePin, RelayAction::OFF);
+    $actions[count($actions) + 1] = array(ActionType::RELAY_ACTION, fanTwoPin, RelayAction::OFF);
   }
   else {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_TEMP, AlertType::OK));
   }
   //hum
-  if ($air_hum > $airHumSwitchValveHigh) {
+  if ($air_hum > airHumSwitchValveHigh) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_HUM, AlertType::HIGH));
   }
-  elseif ($air_hum < $airHumSwitchValveLow) {
+  elseif ($air_hum < airHumSwitchValveLow) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_HUM, AlertType::LOW));
   }
   else {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_HUM, AlertType::OK));
   }
   //light
-  if ($air_light > $airLightSwitchValveHigh) {
+  if ($air_light > airLightSwitchValveHigh) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::HIGH));
   }
-  elseif ($air_light < $airLightSwitchValveLow) {
+  elseif ($air_light < airLightSwitchValveLow) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::LOW));
   }
   else {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::OK));
   }
   //Ground checks - hum
-  if ($ground_hum > $groundHumSwitchValveHigh) {
+  if ($ground_hum > groundHumSwitchValveHigh) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::GROUND_HUM, AlertType::LOW));
   }
-  elseif ($ground_hum < $groundHumSwitchValveLow) {
+  elseif ($ground_hum < groundHumSwitchValveLow) {
     run_query($db, $INSERT_ALERT_SQL, array(AlertType::GROUND_HUM, AlertType::HIGH));
   }
   else {
