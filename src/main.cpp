@@ -1,6 +1,7 @@
 #define PT_USE_TIMER
 
 #include <stdlib.h>
+#include <string.h>
 #include <Arduino.h>
 #include <WString.h>
 #include <utility/w5100.h>
@@ -107,10 +108,7 @@ void parseXmlStringAndExecute(const char * str) {
     doc->Parse(str);
 
     TiXmlHandle *handle = new TiXmlHandle(doc);
-    TiXmlHandle *root = &(handle->FirstChild("root"));
-    TiXmlHandle *actions = &(root->FirstChild("actions"));
-    TiXmlHandle *actionHandle = &(actions->FirstChild("action"));
-    TiXmlElement *action = actionHandle->ToElement();
+    TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
     for (action; action; action = action->NextSiblingElement()) {
         TiXmlElement *type = action->FirstChildElement("type");
         TiXmlElement *targetId = action->FirstChildElement("target_id");
@@ -120,7 +118,7 @@ void parseXmlStringAndExecute(const char * str) {
         const char *paramValue = param->ToText()->Value();
         
         if (typeValue == ActionType::RELAY_ACTION) { 
-            if (paramValue == "0") {
+            if (!strcmp(paramValue, "0")) {
                 digitalWrite(targetIdValue, LOW);
             }
             else {
