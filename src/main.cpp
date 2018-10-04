@@ -9,7 +9,6 @@
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
-#include <packet_parser.h>
 #include <tinyxml.h>
 
 const int InterruptDetectPin = 2;
@@ -34,13 +33,6 @@ LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
 EthernetClient *actionsRequester = new EthernetClient();
-
-TiXmlDocument *respondXml = new TiXmlDocument();
-
-bool isEthernetOk = false;
-bool isConnectionOk = false;
-bool isDhtOk = false;
-bool isLcdOk = false;
 
 float currentAirTemp = 0;
 float currentAirHum = 0;
@@ -73,7 +65,6 @@ void initEthernet() {
             Serial.println(Ethernet.localIP());
             Serial.println(Ethernet.dnsServerIP());
             Serial.println(Ethernet.gatewayIP());
-            isEthernetOk = true;
             break;
         }
     }
@@ -89,7 +80,6 @@ void initEthernet() {
             webUploader->stop();
             actionsRequester->stop();
             Serial.println("Test connection closed.");
-            isConnectionOk = true;
             break;
         }
         else
@@ -105,7 +95,6 @@ void initLcd() {
     screen->begin(16, 2);
     screen->clear();
     screen->setBacklight(false);
-    isLcdOk = true;
     Serial.println("Done.");
 }
 
@@ -113,7 +102,6 @@ void initDht() {
     Serial.println("Initializing DHT");
     airSensor->setup(dhtPin, DHT::DHT_MODEL_t::DHT11);
     Serial.println(airSensor->getStatusString());
-    isDhtOk = true;
     Serial.println("Done.");
 }
 
