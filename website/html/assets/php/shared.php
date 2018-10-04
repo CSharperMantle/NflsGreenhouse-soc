@@ -192,12 +192,6 @@
               "</action>\r\n";
     }
 
-    function xml_print_retransmit(int $retransmit_type) {
-        print "<retransmit>\r\n" . 
-                "$retransmit_type\r\n" . 
-              "</retransmit>\r\n";
-    }
-
     class AlertType {
         public const AIR_TEMP = 0;
         public const AIR_HUM = 1;

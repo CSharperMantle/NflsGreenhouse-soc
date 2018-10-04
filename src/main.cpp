@@ -56,28 +56,6 @@ void pinTwoInterruptHandler() {
 
 }
 
-byte *readEthernet() {
-    Serial.println("Reading Ethernet");
-    if (!webUploader->connected()) {
-        Serial.println("Not connected.");
-        Serial.println("Done.");
-        return NULL;
-    }
-
-    size_t packet_size = 1;
-    byte *packet = MALLOC_HEAP(packet_size, byte);
-
-    do
-    {
-        packet[packet_size - 1] = webUploader->read();
-        packet_size ++;
-        packet = REALLOC_HEAP(packet, packet_size, byte);
-    } while (webUploader->available());
-    
-    Serial.println("Done.");
-    return packet;
-}
-
 void initSerial() {
     Serial.begin(9600);
     Serial.flush();
@@ -139,11 +117,10 @@ void initDht() {
     Serial.println("Done.");
 }
 
-TiXmlElement *readXmlRootElementString(const char * str) {
+void parseXmlStringAndExecute(const char * str) {
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
     TiXmlElement *elem = doc->RootElement();
-    return elem;
 }
 
 PT_THREAD(readSensorData(struct pt *pt)) {

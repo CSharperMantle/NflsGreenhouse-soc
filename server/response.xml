@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <actions>
+    <!--Action types: 1: RELAY 2: LCD 3: RETRANSMIT-->
+        <action type="1" target_id="22" param="ON" />
+        <action type="1" target_id="23" param="OFF" />
+        <action type="2" target_id="50" param="Hello, LCD" />
+        <action type="3" target_id="" param="" />
+    </actions>
+</root>
