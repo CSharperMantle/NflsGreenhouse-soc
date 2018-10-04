@@ -2,9 +2,25 @@
 <root>
     <actions>
     <!--Action types: 1: RELAY 2: LCD 3: RETRANSMIT-->
-        <action type="1" target_id="22" param="ON" />
-        <action type="1" target_id="23" param="OFF" />
-        <action type="2" target_id="50" param="Hello, LCD" />
-        <action type="3" target_id="" param="" />
+        <action>
+            <type>1</type>
+            <target_id>22</target_id>
+            <param>ON</param>
+        </action>
+        <action>
+            <type>1</type>
+            <target_id>23</target_id>
+            <param>OFF</param>
+        </action>
+        <action>
+            <type>2</type>
+            <target_id>50</target_id>
+            <param>Hello, LCD</param>
+        </action>
+        <action>
+            <type>3</type>
+            <target_id></target_id>
+            <param></param>
+        </action>
     </actions>
 </root>
