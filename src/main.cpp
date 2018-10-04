@@ -108,7 +108,8 @@ void initDht() {
 void parseXmlStringAndExecute(const char * str) {
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
-    TiXmlElement *elem = doc->RootElement();
+    TiXmlElement *root = doc->RootElement();
+    TiXmlElement *actions = root->FirstChildElement(); 
 }
 
 PT_THREAD(readSensorData(struct pt *pt)) {
