@@ -41,4 +41,14 @@ const byte packetEnd = 0xF2;
 //Example packet for systemOn event
 const byte systemOnPacket[] = {packetBegin, 0x01, 0x00, PacketType::pSystemOn, 0x00, 0x00, 0x00, packetEnd};
 
+enum ActionType {
+    RELAY_ACTION = 1,
+    DEVICE_ACTION = 2,
+    RETRANSMIT_ACTION = 3,
+};
+
+enum DeviceId {
+    DEVICE_LCD = -1,
+};
+
 #endif /* __PACKET_DEFS_H__ */

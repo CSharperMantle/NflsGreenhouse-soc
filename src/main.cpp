@@ -10,6 +10,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <tinyxml.h>
+#include <packet_defs.h>
 
 const int InterruptDetectPin = 2;
 const int relayOnePin = 22;
@@ -44,10 +45,6 @@ struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
 
 //User methods
-void pinTwoInterruptHandler() {
-
-}
-
 void initSerial() {
     Serial.begin(9600);
     Serial.flush();
@@ -108,8 +105,41 @@ void initDht() {
 void parseXmlStringAndExecute(const char * str) {
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
-    TiXmlElement *root = doc->RootElement();
-    TiXmlElement *actions = root->FirstChildElement(); 
+
+    TiXmlHandle *handle = new TiXmlHandle(doc);
+    TiXmlHandle *root = &(handle->FirstChild("root"));
+    TiXmlHandle *actions = &(root->FirstChild("actions"));
+    TiXmlHandle *actionHandle = &(actions->FirstChild("action"));
+    TiXmlElement *action = actionHandle->ToElement();
+    for (action; action; action = action->NextSiblingElement()) {
+        TiXmlElement *type = action->FirstChildElement("type");
+        TiXmlElement *targetId = action->FirstChildElement("target_id");
+        TiXmlElement *param = action->FirstChildElement("param");
+        int typeValue = atoi(type->ToText()->Value());
+        int targetIdValue = atoi(targetId->ToText()->Value());
+        const char *paramValue = param->ToText()->Value();
+        
+        if (typeValue == ActionType::RELAY_ACTION) { 
+            if (paramValue == "0") {
+                digitalWrite(targetIdValue, LOW);
+            }
+            else {
+                digitalWrite(targetIdValue, HIGH);
+            }
+        }
+        else if (typeValue == ActionType::DEVICE_ACTION) {
+            //TODO: Add multidevice handler
+        }
+        else if (typeValue == ActionType::RETRANSMIT_ACTION) {
+            //TODO: Add retransmitter
+        }
+        else {
+            Serial.println(String("Unknown XML action received: ") + String(typeValue));
+        }
+    }
+
+    delete doc;
+    delete handle;
 }
 
 PT_THREAD(readSensorData(struct pt *pt)) {

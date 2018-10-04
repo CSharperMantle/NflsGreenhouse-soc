@@ -5,16 +5,16 @@
         <action>
             <type>1</type>
             <target_id>22</target_id>
-            <param>ON</param>
+            <param>1</param>
         </action>
         <action>
             <type>1</type>
             <target_id>23</target_id>
-            <param>OFF</param>
+            <param>0</param>
         </action>
         <action>
             <type>2</type>
-            <target_id>50</target_id>
+            <target_id>-1</target_id>
             <param>Hello, LCD</param>
         </action>
         <action>
