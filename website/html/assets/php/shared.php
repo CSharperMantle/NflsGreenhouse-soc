@@ -210,14 +210,8 @@
     }
     
     class ActionType {
-        public const OPEN_RELAY = 0;
-        public const SHUTDOWN_RELAY = 1;
-        public const REBOOT_SYSTEM = -2;
-    }
-
-    class RetransmitType {
-        public const RETRANSMIT_NOT_REQUIRED = 0;
-        public const RETRANSMIT_SUGGESTED = 1;
-        public const RETRANSMIT_REQUIRED = 2;
+        public const RELAY_ACTION = 1;
+        public const DEVICE_ACTION = 2;
+        public const RETRANSMIT_ACTION = 3;
     }
 ?>
