@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <actions>
-    <!--Action types: 1: RELAY 2: LCD 3: RETRANSMIT-->
+        <!--Action types: 1: RELAY 2: LCD 3: RETRANSMIT-->
         <action>
             <type>1</type>
             <target_id>22</target_id>
