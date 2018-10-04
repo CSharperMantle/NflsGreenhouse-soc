@@ -1,8 +1,8 @@
 # Deploy notes
 ## Requirements
-* PHP 7 needed.
-* session.auto_start=1
-* set in Apache: ErrorDocument 404 .../NflsWatering/website/html/pages-404.html
+* Required `PHP7+`
+* Required `session.auto_start=1`
+* Required settings in Apache: `ErrorDocument 404 .../NflsWatering/website/html/pages-404.html`
 ## Deserted code
 ```php
 var light_data = [
