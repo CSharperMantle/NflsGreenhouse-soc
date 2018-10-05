@@ -7,7 +7,7 @@
 ```php
 var light_data = [
     <?php
-        $air_light_query = run_query_fetch_all($db, $FETCH_AIR_LIGHT_SQL);
+        $air_light_query = run_query_fetch_all($db, FETCH_AIR_LIGHT_SQL);
         foreach ($air_light_query as $id => $array) {
             $_id = $array['id'];
             $_light = $array['air_light'];
@@ -18,7 +18,7 @@ var light_data = [
 	  
 var gnd_hum_data = [
     <?php
-        $ground_hum_query = run_query_fetch_all($db, $FETCH_GROUND_HUM_SQL);
+        $ground_hum_query = run_query_fetch_all($db, FETCH_GROUND_HUM_SQL);
         foreach ($ground_hum_query as $id => $array) {
             $_id = $array['id'];
             $_hum = $array['ground_hum'];
@@ -28,7 +28,7 @@ var gnd_hum_data = [
 ];
 $('#spark2').sparkline([
       <?php
-          $result = run_query_fetch_all($db, $FETCH_ALERTS_EACH_DAY_SQL);
+          $result = run_query_fetch_all($db, FETCH_ALERTS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {
             print $array['count'] . ',';
           }

@@ -10,7 +10,7 @@
 
       $db = new PDO($dbdsn, $username, $passwd);
 
-      $result = run_query($db, $FETCH_USER_EXIST_SQL, array($_username));
+      $result = run_query($db, FETCH_USER_EXIST_SQL, array($_username));
       if ($result == NULL) {
         $user_not_registered = true;
       }
@@ -49,8 +49,8 @@
             <div class="card card-border-color card-border-color-primary">
               <div class="card-header"><img src="assets/img/logo.png" alt="logo" class="logo-img"><span class="splash-description">
                 <?php 
-                  if($user_not_registered) print $USER_NOT_REGISTERED_MESSAGE; 
-                  elseif($user_password_wrong) print $USER_PASSWORD_WRONG_MESSAGE; 
+                  if($user_not_registered) print USER_NOT_REGISTERED_MESSAGE; 
+                  elseif($user_password_wrong) print USER_PASSWORD_WRONG_MESSAGE; 
                   else print "<div>请输入登录信息</div>"; 
                 ?></span></div>
               <div class="card-body">

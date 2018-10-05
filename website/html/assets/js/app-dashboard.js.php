@@ -67,7 +67,7 @@ var App = (function () {
 
       $('#spark1').sparkline([
         <?php
-          $result = run_query_fetch_all($db, $FETCH_COMMITS_EACH_DAY_SQL);
+          $result = run_query_fetch_all($db, FETCH_COMMITS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {
             print $array['count'] . ',';
           }
@@ -87,7 +87,7 @@ var App = (function () {
 	  
     $('#spark2').sparkline([
       <?php
-          $result = run_query_fetch_all($db, $FETCH_ALERTS_EACH_DAY_SQL);
+          $result = run_query_fetch_all($db, FETCH_ALERTS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {
             print $array['count'] . ',';
           }
@@ -113,7 +113,7 @@ var App = (function () {
 
       var temp_data = [
         <?php
-          $air_temp_query = run_query_fetch_all($db, $FETCH_AIR_TEMP_SQL);
+          $air_temp_query = run_query_fetch_all($db, FETCH_AIR_TEMP_SQL);
           foreach ($air_temp_query as $id => $array) {
             $_id = $array['id'];
             $_temp = $array['air_temp'];
@@ -124,7 +124,7 @@ var App = (function () {
 
       var hum_data = [
         <?php
-          $air_hum_query = run_query_fetch_all($db, $FETCH_AIR_HUM_SQL);
+          $air_hum_query = run_query_fetch_all($db, FETCH_AIR_HUM_SQL);
           foreach ($air_hum_query as $id => $array) {
             $_id = $array['id'];
             $_hum = $array['air_hum'];
