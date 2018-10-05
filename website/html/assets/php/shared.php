@@ -1,4 +1,10 @@
 <?php
+    /**
+     * Copyright (c) 2018 Ningbo Foreign Language School
+     * This part of program should be delivered with the whole project.
+     * Partly use is not allowed.
+     * Licensed under GPL-v3 Agreement
+     */
     const host = 'localhost';
     const port = 3306;
     const dbname = 'plant_data';
@@ -47,6 +53,8 @@
     const skySheetTwoPin = 23;
     const fanOnePin = 24;
     const fanTwoPin = 25;
+    const waterPumpOnePin = 26;
+    const waterPumpTwoPin = 27;
 
     function purify_data(string $data) : string {
         $data = htmlspecialchars($data, ENT_COMPAT | ENT_HTML5);
@@ -180,21 +188,39 @@
     }
 
     function xml_print_header(string $version = '1.0', string $encoding = 'UTF-8') {
-        print "<?xml version=\"$version\" encoding=\"$encoding\" ?>\r\n";
+        print "<?xml version=\"$version\" encoding=\"$encoding\" ?>\n";
     }
 
     function xml_print_root_begin() {
-        print "<root>\r\n";
+        print "<root>\n";
     }
 
     function xml_print_root_end() {
-        print "</root>\r\n";
+        print "</root>\n";
     }
 
-    function xml_print_action(int $action_type) {
-        print "<action>\r\n" . 
-                "$action_type\r\n" .
-              "</action>\r\n";
+    function xml_print_actions_begin() {
+        print "<actions>\n";
+
+    }
+
+    function xml_print_actions_end() {
+        print "</actions>\n";
+    }
+
+    function xml_print_action(int $type, int $target_id, string $param) {
+        /*
+        <action>
+            <type>1</type>
+            <target_id>22</target_id>
+            <param>1</param>
+        </action>
+        */
+        print "<action>\n";
+        print "    <type>$type</type>\n";
+        print "    <target_id>$target_id</target_id>\n";
+        print "    <param>$param</param>\n";
+        print "</action>\n";
     }
 
     class AlertType {
@@ -222,6 +248,12 @@
 
     class RelayAction {
         public const ON = 1;
-        public const OFF = 1;
+        public const OFF = 0;
+    }
+
+    class SkySheetAction {
+        public const MOVEON = 1;
+        public const MOVEOFF = 0;
+        public const STOP = 2;
     }
 ?>

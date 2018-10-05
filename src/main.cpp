@@ -20,13 +20,18 @@
 #include <packet_defs.h>
 
 const int InterruptDetectPin = 2;
+
 const int skySheetOnePin = 22;
 const int skySheetTwoPin = 23;
 const int fanOnePin = 24;
 const int fanTwoPin = 25;
-const int dhtPin = 26;
+const int waterPumpOnePin = 26;
+const int waterPumpTwoPin = 27;
+
+const int dhtPin = 28;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
+
 const long uploadInterval = 1000L * 20; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
 const long checkSensorInterval = 1000L * 15;
@@ -133,7 +138,16 @@ void parseXmlStringAndExecute(const char * str) {
             }
         }
         else if (typeValue == ActionType::DEVICE_ACTION) {
-            //TODO: Add multidevice handler
+            if (targetIdValue == ActionType::DEVICE_LCD)
+            {
+                screen->clear();
+                screen->home();
+                screen->print(param);
+            }
+            else {
+                Serial.println(String("Unknown device: ") + String(targetIdValue));
+            }
+            //TODO: Add more devices
         }
         else if (typeValue == ActionType::RETRANSMIT_ACTION) {
             //TODO: Add retransmitter
