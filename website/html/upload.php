@@ -1,11 +1,10 @@
 <?php
-  /*
-  GET Params:
-    air_temp 空气温度
-    air_hum 空气湿度
-    air_light 空气亮度
-    ground_hum 地面湿度
-  */
+  /**
+   * Copyright (c) 2018 Ningbo Foreign Language School
+   * This part of program should be delivered with the whole project.
+   * Partly use is not allowed.
+   * Licensed under GPL-v3 Agreement
+   */
   require 'assets\\php\\shared.php';
 
   if ((!isset($_GET['air_temp'])) || (!isset($_GET['air_hum'])) || (!isset($_GET['air_light'])) || (!isset($_GET['ground_hum']))) {
