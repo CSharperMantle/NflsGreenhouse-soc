@@ -2,7 +2,7 @@
   require 'assets\\php\\shared.php';
 
   try {
-    $db = new PDO($dbdsn, $username, $passwd);
+    $db = new PDO(dbdsn, username, passwd);
 
     $result = run_query($db, FETCH_LATEST_SQL);
     $air_temp = $result['air_temp'];

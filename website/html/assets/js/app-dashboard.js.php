@@ -1,7 +1,7 @@
 <?php
   require '../php/shared.php';
 
-  $db = new PDO($dbdsn, $username, $passwd);
+  $db = new PDO(dbdsn, username, passwd);
 ?>
 
 var App = (function () {

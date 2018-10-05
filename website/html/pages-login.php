@@ -8,7 +8,7 @@
       $_username = purify_data($_POST['username']);
       $_passwd = purify_data($_POST['password']);
 
-      $db = new PDO($dbdsn, $username, $passwd);
+      $db = new PDO(dbdsn, username, passwd);
 
       $result = run_query($db, FETCH_USER_EXIST_SQL, array($_username));
       if ($result == NULL) {

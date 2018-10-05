@@ -19,7 +19,7 @@
   $ground_hum = purify_data($_GET['ground_hum']);
 
   try {
-    $db = new PDO($dbdsn, $username, $passwd);
+    $db = new PDO(dbdsn, username, passwd);
   }
   catch (PDOException $e) {
     exit(500);

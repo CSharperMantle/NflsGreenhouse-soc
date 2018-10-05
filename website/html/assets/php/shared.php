@@ -1,10 +1,10 @@
 <?php
-    $host = 'localhost';
-    $port = 3306;
-    $dbname = 'plant_data';
-    $passwd = 'plant_client';
-    $username = 'plant_client';
-    $dbdsn = "mysql:host=$host;port=$port;dbname=$dbname";
+    const host = 'localhost';
+    const port = 3306;
+    const dbname = 'plant_data';
+    const passwd = 'plant_client';
+    const username = 'plant_client';
+    const dbdsn = "mysql:host=" . host . ";port=" . port . ";dbname=" . dbname;
 
     const INSERT_DATA_SQL = "SET @max = (SELECT MAX(id) FROM data); INSERT INTO data (id, air_temp, air_hum, air_light, ground_hum) VALUES (@max + 1, ?, ?, ?, ?);";
     const INSERT_ALERT_SQL = "SET @max = (SELECT MAX(id) FROM alerts); INSERT INTO alerts (id, alert_type, is_ok) VALUES (@max + 1, ?, ?);";
