@@ -355,8 +355,6 @@
                 <ul class="chart-legend-horizontal">
                   <li><span data-color="main-chart-color1"></span> 空气湿度</li>
                   <li><span data-color="main-chart-color2"></span> 空气温度</li>
-                  <!--<li><span data-color="main-chart-color3"></span> 空气亮度</li>
-					            <li><span data-color="main-chart-color4"></span> 地面湿度</li>-->
                 </ul>
               </div>
               <div class="widget-counter-group widget-counter-group-right">
