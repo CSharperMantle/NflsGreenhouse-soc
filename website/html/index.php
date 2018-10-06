@@ -394,7 +394,6 @@
         </div>
       </div>
       <div class="row">
-
         <div class="col-sm-12">
           <div class="card card-table">
             <div class="card-header">历史数据
@@ -435,7 +434,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-12 col-lg-4">
           <div class="card">
             <div class="card-header card-header-divider pb-3">种植时长</div>
@@ -483,7 +481,6 @@
             </div>
           </div>
         </div>
-
       </div>
       <div class="row">
         <div class="col-12 col-lg-6">
