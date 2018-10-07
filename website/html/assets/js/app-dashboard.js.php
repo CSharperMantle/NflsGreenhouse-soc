@@ -58,7 +58,7 @@ var App = (function () {
     }
 
     //Top tile widgets
-    function sparklines(){
+    function sparklines() {
 
       var color1 = App.color.primary;
       var color2 = App.color.warning;
@@ -103,202 +103,226 @@ var App = (function () {
       });
     }
 
-    //Main chart
-    function mainChart(){
-
+    //Air temp widget
+    function widget_air_temp_line_chart() {
       var color1 = App.color.primary;
-      var color2 = tinycolor( App.color.primary ).lighten( 10 ).toString();
-      var color3 = tinycolor( App.color.primary ).lighten( 15 ).toString();
-	    var color4 = tinycolor( App.color.primary ).lighten( 20 ).toString();
-
-      var temp_data = [
-        <?php
-          $air_temp_query = run_query_fetch_all($db, FETCH_AIR_TEMP_SQL);
-          foreach ($air_temp_query as $id => $array) {
-            $_id = $array['id'];
-            $_temp = $array['air_temp'];
-            print "[$_id, $_temp], \r\n";
-          }
-        ?>
-      ];
-
-      var hum_data = [
-        <?php
-          $air_hum_query = run_query_fetch_all($db, FETCH_AIR_HUM_SQL);
-          foreach ($air_hum_query as $id => $array) {
-            $_id = $array['id'];
-            $_hum = $array['air_hum'];
-            print "[$_id, $_hum], \r\n";
-          }
-        ?>
-      ];
-      var plot_statistics = $.plot($("#main-chart"), [{
-        data: hum_data, showLabels: true, label: "空气湿度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
-      },{
-        data: temp_data, showLabels: true, label: "空气温度", labelPlacement: "below", canvasRender: true, cColor: "#FFFFFF" 
-      }],
-      {
+      var plot_statistics = $.plot($("#air-temp-line-chart"), [{
+        data: [
+          <?php
+            $air_temp_query = run_query_fetch_all($db, FETCH_AIR_TEMP_SQL);
+            foreach ($air_temp_query as $id => $array) {
+              $_id = $array['id'];
+              $_temp = $array['air_temp'];
+              print "[$_id, $_temp], \r\n";
+            }
+          ?>
+        ],
+        label: "空气温度"
+      }], {
         series: {
           lines: {
             show: true,
-            lineWidth: 0, 
+            lineWidth: 2, 
             fill: true,
-            fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] }
+            fillColor: {
+              colors: [{
+                opacity: 0.35
+              }, {
+                opacity: 0.35
+              }
+              ]
+            } 
           },
-          fillColor: "rgba(0, 0, 0, 1)",
-          shadowSize: 0,
-          curvedLines: {
-            apply: true,
-            active: true,
-            monotonicFit: true
-          }
+          points: {
+            show: true
+          },
+          shadowSize: 1
         },
         legend:{
           show: false
         },
         grid: {
-          show: true,
           margin: {
-            top: 20,
-            bottom: 0,
-            left: 0,
-            right: 0,
+            left: -8,
+            right: -8,
+            top: 0,
+            bottom: 0
           },
-          labelMargin: 0,
-          minBorderMargin: 0,
-          axisMargin: 0,
-          tickColor: "rgba(0,0,0,0.05)",
-          borderWidth: 0,
+          show: false,
+          labelMargin: 15,
+          axisMargin: 500,
           hoverable: true,
-          clickable: true
+          clickable: true,
+          tickColor: "rgba(0,0,0,0.15)",
+          borderWidth: 0
         },
         tooltip:{
           show: true,
           cssClass: "tooltip-chart",
-          content: "<div class='content-chart'> <span> %s </span> <div class='label'> <div class='label-x'> %x.0 </div> - <div class='label-y'> %y.0 </div> </div></div>",
+          content: "<div class='content-chart'> <div class='label'> <div class='label-x'> %x.0 </div> - <div class='label-y'> %y.0 </div> </div></div>",
           defaultTheme: false
         },
-        colors: [color1, color2, color3, color4],
+        colors: [color1],
         xaxis: {
-          tickFormatter: function(){
-            return '';
-          },
-          autoscaleMargin: 0,
           ticks: 11,
-          tickDecimals: 0,
-          tickLength: 0
+          tickDecimals: 0
         },
         yaxis: {
-          tickFormatter: function(){
-            return '';
-          },
-          //autoscaleMargin: 0.01,
+          autoscaleMargin: 0.5,
           ticks: 4,
           tickDecimals: 0
         }
       });
 
-      widget_tooltipPosition('main-chart', 60);
+      widget_tooltipPosition('air-temp-line-chart', 45);
+    }
 
-      //Chart legend color setter
-      $('[data-color="main-chart-color1"]').css({'background-color':color1});
-      $('[data-color="main-chart-color2"]').css({'background-color':color2});
-      $('[data-color="main-chart-color3"]').css({'background-color':color3});
-	  $('[data-color="main-chart-color4"]').css({'background-color':color4});
-    }    
-
-    //Top sales chart
-    function topSales(){
-
-      var data = [
-        { label: "Services", data: 33 },
-        { label: "Standard Plans", data: 33 },
-        { label: "Services", data: 33 }
-      ];
-
-      var color1 = App.color.success;
-      var color2 = App.color.warning;
-      var color3 = App.color.primary;
-
-      $.plot('#top-sales', data, {
-        series: {
-          pie: {
-            radius: 0.75,
-            innerRadius: 0.58,
-            show: true,
-            highlight: {
-              opacity: 0.1
-            },
-            label: {
-              show: false
+    //Air hum widget
+    function widget_air_hum_line_chart() {
+      var color1 = App.color.warning;
+      var plot_statistics = $.plot($("#air-hum-line-chart"), [{
+        data: [
+          <?php
+            $air_hum_query = run_query_fetch_all($db, FETCH_AIR_HUM_SQL);
+            foreach ($air_hum_query as $id => $array) {
+              $_id = $array['id'];
+              $_hum = $array['air_hum'];
+              print "[$_id, $_hum], \r\n";
             }
-          }
-        },
-        grid:{
-          hoverable: true,
+          ?>
+        ],
+        label: "空气湿度"
+      }], {
+        series: {
+          lines: {
+            show: true,
+            lineWidth: 2, 
+            fill: true,
+            fillColor: {
+              colors: [{
+                opacity: 0.35
+              }, {
+                opacity: 0.35
+              }
+              ]
+            } 
+          },
+          points: {
+            show: true
+          },
+          shadowSize: 1
         },
         legend:{
           show: false
         },
-        colors: [color1, color2, color3]
+        grid: {
+          margin: {
+            left: -8,
+            right: -8,
+            top: 0,
+            bottom: 0
+          },
+          show: false,
+          labelMargin: 15,
+          axisMargin: 500,
+          hoverable: true,
+          clickable: true,
+          tickColor: "rgba(0,0,0,0.15)",
+          borderWidth: 0
+        },
+        tooltip:{
+          show: true,
+          cssClass: "tooltip-chart",
+          content: "<div class='content-chart'> <div class='label'> <div class='label-x'> %x.0 </div> - <div class='label-y'> %y.0 </div> </div></div>",
+          defaultTheme: false
+        },
+        colors: [color1],
+        xaxis: {
+          ticks: 11,
+          tickDecimals: 0
+        },
+        yaxis: {
+          autoscaleMargin: 0.5,
+          ticks: 4,
+          tickDecimals: 0
+        }
       });
 
-      //Chart legend color setter
-      $('[data-color="top-sales-color1"]').css({'background-color':color1});
-      $('[data-color="top-sales-color2"]').css({'background-color':color2});
-      $('[data-color="top-sales-color3"]').css({'background-color':color3});
+      widget_tooltipPosition('air-hum-line-chart', 60);
     }
 
-    //Calendar widget
-    function calendar(){
-      var widget = $("#calendar-widget");
-      var now  = new Date();
-      var year = now.getFullYear();
-      var month = now.getMonth();
-
-      var events = [year + '-' + (month+1) + '-16', year + '-' + (month+1) + '-20'];
-
-      function checkRows(datepicker){
-        var dp = datepicker.dpDiv;
-        var rows = $("tbody tr", dp).length;
-        
-        if( rows == 6 ){
-          dp.addClass('ui-datepicker-6rows');
-        }else{
-          dp.removeClass('ui-datepicker-6rows');
-        }
-      }
-
-      //Extend default datepicker to support afterShow event
-      $.extend($.datepicker, {
-        _updateDatepicker_original: $.datepicker._updateDatepicker,
-        _updateDatepicker: function(inst) {
-          this._updateDatepicker_original(inst);
-          var afterShow = this._get(inst, 'afterShow');
-          if (afterShow){
-            afterShow.apply(inst, [inst]);
-          }
+    //Ground hum widget
+    function widget_ground_hum_line_chart() {
+      var color1 = App.color.danger;
+      var plot_statistics = $.plot($("#ground-hum-line-chart"), [{
+        data: [
+          <?php
+            $ground_hum_query = run_query_fetch_all($db, FETCH_GROUND_HUM_SQL);
+            foreach ($ground_hum_query as $id => $array) {
+              $_id = $array['id'];
+              $_hum = $array['ground_hum'];
+              print "[$_id, $_hum], \r\n";
+            }
+          ?>
+        ],
+        label: "空气湿度"
+      }], {
+        series: {
+          lines: {
+            show: true,
+            lineWidth: 2, 
+            fill: true,
+            fillColor: {
+              colors: [{
+                opacity: 0.35
+              }, {
+                opacity: 0.35
+              }
+              ]
+            } 
+          },
+          points: {
+            show: true
+          },
+          shadowSize: 1
+        },
+        legend:{
+          show: false
+        },
+        grid: {
+          margin: {
+            left: -8,
+            right: -8,
+            top: 0,
+            bottom: 0
+          },
+          show: false,
+          labelMargin: 15,
+          axisMargin: 500,
+          hoverable: true,
+          clickable: true,
+          tickColor: "rgba(0,0,0,0.15)",
+          borderWidth: 0
+        },
+        tooltip:{
+          show: true,
+          cssClass: "tooltip-chart",
+          content: "<div class='content-chart'> <div class='label'> <div class='label-x'> %x.0 </div> - <div class='label-y'> %y.0 </div> </div></div>",
+          defaultTheme: false
+        },
+        colors: [color1],
+        xaxis: {
+          ticks: 11,
+          tickDecimals: 0
+        },
+        yaxis: {
+          autoscaleMargin: 0.5,
+          ticks: 4,
+          tickDecimals: 0
         }
       });
 
-      if (typeof jQuery.ui != 'undefined') {
-        widget.datepicker({
-          showOtherMonths: true,
-          selectOtherMonths: true,
-          beforeShowDay: function(date) {
-            var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
-            if($.inArray(y + '-' + (m+1) + '-' + d, events) != -1)  {
-              return [true, 'has-events', 'This day has events!'];
-            }else{
-              return [true, "", ""];
-            }
-          },
-          afterShow:function(o){
-            //If datepicker has 6 rows add a class to the widget
-            checkRows(o);
-          }
-        });
-      }
+      widget_tooltipPosition('ground-hum-line-chart', 75);
     }
 
     //Map widget
@@ -357,11 +381,9 @@ var App = (function () {
     sparklines();
 
 	  //Row 2
-    mainChart();
-
-	  //Row 4
-    topSales();
-    calendar();
+    widget_air_temp_line_chart();
+    widget_air_hum_line_chart();
+    widget_ground_hum_line_chart();
 
     //Row 5
     map();
