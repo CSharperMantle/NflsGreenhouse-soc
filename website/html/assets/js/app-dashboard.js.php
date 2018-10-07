@@ -65,7 +65,7 @@ var App = (function () {
       var color3 = App.color.success;
       var color4 = App.color.danger;
 
-      $('#spark1').sparkline([
+      $('#all-commits-count-sparkline').sparkline([
         <?php
           $result = run_query_fetch_all($db, FETCH_COMMITS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {
@@ -85,7 +85,7 @@ var App = (function () {
         lineWidth: 1.15
       });
 	  
-    $('#spark2').sparkline([
+    $('#all-alerts-count-sparkline').sparkline([
       <?php
           $result = run_query_fetch_all($db, FETCH_ALERTS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {

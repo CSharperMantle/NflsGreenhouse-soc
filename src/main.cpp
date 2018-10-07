@@ -36,17 +36,14 @@ const long uploadInterval = 1000L * 20; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
 const long checkSensorInterval = 1000L * 15;
 
-const char *webServerAddress = "192.168.1.120";
+const char *webServerAddress = "192.168.1.100";
 const int webServerPort = 80;
-const char *actionServerAddress = "192.168.1.120";
-const int actionServerPort = 20000;
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
-EthernetClient *actionsRequester = new EthernetClient();
 
 float currentAirTemp = 0;
 float currentAirHum = 0;
@@ -82,13 +79,11 @@ void initEthernet() {
 
     Serial.println("Running tests on EthernetClient");
     for (int index = 1; index <= 5; index++) {
-        if (webUploader->connect(webServerAddress, webServerPort) && actionsRequester->connect(actionServerAddress, actionServerPort)) {
+        if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Test connection established.");
             webUploader->flush();
-            actionsRequester->flush();
             Serial.println("Test connection flushed.");
             webUploader->stop();
-            actionsRequester->stop();
             Serial.println("Test connection closed.");
             break;
         }
@@ -138,11 +133,11 @@ void parseXmlStringAndExecute(const char * str) {
             }
         }
         else if (typeValue == ActionType::DEVICE_ACTION) {
-            if (targetIdValue == ActionType::DEVICE_LCD)
+            if (targetIdValue == DeviceId::DEVICE_LCD)
             {
                 screen->clear();
                 screen->home();
-                screen->print(param);
+                screen->print(paramValue);
             }
             else {
                 Serial.println(String("Unknown device: ") + String(targetIdValue));

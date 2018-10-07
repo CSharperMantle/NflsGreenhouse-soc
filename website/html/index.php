@@ -202,7 +202,7 @@
       <div class="main-content container-fluid">
         <noscript>
           <?php
-            print_alert(AlertInfo::DANGER, '使用了不支持的设置！', '您的浏览器不支持JavaScript。大部分功能将不能正常工作。');
+            print_alert(AlertInfo::DANGER, '使用了不支持的设置！', 'JavaScript加载失败。大部分功能将不能正常工作。');
           ?>
         </noscript>
         <?php
@@ -211,15 +211,7 @@
               http_response_code(503);
               exit();
             }
-            if (date('H') >= 18 && date('H') < 24) {
-              print_alert(AlertInfo::INFO, '晚上好！', '目前是UTC时间晚上。');
-            } 
-            elseif (date('H') >= 0 && date('H') < 12) {
-              print_alert(AlertInfo::INFO, '早上好！', '目前是UTC时间早晨。');
-            }
-            elseif (date('H') >= 12 && date('H') < 18) {
-              print_alert(AlertInfo::INFO, '下午好！', '目前是UTC时间下午。');
-            }
+            print_alert(AlertInfo::INFO, '', '页面更新于UTC ' . date('H:m:s'));
             switch ($air_temp_is_ok) {
               case AlertType::HIGH:
                 print_alert(AlertInfo::WARNING, '警告!', '空气温度过高。');
@@ -277,7 +269,7 @@
       <div class="row">
         <div class="col-12 col-lg-6 col-xl-3">
           <div class="widget widget-tile">
-            <div id="spark1" class="chart sparkline"></div>
+            <div id="all-commits-count-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">上传总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
@@ -289,7 +281,7 @@
 
         <div class="col-12 col-lg-6 col-xl-3">
           <div class="widget widget-tile">
-            <div id="spark2" class="chart sparkline"></div>
+            <div id="all-alerts-count-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">报警总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
@@ -301,7 +293,7 @@
         <!--mdi-chevron-up/down/left/right indicator-negative/positive/equal -->
         <div class="col-12 col-lg-6 col-xl-3">
           <div class="widget widget-tile">
-            <div id="spark3" class="chart sparkline"></div>
+            <div id="today-commits-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">今日上传数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
@@ -312,7 +304,7 @@
         </div>
         <div class="col-12 col-lg-6 col-xl-3">
           <div class="widget widget-tile">
-            <div id="spark4" class="chart sparkline"></div>
+            <div id="today-alerts-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">今日报警数</div>
               <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-right"></span><span
@@ -326,7 +318,12 @@
         <div class="col-lg-4">
           <div class="widget widget-fullwidth">
             <div class="widget-head">
-              <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync"></span><span class="icon mdi mdi-close"></span></div><span class="title">空气温度</span>
+              <div class="tools">
+                <span class="icon mdi mdi-chevron-down">
+
+                </span>
+              </div>
+              <span class="title">空气温度</span>
             </div>
             <div class="widget-chart-container">
               <div class="counter">
@@ -340,7 +337,12 @@
         <div class="col-lg-4">
           <div class="widget widget-fullwidth">
             <div class="widget-head">
-              <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync"></span><span class="icon mdi mdi-close"></span></div><span class="title">空气湿度</span>
+              <div class="tools">
+                <span class="icon mdi mdi-chevron-down">
+
+                </span>
+              </div>
+              <span class="title">空气湿度</span>
             </div>
             <div class="widget-chart-container">
               <div class="counter">
@@ -354,7 +356,12 @@
         <div class="col-lg-4">
           <div class="widget widget-fullwidth">
             <div class="widget-head">
-              <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync"></span><span class="icon mdi mdi-close"></span></div><span class="title">地面湿度</span>
+              <div class="tools">
+                <span class="icon mdi mdi-chevron-down">
+
+                </span>
+              </div>
+              <span class="title">地面湿度</span>
             </div>
             <div class="widget-chart-container">
               <div class="counter">

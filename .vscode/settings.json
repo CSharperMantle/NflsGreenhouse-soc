@@ -11,7 +11,8 @@
     "cSpell.words": [
         "Arduino",
         "Uploader",
-        "println"
+        "println",
+        "sparkline"
     ],
     "php.suggest.basic": false,
     "python.jediEnabled": false,
