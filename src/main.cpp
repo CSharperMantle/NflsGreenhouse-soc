@@ -19,6 +19,7 @@
 #include <tinyxml.h>
 #include <packet_defs.h>
 
+#pragma region constant
 const int InterruptDetectPin = 2;
 
 const int skySheetOnePin = 22;
@@ -40,21 +41,28 @@ const char *webServerAddress = "192.168.1.100";
 const int webServerPort = 80;
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
+#pragma endregion
 
+#pragma region object
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
+#pragma endregion
 
+#pragma region var
 float currentAirTemp = 0;
 float currentAirHum = 0;
 int currentLightValue = 0;
 int currentGroundHum = 0;
+#pragma endregion
 
+#pragma region thread_controller
 struct pt uploadSensorData_ctrl;
 struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
+#pragma endregion
 
-//User methods
+#pragma region init_script
 void initSerial() {
     Serial.begin(9600);
     Serial.flush();
@@ -109,7 +117,9 @@ void initDht() {
     Serial.println(airSensor->getStatusString());
     Serial.println("Done.");
 }
+#pragma endregion
 
+#pragma region helper
 void parseXmlStringAndExecute(const char * str) {
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
@@ -156,6 +166,12 @@ void parseXmlStringAndExecute(const char * str) {
     delete handle;
 }
 
+void printScreen(const char * str, bool isNewLine) {
+    
+}
+#pragma endregion
+
+#pragma region threaded_worker
 PT_THREAD(readSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Refreshing sensor data");
@@ -199,7 +215,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
             + String(" HTTP/1.1\r\n" \
-            "Accept: text/html, */*\r\n" \
+            "Accept: application/xml, */*\r\n" \
             "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
             "User-Agent: arduino/mega2560\r\n" \
             "Connection: close\r\n" \
@@ -212,7 +228,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
             + String(" HTTP/1.1\r\n" \
-            "Accept: text/html, */*\r\n" \
+            "Accept: application/xml, */*\r\n" \
             "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
             "User-Agent: arduino/mega2560\r\n" \
             "Connection: close\r\n" \
@@ -230,16 +246,14 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
 }
+#pragma endregion
 
-//Main methods
+#pragma region main
 void setup() {
     //Startup scripts
     initSerial();
-
-    initEthernet();
-
     initLcd();
-
+    initEthernet();
     initDht();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
     PT_INIT(&uploadSensorData_ctrl);
@@ -254,3 +268,4 @@ void loop() {
     uploadSensorData(&uploadSensorData_ctrl);
     maintainEthernet(&maintainEthernet_ctrl);
 }
+#pragma endregion
