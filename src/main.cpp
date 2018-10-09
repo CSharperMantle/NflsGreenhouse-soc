@@ -166,9 +166,6 @@ void parseXmlStringAndExecute(const char * str) {
     delete handle;
 }
 
-void printScreen(const char * str, bool isNewLine) {
-    
-}
 #pragma endregion
 
 #pragma region threaded_worker
@@ -200,6 +197,9 @@ PT_THREAD(maintainEthernet(struct pt *pt)) {
 PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
+    screen->clear();
+    screen->home();
+    screen->print("Uploading sensor data");
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Connection established.");
@@ -243,6 +243,9 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
 
     webUploader->stop();
     Serial.println("Done. Connection closed.");
+    screen->clear();
+    screen->home();
+    screen->print("Done. Connection closed.");
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
 }
