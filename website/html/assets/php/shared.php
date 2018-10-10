@@ -71,10 +71,10 @@
         return $result;
     }
 
-    function run_query_fetch_all(PDO $connection, string $sql, array $args = array()) {
+    function run_query_fetch_all(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
         $stmt = $connection->prepare($sql);
         $stmt->execute($args);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll($fetch_style);
         return $result;
     }
 
