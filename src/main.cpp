@@ -37,7 +37,7 @@ const long uploadInterval = 1000L * 20; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
 const long checkSensorInterval = 1000L * 15;
 
-const char *webServerAddress = "192.168.1.100";
+const char *webServerAddress = "192.168.1.114";
 const int webServerPort = 80;
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};

@@ -9,6 +9,13 @@
 
   if ((!isset($_GET['air_temp'])) || (!isset($_GET['air_hum'])) || (!isset($_GET['air_light'])) || (!isset($_GET['ground_hum']))) {
     http_response_code(400);
+    header('Reason: Values not set');
+    exit();
+  }
+
+  if ((!is_numeric($_GET['air_temp'])) || (!is_numeric($_GET['air_hum'])) || (!is_numeric($_GET['air_light'])) || (!is_numeric($_GET['ground_hum']))) {
+    http_response_code(403);
+    header('Reason: Expected numbers');
     exit();
   }
 
