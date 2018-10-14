@@ -13,13 +13,13 @@ var App = (function () {
     function counter(){
 
       $('[data-toggle="counter"]').each(function(i, e){
-        var _el       = $(this);
-        var prefix    = '';
-        var suffix    = '';
-        var start     = 0;
-        var end       = 0;
-        var decimals  = 0;
-        var duration  = 2.5;
+        var _el = $(this);
+        var prefix = '';
+        var suffix = '';
+        var start = 0;
+        var end = 0;
+        var decimals = 0;
+        var duration = 2.5;
 
         if( _el.data('prefix') ){ prefix = _el.data('prefix'); }
 
@@ -110,10 +110,12 @@ var App = (function () {
         data: [
           <?php
             $air_temp_query = run_query_fetch_all($db, FETCH_AIR_TEMP_SQL);
+            $temp_id = 1;
             foreach ($air_temp_query as $id => $array) {
-              $_id = $array['id'];
+              $_id = $temp_id;
               $_temp = $array['air_temp'];
               print "[$_id, $_temp], \r\n";
+              $temp_id++;
             }
           ?>
         ],
@@ -184,10 +186,12 @@ var App = (function () {
         data: [
           <?php
             $air_hum_query = run_query_fetch_all($db, FETCH_AIR_HUM_SQL);
+            $hum_id = 1;
             foreach ($air_hum_query as $id => $array) {
-              $_id = $array['id'];
+              $_id = $hum_id;
               $_hum = $array['air_hum'];
               print "[$_id, $_hum], \r\n";
+              $hum_id++;
             }
           ?>
         ],
@@ -258,10 +262,12 @@ var App = (function () {
         data: [
           <?php
             $ground_hum_query = run_query_fetch_all($db, FETCH_GROUND_HUM_SQL);
+            $ground_hum_id = 1;
             foreach ($ground_hum_query as $id => $array) {
-              $_id = $array['id'];
+              $_id = $ground_hum_id;
               $_hum = $array['ground_hum'];
               print "[$_id, $_hum], \r\n";
+              $ground_hum_id++;
             }
           ?>
         ],

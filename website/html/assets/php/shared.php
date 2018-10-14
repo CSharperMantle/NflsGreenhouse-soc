@@ -78,11 +78,10 @@
         return $result;
     }
 
-    function print_all_commits_each_item(string $timestamp, string $oddity, string $type, string $air_temp, string $air_hum, string $air_light, string $ground_hum) {
+    function print_all_commits_each_item(string $timestamp, string $oddity, string $air_temp, string $air_hum, string $air_light, string $ground_hum) {
         print "
             <tr class=\"$oddity\">
                 <td>$timestamp</td>
-                <td>$type</td>
                 <td>$air_temp</td>
                 <td>$air_hum</td>
                 <td>$air_light</td>

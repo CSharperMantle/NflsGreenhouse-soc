@@ -390,7 +390,6 @@
                 <thead>
                   <tr>
                     <th>时间</th>
-                    <th>类型</th>
                     <th>空气温度 (°C)</th>
                     <th>空气湿度 (%)</th>
                     <th>地面湿度</th>
@@ -406,8 +405,8 @@
                       $_ground_hum = $value['ground_hum'];
                       $_timestamp = $value['timestamp'];
                       $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
-                      print_all_commits_each_item($_timestamp, $_oddity, '收到数据', $_air_temp, $_air_hum, $_ground_hum, $_air_light);
-                    } 
+                      print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
+                    }
                 ?>
                 </tbody>
               </table>
