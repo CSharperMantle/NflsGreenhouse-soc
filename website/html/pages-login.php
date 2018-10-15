@@ -67,13 +67,6 @@
                   <div class="form-group">
                     <input id="password" type="password" required="" placeholder="密码" class="form-control" name="password" />
                   </div>
-                  <div class="form-group row login-tools">
-                    <div class="col-6 login-remember">
-                      <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" /><span class="custom-control-label">记住我</span>
-                      </label>
-                    </div>
-                  </div>
                   <div class="form-group login-submit">
                     <button data-dismiss="modal" type="submit" class="btn btn-primary btn-xl">登录</button>
                   </div>
