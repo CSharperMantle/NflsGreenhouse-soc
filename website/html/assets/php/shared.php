@@ -138,7 +138,7 @@
 
     function print_settings_button() {
         print "
-            <a href=\"#\" class=\"dropdown-item\">
+            <a href=\"pages-code-editor.php\" class=\"dropdown-item\">
                 <span class=\"icon mdi mdi-settings\"></span> Settings
             </a>
         ";

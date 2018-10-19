@@ -80,8 +80,8 @@
         </div>
         <div class="be-right-navbar">
           <ul class="nav navbar-nav float-right be-user-nav">
-            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><img
-                  src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?php print_user_name(); ?></span></a>
+            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+              <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?php print_user_name(); ?></span></a>
               <div role="menu" class="dropdown-menu">
                 <!--online away busy-->
                 <div class="user-info">

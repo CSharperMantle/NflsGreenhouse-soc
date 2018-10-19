@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="宁波外国语学校大棚管理系统 - 设置编辑器">
+    <meta name="author" content="Mantle Jonse(CSharperMantle) & Jones Ma(iRed_K)">
     <link rel="shortcut icon" href="assets/img/logo-fav.png">
     <title>宁波外国语学校大棚管理系统 - 设置编辑器</title>
     <link rel="stylesheet" type="text/css" href="assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css"/>
@@ -25,12 +25,12 @@
           </div>
           <div class="be-right-navbar">
             <ul class="nav navbar-nav float-right be-user-nav">
-              <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
-                <div role="menu" class="dropdown-menu">     
-                  <div class="user-info">
-                    <div class="user-name">Túpac Amaru</div>
-                    <div class="user-position online">Available</div>
-                  </div><a href="pages-profile.html" class="dropdown-item"><span class="icon mdi mdi-face"></span> Account</a><a href="#" class="dropdown-item"><span class="icon mdi mdi-settings"></span> Settings</a><a href="pages-login.html" class="dropdown-item"><span class="icon mdi mdi-power"></span> Logout</a>
+              <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?php print_user_name(); ?></span></a>
+                <div role="menu" class="dropdown-menu">
+                  <!--online away busy-->
+                  <div class="user-info"> <?php print_user_info(); ?> </div>
+                  <?php print_user_buttons(); ?>
                 </div>
               </li>
             </ul>
