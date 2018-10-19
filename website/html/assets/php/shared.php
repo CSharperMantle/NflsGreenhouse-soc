@@ -112,8 +112,8 @@
     }
 
     function print_user_status(string $username, string $current_status) {
-        if ($current_status == 'online') $text = 'Available';
-        else $text = 'Offline';
+        if ($current_status == 'online') $text = '在线';
+        else $text = '离线';
         print "
             <div class=\"user-name\">$username</div>
             <div class=\"user-position $current_status\">$text</div>
