@@ -123,7 +123,7 @@
     function print_login_button() {
         print "
             <a href=\"pages-login.php\" class=\"dropdown-item\">
-                <span class=\"icon mdi mdi-power\"></span> Login
+                <span class=\"icon mdi mdi-power\"></span> 登录
             </a>
         ";
     }
@@ -131,7 +131,7 @@
     function print_logoff_button() {
         print "
             <a href=\"pages-logoff.php\" class=\"dropdown-item\">
-                <span class=\"icon mdi mdi-power\"></span> Logout
+                <span class=\"icon mdi mdi-power\"></span> 注销
             </a>
         ";
     }
@@ -139,7 +139,7 @@
     function print_settings_button() {
         print "
             <a href=\"pages-code-editor.php\" class=\"dropdown-item\">
-                <span class=\"icon mdi mdi-settings\"></span> Settings
+                <span class=\"icon mdi mdi-settings\"></span> 设置
             </a>
         ";
     }
