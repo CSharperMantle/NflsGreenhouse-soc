@@ -86,7 +86,7 @@
               <div class="left-sidebar-content">
                 <ul class="sidebar-elements">
                   <li class="divider">菜单</li>
-                  <li class="active"><a href="index.php"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
+                  <li class=""><a href="index.php"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
                   </li>
                 </ul>
               </div>

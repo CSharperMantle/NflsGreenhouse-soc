@@ -14,7 +14,7 @@ var App = (function () {
       theme: 'monokai',
       value: code,
       mode:  "text/html",
-      tabSize: 2
+      tabSize: 4
     });
     
     setTimeout(function(){
