@@ -63,6 +63,27 @@ struct pt readSensorData_ctrl;
 #pragma endregion
 
 #pragma region init_script
+void printLicenseInfo() {
+    Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
+    Serial.println("Libs in use: TinyXML by Lee Thomason");
+    Serial.println("ProtoThreads by Adam Dunkels");
+    Serial.println("");
+    screen->clear();
+    screen->home();
+    screen->print("Provided under");
+    screen->setCursor(0, 1);
+    screen->print("GPLv3");
+    delay(1000);
+    screen->home();
+    screen->clear();
+    screen->print("Mantle &");
+    screen->setCursor(0, 1);
+    screen->print("iRed_K");
+    delay(1000);
+    screen->home();
+    screen->clear();
+}
+
 void initSerial() {
     Serial.begin(9600);
     Serial.flush();
@@ -258,6 +279,7 @@ void setup() {
     initLcd();
     initEthernet();
     initDht();
+    printLicenseInfo();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
