@@ -277,7 +277,7 @@ void setup() {
     //Startup scripts
     initSerial();
     initLcd();
-    initEthernet();
+    //initEthernet();
     initDht();
     printLicenseInfo();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
