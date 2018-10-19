@@ -37,8 +37,6 @@
     
     $now = new DateTime();
 
-    $exists = isset($_SESSION['is_logged_in']);
-
   }
   catch (PDOException $e) {
     $air_temp = 'None';
@@ -83,29 +81,13 @@
         <div class="be-right-navbar">
           <ul class="nav navbar-nav float-right be-user-nav">
             <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><img
-                  src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?= $exists ? $_SESSION['username'] : 'John Doe'; ?></span></a>
+                  src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?php print_user_name(); ?></span></a>
               <div role="menu" class="dropdown-menu">
                 <!--online away busy-->
                 <div class="user-info">
-                  <?php
-                      if ($exists) {
-                        print_user_status($_SESSION['username'], 'online');
-                      } else {
-                        print_user_status('John Doe', 'offline');
-                      }
-                    ?>
+                  <?php print_user_info(); ?>
                 </div>
-                <!-- <a href="pages-profile.html" class="dropdown-item">
-                    <span class="icon mdi mdi-face"></span> Account
-                  </a> -->
-                <?php
-                    if($exists && $_SESSION['is_logged_in'] == true) {
-                      print_settings_button();
-                      print_logoff_button();
-                    } else {
-                      print_login_button();
-                    }
-                ?>
+                <?php print_user_buttons(); ?>
               </div>
             </li>
           </ul>

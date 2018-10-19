@@ -90,6 +90,27 @@
         ";
     }
 
+    function print_user_info() {
+        if (isset($_SESSION['is_logged_in'])) {
+          print_user_status($_SESSION['username'], 'online');
+        } else {
+          print_user_status('John Doe', 'offline');
+        }
+    }
+
+    function print_user_name() {
+        print isset($_SESSION['is_logged_in']) ? $_SESSION['username'] : 'John Doe';
+    }
+
+    function print_user_buttons() {
+        if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == true) {
+            print_settings_button();
+            print_logoff_button();
+        } else {
+            print_login_button();
+        }
+    }
+
     function print_user_status(string $username, string $current_status) {
         if ($current_status == 'online') $text = 'Available';
         else $text = 'Offline';
