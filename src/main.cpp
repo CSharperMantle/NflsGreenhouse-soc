@@ -68,6 +68,7 @@ void printLicenseInfo() {
     Serial.println("Libs in use: TinyXML by Lee Thomason");
     Serial.println("ProtoThreads by Adam Dunkels");
     Serial.println("");
+    screen->setBacklight(true);
     screen->clear();
     screen->home();
     screen->print("Provided under");
@@ -82,6 +83,7 @@ void printLicenseInfo() {
     delay(1000);
     screen->home();
     screen->clear();
+    screen->setBacklight(false);
 }
 
 void initSerial() {
@@ -126,7 +128,7 @@ void initEthernet() {
 
 void initLcd() {
     Serial.println("Initializing LCD");
-    screen->begin(16, 2);
+    screen->init();
     screen->clear();
     screen->setBacklight(false);
     Serial.println("Done.");
@@ -155,7 +157,8 @@ void parseXmlStringAndExecute(const char * str) {
         int targetIdValue = atoi(targetId->ToText()->Value());
         const char *paramValue = param->ToText()->Value();
         
-        if (typeValue == ActionType::RELAY_ACTION) { 
+        if (typeValue == ActionType::RELAY_ACTION) {
+            // Relay action requested
             if (!strcmp(paramValue, "0")) {
                 digitalWrite(targetIdValue, LOW);
             }
@@ -164,6 +167,7 @@ void parseXmlStringAndExecute(const char * str) {
             }
         }
         else if (typeValue == ActionType::DEVICE_ACTION) {
+            // Action with other devices requested
             if (targetIdValue == DeviceId::DEVICE_LCD)
             {
                 screen->clear();
@@ -176,7 +180,12 @@ void parseXmlStringAndExecute(const char * str) {
             //TODO: Add more devices
         }
         else if (typeValue == ActionType::RETRANSMIT_ACTION) {
+            // Retransmitting requested
             //TODO: Add retransmitter
+        }
+        else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
+            // LCD backlight setting requested
+            screen->setBacklight(atoi(paramValue));
         }
         else {
             Serial.println(String("Unknown XML action received: ") + String(typeValue));

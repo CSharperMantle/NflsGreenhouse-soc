@@ -23,7 +23,7 @@
   $air_hum = purify_data($_GET['air_hum']);
   $air_light = purify_data($_GET['air_light']);
   $ground_hum = purify_data($_GET['ground_hum']);
-
+  
   try {
     $db = new PDO(dbdsn, username, passwd);
   }

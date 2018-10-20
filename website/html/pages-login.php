@@ -86,7 +86,6 @@
       	//initialize the javascript
       	App.init();
       });
-      
     </script>
   </body>
 </html>

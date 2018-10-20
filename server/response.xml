@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <actions>
-        <!--Action types: 1: RELAY 2: LCD 3: RETRANSMIT-->
+        <!--Action types: 
+            1: RELAY (with params)
+            2: DEVICE (with params)
+            3: RETRANSMIT
+            4: LCD_BACKLIGHT_SET (with params)
+            -->
         <action>
             <type>1</type>
             <target_id>22</target_id>
@@ -21,6 +26,11 @@
             <type>3</type>
             <target_id></target_id>
             <param></param>
+        </action>
+        <action>
+            <type>4</type>
+            <target_id>-1</target_id>
+            <param>1</param>
         </action>
     </actions>
 </root>

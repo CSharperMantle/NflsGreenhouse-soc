@@ -45,6 +45,7 @@ enum ActionType {
     RELAY_ACTION = 1,
     DEVICE_ACTION = 2,
     RETRANSMIT_ACTION = 3,
+    LCD_BACKLIGHT_SET = 4,
 };
 
 enum DeviceId {
