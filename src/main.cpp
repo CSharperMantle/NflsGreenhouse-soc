@@ -239,7 +239,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
     clearAndResetScreen(screen);
-    screen->print("Uploading sensor data");
+    screen->print("DATA PREPARE");
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Connection established.");
@@ -263,6 +263,8 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             ""
         )
     );
+    clearAndResetScreen(screen);
+    screen->print("DATA UPLOAD");
     webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + currentAirHum \
             + String("&air_light=") + currentLightValue \
@@ -295,9 +297,9 @@ void setup() {
     //Startup scripts
     initSerial();
     initLcd();
+    printLicenseInfo();
     initEthernet();
     initDht();
-    printLicenseInfo();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
