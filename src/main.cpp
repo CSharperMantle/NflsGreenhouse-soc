@@ -154,14 +154,18 @@ void initSerial() {
 void initEthernet() {
     Serial.println("Initializing Ethernet");
     for (int index = 1; index <= 5; index++) {
-        if (Ethernet.begin(mac) == 0)
+        if (Ethernet.begin(mac) == 0) {
             Serial.println(String("DHCP failed. Retry ") + String(index));
-        else {
+            clearAndResetScreen(screen);
+            screen->print(String("ETH ERR: ") + String(index));
+        } else {
             Serial.println("DHCP OK.");
             Serial.println("    Ethernet information: IP, DNS, Gateway");
             Serial.println(Ethernet.localIP());
             Serial.println(Ethernet.dnsServerIP());
             Serial.println(Ethernet.gatewayIP());
+            clearAndResetScreen(screen);
+            screen->print(String("ETH OK"));
             break;
         }
     }
@@ -175,11 +179,13 @@ void initEthernet() {
             Serial.println("Test connection flushed.");
             webUploader->stop();
             Serial.println("Test connection closed.");
+            clearAndResetScreen(screen);
+            screen->print(String("CONN OK"));
             break;
-        }
-        else
-        {
+        } else {
             Serial.println(String("Test connection broken. Retry ") + String(index));
+            clearAndResetScreen(screen);
+            screen->print(String("CONN ERR:") + String(index));
         }
     }
     Serial.println("Done.");
@@ -189,7 +195,7 @@ void initLcd() {
     Serial.println("Initializing LCD");
     screen->init();
     screen->clear();
-    screen->setBacklight(false);
+    screen->setBacklight(true);
     Serial.println("Done.");
 }
 
@@ -214,6 +220,8 @@ PT_THREAD(readSensorData(struct pt *pt)) {
     Serial.println(currentGroundHum);
     Serial.println(currentLightValue);
     Serial.println("Done.");
+    clearAndResetScreen(screen);
+    screen->print(String("SENSOR READ"));
     PT_TIMER_DELAY(pt, checkSensorInterval);
     PT_END(pt);
 }
@@ -276,7 +284,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     webUploader->stop();
     Serial.println("Done. Connection closed.");
     clearAndResetScreen(screen);
-    screen->print("Done. Connection closed.");
+    screen->print(String("DATA UPLOADED"));
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
 }
