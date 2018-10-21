@@ -17,8 +17,8 @@
         "sparkline"
     ],
     "php.suggest.basic": false,
-    "python.jediEnabled": false,
-    "python.pythonPath": "C:\\Users\\rong\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
+    "python.jediEnabled": true,
+    "python.pythonPath": "E:\\Programs\\Python\\Python37\\python.exe",
     "cSpell.enabledLanguageIds": [
         "asciidoc",
         "c",

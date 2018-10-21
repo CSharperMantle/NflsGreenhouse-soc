@@ -191,9 +191,10 @@ void parseXmlStringAndExecute(const char * str) {
             Serial.println(String("Unknown XML action received: ") + String(typeValue));
         }
     }
-
-    delete doc;
+    
+    //FIXME: Maybe a bug
     delete handle;
+    delete doc;
 }
 
 #pragma endregion
