@@ -62,6 +62,68 @@ struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
 #pragma endregion
 
+#pragma region helper
+void clearAndResetScreen(LiquidCrystal_I2C *lcd) {
+    lcd->home();
+    lcd->clear();
+} 
+
+void parseXmlStringAndExecute(const char * str) {
+    TiXmlDocument *doc = new TiXmlDocument();
+    doc->Parse(str);
+
+    TiXmlHandle *handle = new TiXmlHandle(doc);
+    TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
+    for (action; action; action = action->NextSiblingElement()) {
+        TiXmlElement *type = action->FirstChildElement("type");
+        TiXmlElement *targetId = action->FirstChildElement("target_id");
+        TiXmlElement *param = action->FirstChildElement("param");
+        int typeValue = atoi(type->ToText()->Value());
+        int targetIdValue = atoi(targetId->ToText()->Value());
+        const char *paramValue = param->ToText()->Value();
+        
+        if (typeValue == ActionType::RELAY_ACTION) {
+            // Relay action requested
+            if (!strcmp(paramValue, "0")) {
+                digitalWrite(targetIdValue, LOW);
+            }
+            else {
+                digitalWrite(targetIdValue, HIGH);
+            }
+        }
+        else if (typeValue == ActionType::DEVICE_ACTION) {
+            // Action with other devices requested
+            if (targetIdValue == DeviceId::DEVICE_LCD)
+            {
+                screen->clear();
+                screen->home();
+                screen->print(paramValue);
+            }
+            else {
+                Serial.println(String("Unknown device: ") + String(targetIdValue));
+            }
+            //TODO: Add more devices
+        }
+        else if (typeValue == ActionType::RETRANSMIT_ACTION) {
+            // Retransmitting requested
+            //TODO: Add retransmitter
+        }
+        else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
+            // LCD backlight setting requested
+            screen->setBacklight(atoi(paramValue));
+        }
+        else {
+            Serial.println(String("Unknown XML action received: ") + String(typeValue));
+        }
+    }
+    
+    //FIXME: Maybe a bug
+    delete handle;
+    delete doc;
+}
+
+#pragma endregion
+
 #pragma region init_script
 void printLicenseInfo() {
     Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
@@ -69,20 +131,17 @@ void printLicenseInfo() {
     Serial.println("ProtoThreads by Adam Dunkels");
     Serial.println("");
     screen->setBacklight(true);
-    screen->clear();
-    screen->home();
+    clearAndResetScreen(screen);
     screen->print("Provided under");
     screen->setCursor(0, 1);
     screen->print("GPLv3");
     delay(1000);
-    screen->home();
-    screen->clear();
+    clearAndResetScreen(screen);
     screen->print("Mantle &");
     screen->setCursor(0, 1);
     screen->print("iRed_K");
     delay(1000);
-    screen->home();
-    screen->clear();
+    clearAndResetScreen(screen);
     screen->setBacklight(false);
 }
 
@@ -142,63 +201,6 @@ void initDht() {
 }
 #pragma endregion
 
-#pragma region helper
-void parseXmlStringAndExecute(const char * str) {
-    TiXmlDocument *doc = new TiXmlDocument();
-    doc->Parse(str);
-
-    TiXmlHandle *handle = new TiXmlHandle(doc);
-    TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
-    for (action; action; action = action->NextSiblingElement()) {
-        TiXmlElement *type = action->FirstChildElement("type");
-        TiXmlElement *targetId = action->FirstChildElement("target_id");
-        TiXmlElement *param = action->FirstChildElement("param");
-        int typeValue = atoi(type->ToText()->Value());
-        int targetIdValue = atoi(targetId->ToText()->Value());
-        const char *paramValue = param->ToText()->Value();
-        
-        if (typeValue == ActionType::RELAY_ACTION) {
-            // Relay action requested
-            if (!strcmp(paramValue, "0")) {
-                digitalWrite(targetIdValue, LOW);
-            }
-            else {
-                digitalWrite(targetIdValue, HIGH);
-            }
-        }
-        else if (typeValue == ActionType::DEVICE_ACTION) {
-            // Action with other devices requested
-            if (targetIdValue == DeviceId::DEVICE_LCD)
-            {
-                screen->clear();
-                screen->home();
-                screen->print(paramValue);
-            }
-            else {
-                Serial.println(String("Unknown device: ") + String(targetIdValue));
-            }
-            //TODO: Add more devices
-        }
-        else if (typeValue == ActionType::RETRANSMIT_ACTION) {
-            // Retransmitting requested
-            //TODO: Add retransmitter
-        }
-        else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
-            // LCD backlight setting requested
-            screen->setBacklight(atoi(paramValue));
-        }
-        else {
-            Serial.println(String("Unknown XML action received: ") + String(typeValue));
-        }
-    }
-    
-    //FIXME: Maybe a bug
-    delete handle;
-    delete doc;
-}
-
-#pragma endregion
-
 #pragma region threaded_worker
 PT_THREAD(readSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
@@ -228,8 +230,7 @@ PT_THREAD(maintainEthernet(struct pt *pt)) {
 PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
-    screen->clear();
-    screen->home();
+    clearAndResetScreen(screen);
     screen->print("Uploading sensor data");
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
@@ -245,12 +246,12 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             + String("&air_hum=") + currentAirHum \
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
-            + String(" HTTP/1.1\r\n" \
-            "Accept: application/xml, */*\r\n" \
-            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
-            "User-Agent: arduino/mega2560\r\n" \
-            "Connection: close\r\n" \
-            "\r\n" \
+            + String(" HTTP/1.1\n" \
+            "Accept: application/xml, */*\n" \
+            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\n") + String( \
+            "User-Agent: arduino/mega2560\n" \
+            "Connection: close\n" \
+            "\n" \
             ""
         )
     );
@@ -259,11 +260,11 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
             + String(" HTTP/1.1\r\n" \
-            "Accept: application/xml, */*\r\n" \
-            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
-            "User-Agent: arduino/mega2560\r\n" \
-            "Connection: close\r\n" \
-            "\r\n" \
+            "Accept: application/xml, */*\n" \
+            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\n") + String( \
+            "User-Agent: arduino/mega2560\n" \
+            "Connection: close\n" \
+            "\n" \
             ""
         ));
     
@@ -274,8 +275,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
 
     webUploader->stop();
     Serial.println("Done. Connection closed.");
-    screen->clear();
-    screen->home();
+    clearAndResetScreen(screen);
     screen->print("Done. Connection closed.");
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
@@ -287,7 +287,7 @@ void setup() {
     //Startup scripts
     initSerial();
     initLcd();
-    //initEthernet();
+    initEthernet();
     initDht();
     printLicenseInfo();
     //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
