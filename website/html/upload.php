@@ -36,7 +36,14 @@
 
   header('Content-Type: application/xml');
 
-  run_query($db, INSERT_DATA_SQL, array((int)$air_temp, (int)$air_hum, (int)$air_light, (int)$ground_hum));
+  try {
+    run_query($db, INSERT_DATA_SQL, array((int)$air_temp, (int)$air_hum, (int)$air_light, (int)$ground_hum));
+  }
+  catch (PDOException $e) {
+    http_response_code(406);
+    exit();
+  }
+  
   // Air checks - temp
   if ($air_temp > airTempSwitchValveHigh) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_TEMP, AlertType::HIGH));

@@ -142,7 +142,6 @@ void printLicenseInfo() {
     screen->print("iRed_K");
     delay(1000);
     clearAndResetScreen(screen);
-    screen->setBacklight(false);
 }
 
 void initSerial() {
@@ -250,41 +249,44 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             Serial.println(String("Connection broken. Retry ") + String(index));
         }
     }
-    Serial.println(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
+    /*Serial.println(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + currentAirHum \
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
             + String(" HTTP/1.1\n" \
-            "Accept: application/xml, */*\n" \
+            "Accept: application/xml*\n \*/ /*
             "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\n") + String( \
             "User-Agent: arduino/mega2560\n" \
             "Connection: close\n" \
             "\n" \
             ""
         )
-    );
+    );*/
     clearAndResetScreen(screen);
     screen->print("DATA UPLOAD");
     webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
-            + String("&air_hum=") + currentAirHum \
-            + String("&air_light=") + currentLightValue \
-            + String("&ground_hum=") + currentGroundHum \
-            + String(" HTTP/1.1\r\n" \
-            "Accept: application/xml, */*\n" \
+            + String("&air_hum=") + String(currentAirHum) \
+            + String("&air_light=") + String(currentLightValue) \
+            + String("&ground_hum=") + String(currentGroundHum) \
+            + String(" HTTP/1.1\n" \
+            "Accept: application/xml\n" \
             "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\n") + String( \
             "User-Agent: arduino/mega2560\n" \
             "Connection: close\n" \
             "\n" \
             ""
         ));
-    
+    clearAndResetScreen(screen);
     do
     {
-        Serial.println(webUploader->readString());
+        String str = webUploader->readString();
+        Serial.println(str);
+        screen->print(str);
     } while (webUploader->available());
 
     webUploader->stop();
     Serial.println("Done. Connection closed.");
+    delay(1000);
     clearAndResetScreen(screen);
     screen->print(String("DATA UPLOADED"));
     PT_TIMER_DELAY(pt, uploadInterval);
