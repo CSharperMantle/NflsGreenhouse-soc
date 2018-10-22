@@ -34,7 +34,7 @@
 
   $actions = array();
 
-  header('Content-Type: text/plain');
+  header('Content-Type: application/xml');
 
   run_query($db, INSERT_DATA_SQL, array((int)$air_temp, (int)$air_hum, (int)$air_light, (int)$ground_hum));
   // Air checks - temp
