@@ -26,6 +26,7 @@
   
   try {
     $db = new PDO(dbdsn, username, passwd);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
   catch (PDOException $e) {
     exit(500);
