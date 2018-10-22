@@ -249,31 +249,31 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             Serial.println(String("Connection broken. Retry ") + String(index));
         }
     }
-    /*Serial.println(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
+    Serial.println(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + currentAirHum \
             + String("&air_light=") + currentLightValue \
             + String("&ground_hum=") + currentGroundHum \
-            + String(" HTTP/1.1\n" \
-            "Accept: application/xml*\n \*/ /*
-            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\n") + String( \
-            "User-Agent: arduino/mega2560\n" \
-            "Connection: close\n" \
-            "\n" \
+            + String(" HTTP/1.1\r\n" \
+            "Accept: application/xml\r\n" \
+            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
+            "User-Agent: arduino/mega2560\r\n" \
+            "Connection: close\r\n" \
+            "\r\n" \
             ""
         )
-    );*/
+    );
     clearAndResetScreen(screen);
     screen->print("DATA UPLOAD");
     webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + String(currentAirHum) \
             + String("&air_light=") + String(currentLightValue) \
             + String("&ground_hum=") + String(currentGroundHum) \
-            + String(" HTTP/1.1\n" \
-            "Accept: application/xml\n" \
-            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\n") + String( \
-            "User-Agent: arduino/mega2560\n" \
-            "Connection: close\n" \
-            "\n" \
+            + String(" HTTP/1.1\r\n" \
+            "Accept: application/xml\r\n" \
+            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
+            "User-Agent: arduino/mega2560\r\n" \
+            "Connection: close\r\n" \
+            "\r\n" \
             ""
         ));
     clearAndResetScreen(screen);
@@ -302,11 +302,9 @@ void setup() {
     printLicenseInfo();
     initEthernet();
     initDht();
-    //attachInterrupt(InterruptDetectPin, pinTwoInterruptHandler, CHANGE);
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
     PT_INIT(&readSensorData_ctrl);
-
     Serial.println("Init done.");
 }
 
