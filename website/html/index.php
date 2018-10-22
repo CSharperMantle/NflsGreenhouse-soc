@@ -147,7 +147,7 @@
                   <div class="list">
                     <div class="content">
                       <div class="row">
-                        <a href="#history_data" class="connection-item"><img src="assets/img/backup.png" alt="Github"><span>历史数据</span></a>
+                        <a href="#history-data" class="connection-item"><img src="assets/img/backup.png" alt="History"><span>历史数据</span></a>
                       </div>
                     </div>
                   </div>
@@ -358,7 +358,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="card card-table">
-            <div class="card-header">历史数据
+            <div class="card-header" name="history-data">历史数据
               <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a href="#" role="button"
                   data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
                 <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another
