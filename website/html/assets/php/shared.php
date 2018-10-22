@@ -12,8 +12,8 @@
     const username = 'plant_client';
     const dbdsn = "mysql:host=" . host . ";port=" . port . ";dbname=" . dbname;
 
-    const INSERT_DATA_SQL = "SELECT addData(?, ?, ?, ?) FROM data;";
-    const INSERT_ALERT_SQL = "SELECT addAlert(?, ?) FROM alerts;";
+    const INSERT_DATA_SQL = "CALL addData(?, ?, ?, ?);";
+    const INSERT_ALERT_SQL = "CALL addAlert(?, ?);";
     const FETCH_LATEST_SQL = "SELECT * FROM data WHERE data.id = (SELECT MAX(id) FROM data) LIMIT 1;";
     const FETCH_TOTAL_COMMITS_SQL = "SELECT COUNT(id) count FROM data LIMIT 1;";
     const FETCH_TOTAL_ALERTS_SQL = "SELECT COUNT(id) count FROM alerts WHERE alerts.is_ok!=0 LIMIT 1;";
