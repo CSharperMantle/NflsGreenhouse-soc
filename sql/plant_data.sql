@@ -1,140 +1,108 @@
--- phpMyAdmin SQL Dump
--- version 4.8.2
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: 2018-09-01 03:03:02
--- 服务器版本： 10.1.34-MariaDB
--- PHP Version: 7.2.8
+/*
+ Navicat MySQL Data Transfer
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
+ Source Server         : plant_root
+ Source Server Type    : MySQL
+ Source Server Version : 80011
+ Source Host           : 192.168.1.114:3306
+ Source Schema         : plant_data
 
+ Target Server Type    : MySQL
+ Target Server Version : 80011
+ File Encoding         : 65001
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+ Date: 22/10/2018 12:32:03
+*/
 
---
--- Database: `plant_data`
---
-CREATE DATABASE IF NOT EXISTS `plant_data` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
-USE `plant_data`;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `actions`
---
-
-CREATE TABLE `actions` (
+-- ----------------------------
+-- Table structure for actions
+-- ----------------------------
+DROP TABLE IF EXISTS `actions`;
+CREATE TABLE `actions`  (
   `id` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `type` int(11) DEFAULT NULL,
-  `action` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `info` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `timestamp` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `type` int(11) NULL DEFAULT NULL,
+  `action` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+  `info` varchar(1024) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `alerts`
---
-
-CREATE TABLE `alerts` (
+-- ----------------------------
+-- Table structure for alerts
+-- ----------------------------
+DROP TABLE IF EXISTS `alerts`;
+CREATE TABLE `alerts`  (
   `id` int(11) NOT NULL,
   `alert_type` int(6) NOT NULL,
-  `is_ok` int(4) NOT NULL DEFAULT '0' ,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `is_ok` int(4) NOT NULL DEFAULT 0,
+  `timestamp` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `data`
---
-
-CREATE TABLE `data` (
+-- ----------------------------
+-- Table structure for data
+-- ----------------------------
+DROP TABLE IF EXISTS `data`;
+CREATE TABLE `data`  (
   `id` int(11) NOT NULL,
-  `air_temp` int(11) DEFAULT NULL,
-  `air_hum` int(11) DEFAULT NULL,
-  `air_light` int(11) DEFAULT NULL,
-  `ground_hum` int(11) DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+  `air_temp` int(11) NULL DEFAULT NULL,
+  `air_hum` int(11) NULL DEFAULT NULL,
+  `air_light` int(11) NULL DEFAULT NULL,
+  `ground_hum` int(11) NULL DEFAULT NULL,
+  `timestamp` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `users`
---
-
-CREATE TABLE `users` (
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`  (
   `id` int(11) NOT NULL,
-  `username` varchar(32) COLLATE latin1_general_ci NOT NULL,
-  `password` varchar(64) COLLATE latin1_general_ci DEFAULT '123456',
-  `register_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+  `username` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `password` varchar(64) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT '123456',
+  `register_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
 
---
--- Indexes for dumped tables
---
+-- ----------------------------
+-- Procedure structure for addAlert
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `addAlert`;
+delimiter ;;
+CREATE PROCEDURE `addAlert`(IN `alert_type_i` int,IN `is_ok_i` int)
+BEGIN
+	DECLARE id_count INT;
+	SELECT count(`alerts`.id) INTO id_count FROM `alerts`;
+	IF (id_count > 0) THEN
+	    INSERT INTO `alerts` (id, alert_type, is_ok) VALUES (id_count, alert_type_i, is_ok_i);
+  ELSE
+	    INSERT INTO `alerts` (id, alert_type, is_ok) VALUES (0, alert_type_i, is_ok_i);
+  END IF;
+END
+;;
+delimiter ;
 
---
--- Indexes for table `actions`
---
-ALTER TABLE `actions`
-  ADD PRIMARY KEY (`id`);
+-- ----------------------------
+-- Procedure structure for addData
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `addData`;
+delimiter ;;
+CREATE PROCEDURE `addData`(IN `air_temp_i` int,IN `air_hum_i` int,IN `air_light_i` int,IN `ground_hum_i` int)
+BEGIN
+	DECLARE id_count INT;
+	SELECT count(`data`.id) INTO id_count FROM `data`;
+	IF (id_count > 0) THEN
+	    INSERT INTO `data` (id, air_temp, air_hum, air_light, ground_hum) VALUES (id_count, air_temp_i, air_hum_i, air_light_i, ground_hum_i);
+  ELSE
+	    INSERT INTO `data` (id, air_temp, air_hum, air_light, ground_hum) VALUES (0, air_temp_i, air_hum_i, air_light_i, ground_hum_i);
+  END IF;
+END
+;;
+delimiter ;
 
---
--- Indexes for table `alerts`
---
-ALTER TABLE `alerts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `data`
---
-ALTER TABLE `data`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
-
-
---
--- Metadata
---
-USE `phpmyadmin`;
-
---
--- Metadata for table actions
---
-
---
--- Metadata for table alerts
---
-
---
--- Metadata for table data
---
-
---
--- Metadata for table users
---
-
---
--- Metadata for database plant_data
---
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET FOREIGN_KEY_CHECKS = 1;
