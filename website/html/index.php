@@ -356,9 +356,9 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12" id="history-data">
           <div class="card card-table">
-            <div class="card-header" id="history-data">历史数据
+            <div class="card-header">历史数据
               <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a href="#" role="button"
                   data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
                 <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another
