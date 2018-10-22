@@ -147,7 +147,8 @@
                   <div class="list">
                     <div class="content">
                       <div class="row">
-                        <a href="#history-data" class="connection-item"><img src="assets/img/backup.png" alt="History"><span>历史数据</span></a>
+                        <a href="#history-data" class="connection-item"><img src="assets/img/backup.png" alt="历史数据"><span>历史数据</span></a>
+                        <a href="#latest-activities" class="connection-item"><img src="assets/img/backup.png" alt="最新行为"><span>最新行为</span></a>
                       </div>
                     </div>
                   </div>
@@ -445,7 +446,7 @@
       </div>
       <div class="row">
         <div class="col-12 col-lg-6">
-          <div class="card">
+          <div class="card" id="latest-activities">
             <div class="card-header">最新行为</div>
             <div class="card-body">
               <ul class="user-timeline user-timeline-compact">
