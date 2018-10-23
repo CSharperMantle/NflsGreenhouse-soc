@@ -290,8 +290,8 @@
             <div id="today-alerts-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">今日报警数</div>
-              <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-right"></span><span
-                  data-toggle="counter" data-end="<?= $today_alerts; ?>" class="number">0</span>
+              <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-right"></span>
+              <span data-toggle="counter" data-end="<?= $today_alerts; ?>" class="number">0</span>
               </div>
             </div>
           </div>
@@ -303,7 +303,6 @@
             <div class="widget-head">
               <div class="tools">
                 <span class="icon mdi mdi-chevron-down">
-
                 </span>
               </div>
               <span class="title">空气温度</span>
@@ -322,7 +321,6 @@
             <div class="widget-head">
               <div class="tools">
                 <span class="icon mdi mdi-chevron-down">
-
                 </span>
               </div>
               <span class="title">空气湿度</span>
@@ -341,7 +339,6 @@
             <div class="widget-head">
               <div class="tools">
                 <span class="icon mdi mdi-chevron-down">
-
                 </span>
               </div>
               <span class="title">地面湿度</span>
@@ -352,6 +349,24 @@
                 <div class="desc">最新值</div>
               </div>
               <div id="ground-hum-line-chart" style="height: 230px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="widget widget-fullwidth">
+            <div class="widget-head">
+              <div class="tools">
+                <span class="icon mdi mdi-chevron-down">
+                </span>
+              </div>
+              <span class="title">光强度</span>
+            </div>
+            <div class="widget-chart-container">
+              <div class="counter">
+                <div class="value"><?= $air_light; ?></div>
+                <div class="desc">最新值</div>
+              </div>
+              <div id="air-light-line-chart" style="height: 230px;"></div>
             </div>
           </div>
         </div>
