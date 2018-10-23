@@ -462,6 +462,9 @@ var App = (function () {
     widgetAirHumLineChart();
     widgetGroundHumLineChart();
 
+    //Row 3
+    widgetAirLightLineChart();
+
     //Row 5
     map();
 
