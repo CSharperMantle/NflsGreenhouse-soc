@@ -370,7 +370,7 @@
             </div>
           </div>
         </div>
-        <div class="col-10 col-lg-4">
+        <div class="col-1 col-lg-4">
           <div class="card">
             <div class="card-header card-header-divider pb-3">种植时长</div>
             <div class="card-body pt-5">
