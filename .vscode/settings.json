@@ -5,7 +5,9 @@
     },
     "files.associations": {
         "wiring_private.h": "c",
-        "list": "cpp"
+        "list": "cpp",
+        "stddef.h": "c",
+        "assert.h": "c"
     },
     "cSpell.language": "en",
     "cSpell.words": [
@@ -15,6 +17,7 @@
         "Ningbo",
         "Uploader",
         "println",
+        "reexecute",
         "sparkline"
     ],
     "php.suggest.basic": false,
