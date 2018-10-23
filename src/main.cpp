@@ -18,6 +18,7 @@
 #include <pt.h>
 #include <tinyxml.h>
 #include <packet_defs.h>
+#include <http_parser.h>
 
 #pragma region constant
 const int InterruptDetectPin = 2;
