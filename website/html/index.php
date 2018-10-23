@@ -69,7 +69,7 @@
   <link rel="stylesheet" type="text/css" href="assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" />
   <link rel="stylesheet" type="text/css" href="assets/lib/jqvmap/jqvmap.min.css" />
   <link rel="stylesheet" type="text/css" href="assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" />
-  <link rel="stylesheet" href="assets/css/app.css" type="text/css" />
+  <link rel="stylesheet" href="assets/css/app.min.css" type="text/css" />
 </head>
 
 <body>
