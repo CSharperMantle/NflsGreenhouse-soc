@@ -375,12 +375,8 @@
         <div class="col-sm-12" id="history-data">
           <div class="card card-table">
             <div class="card-header">历史数据
-              <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a href="#" role="button"
-                  data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
-                <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another
-                    action</a><a href="#" class="dropdown-item">Something else here</a>
-                  <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
-                </div>
+              <div class="tools dropdown">
+                
               </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">

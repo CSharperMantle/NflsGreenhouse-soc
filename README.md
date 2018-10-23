@@ -354,3 +354,16 @@ function mainChart() {
           </div>
         </div>
 ```
+```html
+<span class="icon mdi mdi-download"></span>
+                <a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle">
+                  <span class="icon mdi mdi-more-vert"></span>
+                </a>
+                <div role="menu" class="dropdown-menu">
+                  <a href="#" class="dropdown-item">Action</a>
+                  <a href="#" class="dropdown-item">Another action</a>
+                  <a href="#" class="dropdown-item">Something else here</a>
+                  <div class="dropdown-divider"></div>
+                  <a href="#" class="dropdown-item">Separated link</a>
+                </div>
+```
