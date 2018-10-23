@@ -372,10 +372,10 @@
         </div>
         <div class="col-12 col-lg-4">
           <div class="card">
-            <div class="card-header card-header-divider pb-3">种植时长</div>
+            <div class="card-header card-header-divider pb-3">数据正常比例</div>
             <div class="card-body pt-5">
               <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">牵牛花</span></div>
+                <div class="col-lg-5"><span class="title">空气温度</span></div>
                 <div class="col-lg-7">
                   <div class="progress">
                     <div style="width: 40%" class="progress-bar bg-success"></div>
@@ -383,7 +383,7 @@
                 </div>
               </div>
               <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">玫瑰花</span></div>
+                <div class="col-lg-5"><span class="title">空气湿度</span></div>
                 <div class="col-lg-7">
                   <div class="progress">
                     <div style="width: 65%" class="progress-bar bg-success"></div>
@@ -391,7 +391,7 @@
                 </div>
               </div>
               <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">多肉植物</span></div>
+                <div class="col-lg-5"><span class="title"></span></div>
                 <div class="col-lg-7">
                   <div class="progress">
                     <div style="width: 30%" class="progress-bar bg-success"></div>
