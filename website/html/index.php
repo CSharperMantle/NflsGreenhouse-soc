@@ -370,42 +370,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12" id="history-data">
-          <div class="card card-table">
-            <div class="card-header">历史数据
-              <div class="tools dropdown">
-              </div><span class="card-subtitle">所有上传数据</span>
-            </div>
-            <div class="card-body">
-              <table id="table2" class="table table-striped table-hover table-fw-widget">
-                <thead>
-                  <tr>
-                    <th>时间</th>
-                    <th>空气温度 (°C)</th>
-                    <th>空气湿度 (%)</th>
-                    <th>地面湿度</th>
-                    <th>光强度</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php
-                    foreach ($all_commits as $key => $value) {
-                      $_air_temp = $value['air_temp'];
-                      $_air_light = $value['air_light'];
-                      $_air_hum = $value['air_hum'];
-                      $_ground_hum = $value['ground_hum'];
-                      $_timestamp = $value['timestamp'];
-                      $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
-                      print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
-                    }
-                ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
         <div class="col-12 col-lg-4">
           <div class="card">
             <div class="card-header card-header-divider pb-3">种植时长</div>
@@ -453,6 +417,43 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12" id="history-data">
+          <div class="card card-table">
+            <div class="card-header">历史数据
+              <div class="tools dropdown">
+              </div><span class="card-subtitle">所有上传数据</span>
+            </div>
+            <div class="card-body">
+              <table id="table2" class="table table-striped table-hover table-fw-widget">
+                <thead>
+                  <tr>
+                    <th>时间</th>
+                    <th>空气温度 (°C)</th>
+                    <th>空气湿度 (%)</th>
+                    <th>地面湿度</th>
+                    <th>光强度</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <?php
+                    foreach ($all_commits as $key => $value) {
+                      $_air_temp = $value['air_temp'];
+                      $_air_light = $value['air_light'];
+                      $_air_hum = $value['air_hum'];
+                      $_ground_hum = $value['ground_hum'];
+                      $_timestamp = $value['timestamp'];
+                      $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
+                      print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
+                    }
+                ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
       </div>
       <div class="row">
         <div class="col-12 col-lg-6">
