@@ -104,7 +104,7 @@ var App = (function () {
     }
 
     //Air temp widget
-    function widget_air_temp_line_chart() {
+    function widgetAirTempLineChart() {
       var color1 = App.color.primary;
       var plot_statistics = $.plot($("#air-temp-line-chart"), [{
         data: [
@@ -112,9 +112,8 @@ var App = (function () {
             $air_temp_query = run_query_fetch_all($db, FETCH_AIR_TEMP_SQL);
             $temp_id = 1;
             foreach ($air_temp_query as $id => $array) {
-              $_id = $temp_id;
               $_temp = $array['air_temp'];
-              print "[$_id, $_temp], \r\n";
+              print "[$temp_id, $_temp], \r\n";
               $temp_id++;
             }
           ?>
@@ -180,7 +179,7 @@ var App = (function () {
     }
 
     //Air hum widget
-    function widget_air_hum_line_chart() {
+    function widgetAirHumLineChart() {
       var color1 = App.color.warning;
       var plot_statistics = $.plot($("#air-hum-line-chart"), [{
         data: [
@@ -188,9 +187,8 @@ var App = (function () {
             $air_hum_query = run_query_fetch_all($db, FETCH_AIR_HUM_SQL);
             $hum_id = 1;
             foreach ($air_hum_query as $id => $array) {
-              $_id = $hum_id;
               $_hum = $array['air_hum'];
-              print "[$_id, $_hum], \r\n";
+              print "[$hum_id, $_hum], \r\n";
               $hum_id++;
             }
           ?>
@@ -255,8 +253,82 @@ var App = (function () {
       widget_tooltipPosition('air-hum-line-chart', 60);
     }
 
+    function widgetAirLightLineChart() {
+      var color1 = App.color.warning;
+      var plot_statistics = $.plot($("#air-light-line-chart"), [{
+        data: [
+          <?php
+            $air_light_query = run_query_fetch_all($db, FETCH_AIR_LIGHT_SQL);
+            $light_id = 1;
+            foreach ($air_light_query as $id => $array) {
+              $_light = $array['air_light'];
+              print "[$light_id, $_light], \r\n";
+              $light_id++;
+            }
+          ?>
+        ],
+        label: "空气湿度"
+      }], {
+        series: {
+          lines: {
+            show: true,
+            lineWidth: 2, 
+            fill: true,
+            fillColor: {
+              colors: [{
+                opacity: 0.35
+              }, {
+                opacity: 0.35
+              }
+              ]
+            } 
+          },
+          points: {
+            show: true
+          },
+          shadowSize: 1
+        },
+        legend:{
+          show: false
+        },
+        grid: {
+          margin: {
+            left: -8,
+            right: -8,
+            top: 0,
+            bottom: 0
+          },
+          show: false,
+          labelMargin: 15,
+          axisMargin: 500,
+          hoverable: true,
+          clickable: true,
+          tickColor: "rgba(0,0,0,0.15)",
+          borderWidth: 0
+        },
+        tooltip:{
+          show: true,
+          cssClass: "tooltip-chart",
+          content: "<div class='content-chart'> <div class='label'> <div class='label-x'> %x.0 </div> - <div class='label-y'> %y.0 </div> </div></div>",
+          defaultTheme: false
+        },
+        colors: [color1],
+        xaxis: {
+          ticks: 11,
+          tickDecimals: 0
+        },
+        yaxis: {
+          autoscaleMargin: 0.5,
+          ticks: 4,
+          tickDecimals: 0
+        }
+      });
+
+      widget_tooltipPosition('air-light-line-chart', 60);
+    }
+
     //Ground hum widget
-    function widget_ground_hum_line_chart() {
+    function widgetGroundHumLineChart() {
       var color1 = App.color.danger;
       var plot_statistics = $.plot($("#ground-hum-line-chart"), [{
         data: [
@@ -264,9 +336,8 @@ var App = (function () {
             $ground_hum_query = run_query_fetch_all($db, FETCH_GROUND_HUM_SQL);
             $ground_hum_id = 1;
             foreach ($ground_hum_query as $id => $array) {
-              $_id = $ground_hum_id;
               $_hum = $array['ground_hum'];
-              print "[$_id, $_hum], \r\n";
+              print "[$ground_hum_id, $_hum], \r\n";
               $ground_hum_id++;
             }
           ?>
@@ -387,9 +458,9 @@ var App = (function () {
     sparklines();
 
 	  //Row 2
-    widget_air_temp_line_chart();
-    widget_air_hum_line_chart();
-    widget_ground_hum_line_chart();
+    widgetAirTempLineChart();
+    widgetAirHumLineChart();
+    widgetGroundHumLineChart();
 
     //Row 5
     map();

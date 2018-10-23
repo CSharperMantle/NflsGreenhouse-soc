@@ -376,7 +376,6 @@
           <div class="card card-table">
             <div class="card-header">历史数据
               <div class="tools dropdown">
-                
               </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">
