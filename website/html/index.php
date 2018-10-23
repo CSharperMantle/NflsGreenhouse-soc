@@ -398,22 +398,6 @@
                   </div>
                 </div>
               </div>
-              <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">菊花</span></div>
-                <div class="col-lg-7">
-                  <div class="progress">
-                    <div style="width: 80%" class="progress-bar bg-success"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">薄荷</span></div>
-                <div class="col-lg-7">
-                  <div class="progress">
-                    <div style="width: 45%" class="progress-bar bg-success"></div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
