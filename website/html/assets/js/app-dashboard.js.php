@@ -254,7 +254,7 @@ var App = (function () {
     }
 
     function widgetAirLightLineChart() {
-      var color1 = App.color.warning;
+      var color1 = App.color.success;
       var plot_statistics = $.plot($("#air-light-line-chart"), [{
         data: [
           <?php
@@ -267,7 +267,7 @@ var App = (function () {
             }
           ?>
         ],
-        label: "空气湿度"
+        label: "光强度"
       }], {
         series: {
           lines: {
