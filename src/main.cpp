@@ -147,6 +147,7 @@ void printLicenseInfo() {
     Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
     Serial.println("Libs in use: TinyXML by Lee Thomason");
     Serial.println("ProtoThreads by Adam Dunkels");
+    Serial.println("HttpParser by Joyent, Inc. and other Node contributors");
     Serial.println("");
     screen->setBacklight(true);
     clearAndResetScreen(screen);
