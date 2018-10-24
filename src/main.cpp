@@ -20,6 +20,11 @@
 #include <packet_defs.h>
 #include <http_parser.h>
 
+#define alloc_cpy(type, dest, src, len) \
+    dest = (type *)malloc(len + 1); \
+    memcpy(dest, src, len); \
+    dest[len] = '\0';
+
 #pragma region constant
 const int InterruptDetectPin = 2;
 
@@ -48,6 +53,13 @@ byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
+http_parser_settings *httpParserSettings = new http_parser_settings();
+http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
+struct http_respond {
+    char *method, *url, *body;
+    unsigned int flags;
+    unsigned short http_major, http_minor;
+};
 #pragma endregion
 
 #pragma region var
@@ -61,6 +73,14 @@ int currentGroundHum = 0;
 struct pt uploadSensorData_ctrl;
 struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
+#pragma endregion
+
+#pragma region callback 
+int body_cb(http_parser *parser, const char *buf, size_t len) {
+    http_respond *respond = (http_respond *) parser->data;
+    alloc_cpy(char, respond->body, buf, len);
+    return 0;
+}
 #pragma endregion
 
 #pragma region helper
@@ -240,6 +260,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     Serial.println("Uploading sensor data");
     clearAndResetScreen(screen);
     screen->print("DATA PREPARE");
+    httpParser->data = new http_respond();
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Connection established.");
@@ -278,18 +299,25 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             ""
         ));
     clearAndResetScreen(screen);
-    do
+
     {
-        String str = webUploader->readString();
-        Serial.println(str);
-        screen->print(str);
-    } while (webUploader->available());
+        String respond = String();
+        do
+        {
+            String str = webUploader->readString();
+            Serial.println(str);
+            respond += str;
+        } while (webUploader->available());
+        http_parser_execute(httpParser, httpParserSettings, respond.c_str(), 0);
+    }
 
     webUploader->stop();
     Serial.println("Done. Connection closed.");
     delay(1000);
     clearAndResetScreen(screen);
     screen->print(String("DATA UPLOADED"));
+    delete httpParser->data;
+    httpParser->data = nullptr;
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
 }
