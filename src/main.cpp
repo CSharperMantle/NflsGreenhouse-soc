@@ -55,10 +55,8 @@ DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
 http_parser_settings *httpParserSettings = new http_parser_settings();
 http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
-struct http_respond {
-    char *method, *url, *body;
-    unsigned int flags;
-    unsigned short http_major, http_minor;
+struct http_response {
+    char *body;
 };
 #pragma endregion
 
@@ -77,7 +75,7 @@ struct pt readSensorData_ctrl;
 
 #pragma region callback 
 int body_cb(http_parser *parser, const char *buf, size_t len) {
-    http_respond *respond = (http_respond *) parser->data;
+    http_response *respond = (http_response *) parser->data;
     alloc_cpy(char, respond->body, buf, len);
     return 0;
 }
@@ -260,7 +258,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     Serial.println("Uploading sensor data");
     clearAndResetScreen(screen);
     screen->print("DATA PREPARE");
-    httpParser->data = new http_respond();
+    httpParser->data = new http_response();
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Connection established.");
@@ -316,6 +314,11 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     delay(1000);
     clearAndResetScreen(screen);
     screen->print(String("DATA UPLOADED"));
+
+    parseXmlStringAndExecute(((http_response *)httpParser->data)->body);
+    clearAndResetScreen(screen);
+    screen->print(String("RESPONSE PARSED"));
+    
     delete httpParser->data;
     httpParser->data = nullptr;
     PT_TIMER_DELAY(pt, uploadInterval);
