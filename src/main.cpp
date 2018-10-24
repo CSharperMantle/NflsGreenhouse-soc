@@ -151,7 +151,7 @@ void initDigital() {
         pinMode(eachPin, OUTPUT);
     }
 
-    for (int eachPin : availableInputDigitalPin) {
+    for (int eachPin : avaliableInputDigitalPin) {
         pinMode(eachPin, INPUT);
     }
 }
