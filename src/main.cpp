@@ -47,6 +47,9 @@ const char *webServerAddress = "192.168.1.114";
 const int webServerPort = 80;
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
+
+const int availableOutputDigitalPin[] = {22, 23, 24, 25, 26, 27};
+const int avaliableInputDigitalPin[] = {};
 #pragma endregion
 
 #pragma region object
@@ -143,6 +146,15 @@ void parseXmlStringAndExecute(const char * str) {
 #pragma endregion
 
 #pragma region init_script
+void initDigital() {
+    for (int eachPin : availableOutputDigitalPin) {
+        pinMode(eachPin, OUTPUT);
+    }
+
+    for (int eachPin : availableInputDigitalPin) {
+        pinMode(eachPin, INPUT);
+    }
+}
 void printLicenseInfo() {
     Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
     Serial.println("Libs in use: TinyXML by Lee Thomason");
