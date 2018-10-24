@@ -74,7 +74,7 @@ struct pt readSensorData_ctrl;
 #pragma endregion
 
 #pragma region callback 
-int body_cb(http_parser *parser, const char *buf, size_t len) {
+int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
     http_response *respond = (http_response *) parser->data;
     alloc_cpy(char, respond->body, buf, len);
     return 0;
@@ -140,7 +140,6 @@ void parseXmlStringAndExecute(const char * str) {
     delete handle;
     delete doc;
 }
-
 #pragma endregion
 
 #pragma region init_script
