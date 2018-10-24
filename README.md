@@ -367,3 +367,64 @@ function mainChart() {
                   <a href="#" class="dropdown-item">Separated link</a>
                 </div>
 ```
+
+```cpp
+case (HTTP_POST << 16 | 1 << 8 | 'U'): 
+              parser->method = HTTP_PUT; break;
+            case (HTTP_POST << 16 | 1 << 8 | 'A'): 
+              parser->method = HTTP_PATCH; break;
+            case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+              case (HTTP_POST << 16 | 1 << 8 | 'R'): 
+              parser->method = HTTP_PROPFIND; break;
+```
+```C
+#define XX(meth, pos, ch, new_meth) \
+            case (meth << 16 | pos << 8 | ch): \
+              parser->method = new_meth; break;
+
+            XX(HTTP_PUT,       2, 'R', HTTP_PURGE)
+            XX(HTTP_CONNECT,   1, 'H', HTTP_CHECKOUT)
+            XX(HTTP_CONNECT,   2, 'P', HTTP_COPY)
+            XX(HTTP_MKCOL,     1, 'O', HTTP_MOVE)
+            XX(HTTP_MKCOL,     1, 'E', HTTP_MERGE)
+            XX(HTTP_MKCOL,     1, '-', HTTP_MSEARCH)
+            XX(HTTP_MKCOL,     2, 'A', HTTP_MKACTIVITY)
+            XX(HTTP_MKCOL,     3, 'A', HTTP_MKCALENDAR)
+            XX(HTTP_SUBSCRIBE, 1, 'E', HTTP_SEARCH)
+            XX(HTTP_SUBSCRIBE, 1, 'O', HTTP_SOURCE)
+            XX(HTTP_REPORT,    2, 'B', HTTP_REBIND)
+            XX(HTTP_PROPFIND,  4, 'P', HTTP_PROPPATCH)
+            XX(HTTP_LOCK,      1, 'I', HTTP_LINK)
+            XX(HTTP_UNLOCK,    2, 'S', HTTP_UNSUBSCRIBE)
+            XX(HTTP_UNLOCK,    2, 'B', HTTP_UNBIND)
+            XX(HTTP_UNLOCK,    3, 'I', HTTP_UNLINK)
+```
