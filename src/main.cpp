@@ -215,8 +215,9 @@ void initEthernet() {
 
     Serial.println("Setting up HTTP Parser");
     clearWriteScreen(screen, "PARSER SETUP", 300);
-    httpParserSettings->on_body = onBodyReceivedCallback;
+    http_parser_settings_init(httpParserSettings);
     http_parser_init(httpParser, http_parser_type::HTTP_RESPONSE);
+    httpParserSettings->on_body = onBodyReceivedCallback;
     Serial.println("Done.");
 }
 
