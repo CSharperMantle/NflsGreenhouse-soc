@@ -205,19 +205,18 @@ void initEthernet() {
             Serial.println("Test connection flushed.");
             webUploader->stop();
             Serial.println("Test connection closed.");
-            clearAndResetScreen(screen);
             clearWriteScreen(screen, "CONN OK", 300);
             break;
         } else {
             Serial.println(String("Test connection broken. Retry ") + String(index));
-            clearAndResetScreen(screen);
             clearWriteScreen(screen, (String("CONN ERR:") + String(index)).c_str(), 300);
         }
     }
 
-    Serial.println("Setting up callbacks");
-
+    Serial.println("Setting up HTTP Parser");
+    clearWriteScreen(screen, "PARSER SETUP", 300);
     httpParserSettings->on_body = onBodyReceivedCallback;
+    http_parser_init(httpParser, http_parser_type::HTTP_RESPONSE);
     Serial.println("Done.");
 }
 
