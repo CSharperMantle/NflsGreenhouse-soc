@@ -214,6 +214,10 @@ void initEthernet() {
             clearWriteScreen(screen, (String("CONN ERR:") + String(index)).c_str(), 300);
         }
     }
+
+    Serial.println("Setting up callbacks");
+
+    httpParserSettings->on_body = onBodyReceivedCallback;
     Serial.println("Done.");
 }
 
@@ -323,6 +327,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     clearAndResetScreen(screen);
     clearWriteScreen(screen, "RESPONSE PARSED", 300);
     
+    clearWriteScreen(screen, ((http_response *)(httpParser->data))->body, 5000);
     delete (http_response *)(httpParser->data);
     httpParser->data = nullptr;
     PT_TIMER_DELAY(pt, uploadInterval);
