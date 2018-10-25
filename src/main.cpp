@@ -101,7 +101,7 @@ void parseXmlStringAndExecute(const char * str) {
 
     TiXmlHandle *handle = new TiXmlHandle(doc);
     TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
-    for (action; action; action = action->NextSiblingElement()) {
+    for ( ; action; action = action->NextSiblingElement()) {
         TiXmlElement *type = action->FirstChildElement("type");
         TiXmlElement *targetId = action->FirstChildElement("target_id");
         TiXmlElement *param = action->FirstChildElement("param");
@@ -323,7 +323,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     clearAndResetScreen(screen);
     clearWriteScreen(screen, "RESPONSE PARSED", 300);
     
-    delete httpParser->data;
+    delete (http_response *)(httpParser->data);
     httpParser->data = nullptr;
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
