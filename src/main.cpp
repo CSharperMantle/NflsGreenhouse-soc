@@ -48,8 +48,6 @@ const int webServerPort = 80;
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
-const int availableOutputDigitalPin[] = {22, 23, 24, 25, 26, 27};
-const int avaliableInputDigitalPin[] = {};
 #pragma endregion
 
 #pragma region object
@@ -88,7 +86,14 @@ int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
 void clearAndResetScreen(LiquidCrystal_I2C *lcd) {
     lcd->home();
     lcd->clear();
-} 
+}
+
+void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayMillisecond) {
+    lcd->home();
+    lcd->clear();
+    lcd->print(text);
+    delay(delayMillisecond);
+}
 
 void parseXmlStringAndExecute(const char * str) {
     TiXmlDocument *doc = new TiXmlDocument();
@@ -106,6 +111,7 @@ void parseXmlStringAndExecute(const char * str) {
         
         if (typeValue == ActionType::RELAY_ACTION) {
             // Relay action requested
+            pinMode(targetIdValue, OUTPUT);
             if (!strcmp(paramValue, "0")) {
                 digitalWrite(targetIdValue, LOW);
             }
@@ -146,15 +152,7 @@ void parseXmlStringAndExecute(const char * str) {
 #pragma endregion
 
 #pragma region init_script
-void initDigital() {
-    for (int eachPin : availableOutputDigitalPin) {
-        pinMode(eachPin, OUTPUT);
-    }
 
-    for (int eachPin : avaliableInputDigitalPin) {
-        pinMode(eachPin, INPUT);
-    }
-}
 void printLicenseInfo() {
     Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
     Serial.println("Libs in use: TinyXML by Lee Thomason");
@@ -186,16 +184,14 @@ void initEthernet() {
     for (int index = 1; index <= 5; index++) {
         if (Ethernet.begin(mac) == 0) {
             Serial.println(String("DHCP failed. Retry ") + String(index));
-            clearAndResetScreen(screen);
-            screen->print(String("ETH ERR: ") + String(index));
+            clearWriteScreen(screen, (String("ETH ERR: ") + String(index)).c_str(), 300);
         } else {
             Serial.println("DHCP OK.");
             Serial.println("    Ethernet information: IP, DNS, Gateway");
             Serial.println(Ethernet.localIP());
             Serial.println(Ethernet.dnsServerIP());
             Serial.println(Ethernet.gatewayIP());
-            clearAndResetScreen(screen);
-            screen->print(String("ETH OK"));
+            clearWriteScreen(screen, "ETH OK", 300);
             break;
         }
     }
@@ -210,12 +206,12 @@ void initEthernet() {
             webUploader->stop();
             Serial.println("Test connection closed.");
             clearAndResetScreen(screen);
-            screen->print(String("CONN OK"));
+            clearWriteScreen(screen, "CONN OK", 300);
             break;
         } else {
             Serial.println(String("Test connection broken. Retry ") + String(index));
             clearAndResetScreen(screen);
-            screen->print(String("CONN ERR:") + String(index));
+            clearWriteScreen(screen, (String("CONN ERR:") + String(index)).c_str(), 300);
         }
     }
     Serial.println("Done.");
@@ -250,8 +246,7 @@ PT_THREAD(readSensorData(struct pt *pt)) {
     Serial.println(currentGroundHum);
     Serial.println(currentLightValue);
     Serial.println("Done.");
-    clearAndResetScreen(screen);
-    screen->print(String("SENSOR READ"));
+    clearWriteScreen(screen, "REFRESH SENSOR", 0);
     PT_TIMER_DELAY(pt, checkSensorInterval);
     PT_END(pt);
 }
@@ -268,8 +263,7 @@ PT_THREAD(maintainEthernet(struct pt *pt)) {
 PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
-    clearAndResetScreen(screen);
-    screen->print("DATA PREPARE");
+    clearWriteScreen(screen, "DATA PREPARE", 300);
     httpParser->data = new http_response();
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
@@ -294,8 +288,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             ""
         )
     );
-    clearAndResetScreen(screen);
-    screen->print("DATA UPLOAD");
+    clearWriteScreen(screen, "DATA UPLOAD", 300);
     webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + String(currentAirHum) \
             + String("&air_light=") + String(currentLightValue) \
@@ -324,12 +317,11 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     webUploader->stop();
     Serial.println("Done. Connection closed.");
     delay(1000);
-    clearAndResetScreen(screen);
-    screen->print(String("DATA UPLOADED"));
+    clearWriteScreen(screen, "DATA UPLOADED", 300);
 
     parseXmlStringAndExecute(((http_response *)httpParser->data)->body);
     clearAndResetScreen(screen);
-    screen->print(String("RESPONSE PARSED"));
+    clearWriteScreen(screen, "RESPONSE PARSED", 300);
     
     delete httpParser->data;
     httpParser->data = nullptr;
