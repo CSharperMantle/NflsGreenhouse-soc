@@ -20,10 +20,11 @@
 #include <packet_defs.h>
 #include <http_parser.h>
 
-#define alloc_cpy(type, dest, src, len) \
+#define ALLOC_COPY(type, dest, src, len) \
     dest = (type *)malloc(len + 1); \
     memcpy(dest, src, len); \
     dest[len] = '\0';
+#define ALLOC(type, size) (type *)malloc(sizeof(type) * size)
 
 #pragma region constant
 const int InterruptDetectPin = 2;
@@ -56,9 +57,10 @@ DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
 http_parser_settings *httpParserSettings = new http_parser_settings();
 http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
-struct http_response {
+struct ServerResponse {
     char *body;
 };
+ServerResponse *server_response = new ServerResponse();
 #pragma endregion
 
 #pragma region var
@@ -74,10 +76,14 @@ struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
 #pragma endregion
 
-#pragma region callback 
+#pragma region callback
 int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
-    http_response *respond = (http_response *) parser->data;
-    alloc_cpy(char, respond->body, buf, len);
+    if (server_response->body != NULL) {
+        ALLOC_COPY(char, server_response->body, buf, len);
+    } else {
+        server_response->body = ALLOC(char, len);
+        memcpy(server_response->body, buf, len);
+    }
     return 0;
 }
 #pragma endregion

@@ -63,6 +63,10 @@ typedef unsigned __int64 uint64_t;
 # define HTTP_MAX_HEADER_SIZE (80*1024)
 #endif
 
+#ifndef HTTP_PARSER_CALLBACK
+# define HTTP_PARSER_CALLBACK(name_args) int name_args 
+#endif
+
 typedef struct http_parser http_parser;
 typedef struct http_parser_settings http_parser_settings;
 
