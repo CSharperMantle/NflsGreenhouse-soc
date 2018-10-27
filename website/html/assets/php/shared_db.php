@@ -1,0 +1,49 @@
+<?php
+/**
+     * Copyright (c) 2018 Ningbo Foreign Language School
+     * This part of program should be delivered with the whole project.
+     * Partly use is not allowed.
+     * Licensed under GPL-v3 Agreement
+     */
+
+    const host = 'localhost';
+    const port = 3306;
+    const dbname = 'plant_data';
+    const passwd = 'plant_client';
+    const username = 'plant_client';
+    const dbdsn = "mysql:host=" . host . ";port=" . port . ";dbname=" . dbname;
+
+    function run_query(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
+        if ($sql === INSERT_DATA_SQL || $sql === INSERT_ALERT_SQL) {
+            $stmt = $connection->prepare($sql);
+            $stmt->execute($args);
+            return;
+        }
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($args);
+        $result = $stmt->fetch($fetch_style);
+        return $result;
+    }
+
+    function run_query_fetch_all(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($args);
+        $result = $stmt->fetchAll($fetch_style);
+        return $result;
+    }
+
+    class DatabaseConnectionSingleton {
+        private static $_instance = NULL;
+
+        private function __constructor() {
+            
+        }
+
+        public static function getInstance() {
+            if (!(DatabaseConnectionSingleton::$_instance instanceof PDO)) {
+                DatabaseConnectionSingleton::$_instance = new PDO(dbdsn, username, passwd);
+            }
+            return DatabaseConnectionSingleton::$_instance;
+        }
+    }
+?>

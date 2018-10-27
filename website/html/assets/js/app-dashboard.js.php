@@ -1,7 +1,8 @@
 <?php
-  require '../php/shared.php';
+  require '..\\php\\shared_db.php';
+  require '..\\php\\shared_sql.php';
 
-  $db = new PDO(dbdsn, username, passwd);
+  $db = DatabaseConnectionSingleton::getInstance();
 ?>
 
 var App = (function () {
