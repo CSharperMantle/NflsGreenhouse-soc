@@ -33,17 +33,19 @@
     }
 
     class DatabaseConnectionSingleton {
-        private static $_instance = NULL;
+        private static $_instance;
+
+        private $_pdo;
 
         private function __constructor() {
-            
+            $this->_pdo = new PDO(dbdsn, username, passwd);
         }
 
         public static function getInstance() {
-            if (!(DatabaseConnectionSingleton::$_instance instanceof PDO)) {
-                DatabaseConnectionSingleton::$_instance = new PDO(dbdsn, username, passwd);
+            if (!(DatabaseConnectionSingleton::$_instance instanceof DatabaseConnectionSingleton)) {
+                DatabaseConnectionSingleton::$_instance = new DatabaseConnectionSingleton();
             }
-            return DatabaseConnectionSingleton::$_instance;
+            return DatabaseConnectionSingleton::$_instance->$_pdo;
         }
     }
 ?>
