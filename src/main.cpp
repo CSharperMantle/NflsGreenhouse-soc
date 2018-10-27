@@ -77,41 +77,6 @@ struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
 #pragma endregion
 
-#pragma region callback
-int onMessageBeginCallback(http_parser *parser) {
-    if (server_response->body != NULL) {
-        free(server_response->body);
-        server_response->body = NULL;
-    }
-    if (server_response->status != NULL) {
-        free(server_response->status);
-        server_response->status = NULL;
-    }
-    server_response->status = MALLOC_HEAP(1, char);
-    server_response->body = MALLOC_HEAP(1, char);
-    return 0;
-}
-
-int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
-    if (server_response->body != NULL) {
-        ALLOC_COPY(char, server_response->body, buf, len);
-    } else {
-        server_response->body = ALLOC(char, len);
-        memcpy(server_response->body, buf, len);
-    }
-    return 0;
-}
-
-int onMessageEndCallback(http_parser *parser) {
-    parseXmlStringAndExecute(server_response->body);
-    free(server_response->body);
-    free(server_response->status);
-    server_response->status = NULL;
-    server_response->body = NULL;
-    return 0;
-}
-#pragma endregion
-
 #pragma region helper
 void clearAndResetScreen(LiquidCrystal_I2C *lcd) {
     lcd->home();
@@ -178,6 +143,41 @@ void parseXmlStringAndExecute(const char * str) {
     //FIXME: Maybe a bug
     delete handle;
     delete doc;
+}
+#pragma endregion
+
+#pragma region callback
+int onMessageBeginCallback(http_parser *parser) {
+    if (server_response->body != NULL) {
+        free(server_response->body);
+        server_response->body = NULL;
+    }
+    if (server_response->status != NULL) {
+        free(server_response->status);
+        server_response->status = NULL;
+    }
+    server_response->status = MALLOC_HEAP(1, char);
+    server_response->body = MALLOC_HEAP(1, char);
+    return 0;
+}
+
+int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
+    if (server_response->body != NULL) {
+        ALLOC_COPY(char, server_response->body, buf, len);
+    } else {
+        server_response->body = ALLOC(char, len);
+        memcpy(server_response->body, buf, len);
+    }
+    return 0;
+}
+
+int onMessageEndCallback(http_parser *parser) {
+    parseXmlStringAndExecute(server_response->body);
+    free(server_response->body);
+    free(server_response->status);
+    server_response->status = NULL;
+    server_response->body = NULL;
+    return 0;
 }
 #pragma endregion
 
