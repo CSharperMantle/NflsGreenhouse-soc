@@ -29,7 +29,7 @@
   $ground_hum = purify_data($_GET['ground_hum']);
   
   try {
-    $db = DatabaseConnectionSingleton::getInstance();
+    $db = DBConnectionSingleton::getInstance();
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
   catch (PDOException $e) {

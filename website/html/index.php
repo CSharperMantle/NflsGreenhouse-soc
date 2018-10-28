@@ -10,32 +10,32 @@
   require 'assets\\php\\shared_html.php';
 
   try {
-    $db = DatabaseConnectionSingleton::getInstance();
+    $db = DBConnectionSingleton::getInstance();
 
-    $result = run_query($db, FETCH_LATEST_SQL);
+    $result = run_query_fetch($db, FETCH_LATEST_SQL);
     $air_temp = $result['air_temp'];
     $air_hum = $result['air_hum'];
     $air_light = $result['air_light'];
     $ground_hum = $result['ground_hum'];
 
-    $result = run_query($db, FETCH_TOTAL_COMMITS_SQL);
+    $result = run_query_fetch($db, FETCH_TOTAL_COMMITS_SQL);
     $total_commits = $result['count'];
-    $result = run_query($db, FETCH_TOTAL_ALERTS_SQL);
+    $result = run_query_fetch($db, FETCH_TOTAL_ALERTS_SQL);
     $total_alerts = $result['count'];
-    $result = run_query($db, FETCH_TODAY_COMMITS_COUNT_SQL);
+    $result = run_query_fetch($db, FETCH_TODAY_COMMITS_COUNT_SQL);
     $today_uploads = $result['count'];
-    $result = run_query($db, FETCH_TODAY_ALERTS_COUNT_SQL);
+    $result = run_query_fetch($db, FETCH_TODAY_ALERTS_COUNT_SQL);
     $today_alerts = $result['count'];
-    $result = run_query($db, FETCH_LATEST_AIR_TEMP_ALERT_SQL);
+    $result = run_query_fetch($db, FETCH_LATEST_AIR_TEMP_ALERT_SQL);
     $air_temp_is_ok = $result['is_ok'];
-    $result = run_query($db, FETCH_LATEST_AIR_HUM_ALERT_SQL);
+    $result = run_query_fetch($db, FETCH_LATEST_AIR_HUM_ALERT_SQL);
     $air_hum_is_ok = $result['is_ok'];
-    $result = run_query($db, FETCH_LATEST_AIR_LIGHT_ALERT_SQL);
+    $result = run_query_fetch($db, FETCH_LATEST_AIR_LIGHT_ALERT_SQL);
     $air_light_is_ok = $result['is_ok'];
-    $result = run_query($db, FETCH_LATEST_GROUND_HUM_ALERT_SQL);
+    $result = run_query_fetch($db, FETCH_LATEST_GROUND_HUM_ALERT_SQL);
     $ground_hum_is_ok = $result['is_ok'];
 
-    $all_commits = run_query_fetch_all($db, FETCH_ALL_SQL);
+    $all_commits = run_query_fetch_multi($db, FETCH_ALL_SQL);
     
     $now = new DateTime();
 

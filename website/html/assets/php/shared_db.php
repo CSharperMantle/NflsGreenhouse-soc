@@ -13,7 +13,12 @@
     const username = 'plant_client';
     const dbdsn = "mysql:host=" . host . ";port=" . port . ";dbname=" . dbname;
 
-    function run_query(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
+    function run_query(PDO $connection, string $sql, array $args = array()) {
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($args);
+    }
+
+    function run_query_fetch(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
         if ($sql === INSERT_DATA_SQL || $sql === INSERT_ALERT_SQL) {
             $stmt = $connection->prepare($sql);
             $stmt->execute($args);
@@ -25,27 +30,29 @@
         return $result;
     }
 
-    function run_query_fetch_all(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
+    function run_query_fetch_multi(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
         $stmt = $connection->prepare($sql);
         $stmt->execute($args);
         $result = $stmt->fetchAll($fetch_style);
         return $result;
     }
 
-    class DatabaseConnectionSingleton {
+    class DBConnectionSingleton {
         private static $_instance;
+        
+        public static function getInstance() {
+            if (!(DBConnectionSingleton::$_instance instanceof DBConnectionSingleton)) {
+                DBConnectionSingleton::$_instance = new DBConnectionSingleton();
+            }
+            return DBConnectionSingleton::$_instance->$_pdo;
+        }
 
         private $_pdo;
-
         private function __constructor() {
             $this->_pdo = new PDO(dbdsn, username, passwd);
         }
-
-        public static function getInstance() {
-            if (!(DatabaseConnectionSingleton::$_instance instanceof DatabaseConnectionSingleton)) {
-                DatabaseConnectionSingleton::$_instance = new DatabaseConnectionSingleton();
-            }
-            return DatabaseConnectionSingleton::$_instance->$_pdo;
+        private function __clone() {
+            throw new RuntimeException('');
         }
     }
 ?>

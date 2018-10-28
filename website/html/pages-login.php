@@ -19,7 +19,7 @@
 
       $db = new PDO(dbdsn, username, passwd);
 
-      $result = run_query($db, FETCH_USER_EXIST_SQL, array($_username));
+      $result = run_query_fetch($db, FETCH_USER_EXIST_SQL, array($_username));
       if ($result == NULL) {
         $user_not_registered = true;
       }
