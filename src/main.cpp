@@ -161,7 +161,7 @@ int onMessageBeginCallback(http_parser *parser) {
     return 0;
 }
 
-int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
+long onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
     if (server_response->body != NULL) {
         ALLOC_COPY(char, server_response->body, buf, len);
     } else {
@@ -171,7 +171,7 @@ int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
     return 0;
 }
 
-int onMessageEndCallback(http_parser *parser) {
+long onMessageEndCallback(http_parser *parser) {
     parseXmlStringAndExecute(server_response->body);
     free(server_response->body);
     free(server_response->status);

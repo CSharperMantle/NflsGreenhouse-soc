@@ -39,12 +39,12 @@
 
 #ifndef BIT_AT
 # define BIT_AT(a, i)                                                \
-  (!!((unsigned int) (a)[(unsigned int) (i) >> 3] &                  \
-   (1 << ((unsigned int) (i) & 7))))
+  (!!((unsigned long) (a)[(unsigned long) (i) >> 3] &                  \
+   (1 << ((unsigned long) (i) & 7))))
 #endif
 
 #ifndef ELEM_AT
-# define ELEM_AT(a, i, v) ((unsigned int) (i) < ARRAY_SIZE(a) ? (a)[(i)] : (v))
+# define ELEM_AT(a, i, v) ((unsigned long) (i) < ARRAY_SIZE(a) ? (a)[(i)] : (v))
 #endif
 
 #define SET_ERRNO(e)                                                 \
@@ -468,7 +468,7 @@ static struct {
 };
 #undef HTTP_STRERROR_GEN
 
-int http_message_needs_eof(const http_parser *parser);
+long http_message_needs_eof(const http_parser *parser);
 
 /* Our URL parser.
  *
@@ -643,7 +643,7 @@ size_t http_parser_execute (http_parser *parser,
   const char *body_mark = 0;
   const char *status_mark = 0;
   enum state p_state = (enum state) parser->state;
-  const unsigned int lenient = parser->lenient_http_headers;
+  const unsigned long lenient = parser->lenient_http_headers;
 
   /* We're in an error state. Don't bother doing anything. */
   if (HTTP_PARSER_ERRNO(parser) != HPE_OK) {
@@ -977,25 +977,25 @@ reexecute:
 #define XXXX_NO_ELSE(meth, pos, ch, new_meth) \
             if ((parser->method << 16 | parser->index << 8 | ch) == (HTTP_##meth << 16 | pos << 8 | ch)) { parser->method = HTTP_##new_meth; }
 
-            XXXX_NO_ELSE(POST,   1, 'U', PUT)
-            XXXX_ELSE(POST,      1, 'A', PATCH)
-            XXXX_ELSE(POST,      1, 'R', PROPFIND)
-            XXXX_ELSE(PUT,       2, 'R', PURGE)
-            XXXX_ELSE(CONNECT,   1, 'H', CHECKOUT)
-            XXXX_ELSE(CONNECT,   2, 'P', COPY)
-            XXXX_ELSE(MKCOL,     1, 'O', MOVE)
-            XXXX_ELSE(MKCOL,     1, 'E', MERGE)
-            XXXX_ELSE(MKCOL,     1, '-', MSEARCH)
-            XXXX_ELSE(MKCOL,     2, 'A', MKACTIVITY)
-            XXXX_ELSE(MKCOL,     3, 'A', MKCALENDAR)
-            XXXX_ELSE(SUBSCRIBE, 1, 'E', SEARCH)
-            XXXX_ELSE(SUBSCRIBE, 1, 'O', SOURCE)
-            XXXX_ELSE(REPORT,    2, 'B', REBIND)
-            XXXX_ELSE(PROPFIND,  4, 'P', PROPPATCH)
-            XXXX_ELSE(LOCK,      1, 'I', LINK)
-            XXXX_ELSE(UNLOCK,    2, 'S', UNSUBSCRIBE)
-            XXXX_ELSE(UNLOCK,    2, 'B', UNBIND)
-            XXXX_ELSE(UNLOCK,    3, 'I', UNLINK)
+            XXXX_NO_ELSE(POST,   1L, 'U', PUT)
+            XXXX_ELSE(POST,      1L, 'A', PATCH)
+            XXXX_ELSE(POST,      1L, 'R', PROPFIND)
+            XXXX_ELSE(PUT,       2L, 'R', PURGE)
+            XXXX_ELSE(CONNECT,   1L, 'H', CHECKOUT)
+            XXXX_ELSE(CONNECT,   2L, 'P', COPY)
+            XXXX_ELSE(MKCOL,     1L, 'O', MOVE)
+            XXXX_ELSE(MKCOL,     1L, 'E', MERGE)
+            XXXX_ELSE(MKCOL,     1L, '-', MSEARCH)
+            XXXX_ELSE(MKCOL,     2L, 'A', MKACTIVITY)
+            XXXX_ELSE(MKCOL,     3L, 'A', MKCALENDAR)
+            XXXX_ELSE(SUBSCRIBE, 1L, 'E', SEARCH)
+            XXXX_ELSE(SUBSCRIBE, 1L, 'O', SOURCE)
+            XXXX_ELSE(REPORT,    2L, 'B', REBIND)
+            XXXX_ELSE(PROPFIND,  4L, 'P', PROPPATCH)
+            XXXX_ELSE(LOCK,      1L, 'I', LINK)
+            XXXX_ELSE(UNLOCK,    2L, 'S', UNSUBSCRIBE)
+            XXXX_ELSE(UNLOCK,    2L, 'B', UNBIND)
+            XXXX_ELSE(UNLOCK,    3L, 'I', UNLINK)
 #undef XXXX_ELSE
 #undef XXXX_NO_ELSE
             else {
@@ -1790,7 +1790,7 @@ reexecute:
 
       case s_headers_done:
       {
-        int hasBody;
+        long hasBody;
         STRICT_CHECK(ch != LF);
 
         parser->nread = 0;
@@ -2047,7 +2047,7 @@ error:
 
 
 /* Does the parser need to see an EOF to find the end of the message? */
-int
+long
 http_message_needs_eof (const http_parser *parser)
 {
   if (parser->type == HTTP_REQUEST) {
@@ -2070,7 +2070,7 @@ http_message_needs_eof (const http_parser *parser)
 }
 
 
-int
+long
 http_should_keep_alive (const http_parser *parser)
 {
   if (parser->http_major > 0 && parser->http_minor > 0) {
@@ -2207,8 +2207,8 @@ http_parse_host_char(enum http_host_state s, const char ch) {
   return s_http_host_dead;
 }
 
-static int
-http_parse_host(const char * buf, struct http_parser_url *u, int found_at) {
+static long
+http_parse_host(const char * buf, struct http_parser_url *u, long found_at) {
   enum http_host_state s;
 
   const char *p;
@@ -2294,14 +2294,14 @@ http_parser_url_init(struct http_parser_url *u) {
   memset(u, 0, sizeof(*u));
 }
 
-int
-http_parser_parse_url(const char *buf, size_t buflen, int is_connect,
+long
+http_parser_parse_url(const char *buf, size_t buflen, long is_connect,
                       struct http_parser_url *u)
 {
   enum state s;
   const char *p;
   enum http_parser_url_fields uf, old_uf;
-  int found_at = 0;
+  long found_at = 0;
 
   u->port = u->field_set = 0;
   s = is_connect ? s_req_server_start : s_req_spaces_before_url;
@@ -2414,7 +2414,7 @@ http_parser_parse_url(const char *buf, size_t buflen, int is_connect,
 }
 
 void
-http_parser_pause(http_parser *parser, int paused) {
+http_parser_pause(http_parser *parser, long paused) {
   /* Users should only be pausing/unpausing a parser that is not in an error
    * state. In non-debug builds, there's not much that we can do about this
    * other than ignore it.
@@ -2427,7 +2427,7 @@ http_parser_pause(http_parser *parser, int paused) {
   }
 }
 
-int
+long
 http_body_is_final(const struct http_parser *parser) {
     return parser->state == s_message_done;
 }

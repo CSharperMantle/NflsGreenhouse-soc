@@ -19,11 +19,6 @@
     }
 
     function run_query_fetch(PDO $connection, string $sql, array $args = array(), int $fetch_style = PDO::FETCH_ASSOC) {
-        if ($sql === INSERT_DATA_SQL || $sql === INSERT_ALERT_SQL) {
-            $stmt = $connection->prepare($sql);
-            $stmt->execute($args);
-            return;
-        }
         $stmt = $connection->prepare($sql);
         $stmt->execute($args);
         $result = $stmt->fetch($fetch_style);

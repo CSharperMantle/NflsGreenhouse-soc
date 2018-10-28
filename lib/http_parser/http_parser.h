@@ -60,11 +60,11 @@ typedef unsigned __int64 uint64_t;
  * to a very large number (e.g. -DHTTP_MAX_HEADER_SIZE=0x7fffffff)
  */
 #ifndef HTTP_MAX_HEADER_SIZE
-# define HTTP_MAX_HEADER_SIZE (80*1024)
+# define HTTP_MAX_HEADER_SIZE (80L*1024L)
 #endif
 
 #ifndef HTTP_PARSER_CALLBACK
-# define HTTP_PARSER_CALLBACK(name_args) int name_args 
+# define HTTP_PARSER_CALLBACK(name_args) long name_args 
 #endif
 
 typedef struct http_parser http_parser;
@@ -89,8 +89,8 @@ typedef struct http_parser_settings http_parser_settings;
  * many times for each string. E.G. you might get 10 callbacks for "on_url"
  * each providing just a few characters more data.
  */
-typedef int (*http_data_cb) (http_parser*, const char *at, size_t length);
-typedef int (*http_cb) (http_parser*);
+typedef long (*http_data_cb) (http_parser*, const char *at, size_t length);
+typedef long (*http_cb) (http_parser*);
 
 
 /* Status Codes */
@@ -296,12 +296,12 @@ enum http_errno {
 
 struct http_parser {
   /** PRIVATE **/
-  unsigned int type : 2;         /* enum http_parser_type */
-  unsigned int flags : 8;        /* F_* values from 'flags' enum; semi-public */
-  unsigned int state : 7;        /* enum state from http_parser.c */
-  unsigned int header_state : 7; /* enum header_state from http_parser.c */
-  unsigned int index : 7;        /* index into current matcher */
-  unsigned int lenient_http_headers : 1;
+  unsigned long type : 2;         /* enum http_parser_type */
+  unsigned long flags : 8;        /* F_* values from 'flags' enum; semi-public */
+  unsigned long state : 7;        /* enum state from http_parser.c */
+  unsigned long header_state : 7; /* enum header_state from http_parser.c */
+  unsigned long index : 7;        /* index into current matcher */
+  unsigned long lenient_http_headers : 1;
 
   uint32_t nread;          /* # bytes read in various scenarios */
   uint64_t content_length; /* # bytes in body (0 if no Content-Length header) */
@@ -309,16 +309,16 @@ struct http_parser {
   /** READ-ONLY **/
   unsigned short http_major;
   unsigned short http_minor;
-  unsigned int status_code : 16; /* responses only */
-  unsigned int method : 8;       /* requests only */
-  unsigned int http_errno : 7;
+  unsigned long status_code : 16; /* responses only */
+  unsigned long method : 8;       /* requests only */
+  unsigned long http_errno : 7;
 
   /* 1 = Upgrade header was present and the parser has exited because of that.
    * 0 = No upgrade header present.
    * Should be checked when http_parser_execute() returns in addition to
    * error checking.
    */
-  unsigned int upgrade : 1;
+  unsigned long upgrade : 1;
 
   /** PUBLIC **/
   void *data; /* A pointer to get hook to the "connection" or "socket" object */
@@ -406,7 +406,7 @@ size_t http_parser_execute(http_parser *parser,
  * If you are the server, respond with the "Connection: close" header.
  * If you are the client, close the connection.
  */
-int http_should_keep_alive(const http_parser *parser);
+long http_should_keep_alive(const http_parser *parser);
 
 /* Returns a string version of the HTTP method. */
 const char *http_method_str(enum http_method m);
@@ -421,15 +421,15 @@ const char *http_errno_description(enum http_errno err);
 void http_parser_url_init(struct http_parser_url *u);
 
 /* Parse a URL; return nonzero on failure */
-int http_parser_parse_url(const char *buf, size_t buflen,
-                          int is_connect,
+long http_parser_parse_url(const char *buf, size_t buflen,
+                          long is_connect,
                           struct http_parser_url *u);
 
 /* Pause or un-pause the parser; a nonzero value pauses */
-void http_parser_pause(http_parser *parser, int paused);
+void http_parser_pause(http_parser *parser, long paused);
 
 /* Checks if this is the final chunk of the body. */
-int http_body_is_final(const http_parser *parser);
+long http_body_is_final(const http_parser *parser);
 
 #ifdef __cplusplus
 }
