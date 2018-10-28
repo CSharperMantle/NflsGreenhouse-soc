@@ -1,7 +1,8 @@
 <?php
-  require '../php/shared.php';
+  require '..\\php\\shared_db.php';
+  require '..\\php\\shared_sql.php';
 
-  $db = new PDO(dbdsn, username, passwd);
+  $db = DBConnectionSingleton::getInstance();
 ?>
 
 var App = (function () {
@@ -67,7 +68,7 @@ var App = (function () {
 
       $('#all-commits-count-sparkline').sparkline([
         <?php
-          $result = run_query_fetch_all($db, FETCH_COMMITS_EACH_DAY_SQL);
+          $result = run_query_fetch_multi($db, FETCH_COMMITS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {
             print $array['count'] . ',';
           }
@@ -87,7 +88,7 @@ var App = (function () {
 	  
     $('#all-alerts-count-sparkline').sparkline([
       <?php
-          $result = run_query_fetch_all($db, FETCH_ALERTS_EACH_DAY_SQL);
+          $result = run_query_fetch_multi($db, FETCH_ALERTS_EACH_DAY_SQL);
           foreach ($result as $key => $array) {
             print $array['count'] . ',';
           }
@@ -109,7 +110,7 @@ var App = (function () {
       var plot_statistics = $.plot($("#air-temp-line-chart"), [{
         data: [
           <?php
-            $air_temp_query = run_query_fetch_all($db, FETCH_AIR_TEMP_SQL);
+            $air_temp_query = run_query_fetch_multi($db, FETCH_AIR_TEMP_SQL);
             $temp_id = 1;
             foreach ($air_temp_query as $id => $array) {
               $_temp = $array['air_temp'];
@@ -184,7 +185,7 @@ var App = (function () {
       var plot_statistics = $.plot($("#air-hum-line-chart"), [{
         data: [
           <?php
-            $air_hum_query = run_query_fetch_all($db, FETCH_AIR_HUM_SQL);
+            $air_hum_query = run_query_fetch_multi($db, FETCH_AIR_HUM_SQL);
             $hum_id = 1;
             foreach ($air_hum_query as $id => $array) {
               $_hum = $array['air_hum'];
@@ -258,7 +259,7 @@ var App = (function () {
       var plot_statistics = $.plot($("#air-light-line-chart"), [{
         data: [
           <?php
-            $air_light_query = run_query_fetch_all($db, FETCH_AIR_LIGHT_SQL);
+            $air_light_query = run_query_fetch_multi($db, FETCH_AIR_LIGHT_SQL);
             $light_id = 1;
             foreach ($air_light_query as $id => $array) {
               $_light = $array['air_light'];
@@ -333,7 +334,7 @@ var App = (function () {
       var plot_statistics = $.plot($("#ground-hum-line-chart"), [{
         data: [
           <?php
-            $ground_hum_query = run_query_fetch_all($db, FETCH_GROUND_HUM_SQL);
+            $ground_hum_query = run_query_fetch_multi($db, FETCH_GROUND_HUM_SQL);
             $ground_hum_id = 1;
             foreach ($ground_hum_query as $id => $array) {
               $_hum = $array['ground_hum'];

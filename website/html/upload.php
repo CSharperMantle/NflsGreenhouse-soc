@@ -5,7 +5,11 @@
    * Partly use is not allowed.
    * Licensed under GPL-v3 Agreement
    */
-  require 'assets\\php\\shared.php';
+  require 'assets\\php\\shared_db.php';
+  require 'assets\\php\\shared_util.php';
+  require 'assets\\php\\shared_sql.php';
+  require 'assets\\php\\shared_xml.php';
+  require 'assets\\php\\shared_const.php';
 
   if ((!isset($_GET['air_temp'])) || (!isset($_GET['air_hum'])) || (!isset($_GET['air_light'])) || (!isset($_GET['ground_hum']))) {
     http_response_code(400);
@@ -25,7 +29,7 @@
   $ground_hum = purify_data($_GET['ground_hum']);
   
   try {
-    $db = new PDO(dbdsn, username, passwd);
+    $db = DBConnectionSingleton::getInstance();
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
   catch (PDOException $e) {

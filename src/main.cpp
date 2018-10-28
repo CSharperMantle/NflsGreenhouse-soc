@@ -58,7 +58,8 @@ EthernetClient *webUploader = new EthernetClient();
 http_parser_settings *httpParserSettings = new http_parser_settings();
 http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
 struct ServerResponse {
-    char *body;
+    char *status = NULL;
+    char *body = NULL;
 };
 ServerResponse *server_response = new ServerResponse();
 #pragma endregion
@@ -74,18 +75,6 @@ int currentGroundHum = 0;
 struct pt uploadSensorData_ctrl;
 struct pt maintainEthernet_ctrl;
 struct pt readSensorData_ctrl;
-#pragma endregion
-
-#pragma region callback
-int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
-    if (server_response->body != NULL) {
-        ALLOC_COPY(char, server_response->body, buf, len);
-    } else {
-        server_response->body = ALLOC(char, len);
-        memcpy(server_response->body, buf, len);
-    }
-    return 0;
-}
 #pragma endregion
 
 #pragma region helper
@@ -154,6 +143,41 @@ void parseXmlStringAndExecute(const char * str) {
     //FIXME: Maybe a bug
     delete handle;
     delete doc;
+}
+#pragma endregion
+
+#pragma region callback
+int onMessageBeginCallback(http_parser *parser) {
+    if (server_response->body != NULL) {
+        free(server_response->body);
+        server_response->body = NULL;
+    }
+    if (server_response->status != NULL) {
+        free(server_response->status);
+        server_response->status = NULL;
+    }
+    server_response->status = MALLOC_HEAP(1, char);
+    server_response->body = MALLOC_HEAP(1, char);
+    return 0;
+}
+
+int onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
+    if (server_response->body != NULL) {
+        ALLOC_COPY(char, server_response->body, buf, len);
+    } else {
+        server_response->body = ALLOC(char, len);
+        memcpy(server_response->body, buf, len);
+    }
+    return 0;
+}
+
+int onMessageEndCallback(http_parser *parser) {
+    parseXmlStringAndExecute(server_response->body);
+    free(server_response->body);
+    free(server_response->status);
+    server_response->status = NULL;
+    server_response->body = NULL;
+    return 0;
 }
 #pragma endregion
 
@@ -274,7 +298,6 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
     clearWriteScreen(screen, "DATA PREPARE", 300);
-    httpParser->data = new http_response();
     for (static int index = 1; index <= 5; index++) {
         if (webUploader->connect(webServerAddress, webServerPort)) {
             Serial.println("Connection established.");
@@ -329,13 +352,8 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
     delay(1000);
     clearWriteScreen(screen, "DATA UPLOADED", 300);
 
-    parseXmlStringAndExecute(((http_response *)httpParser->data)->body);
-    clearAndResetScreen(screen);
     clearWriteScreen(screen, "RESPONSE PARSED", 300);
     
-    clearWriteScreen(screen, ((http_response *)(httpParser->data))->body, 5000);
-    delete (http_response *)(httpParser->data);
-    httpParser->data = nullptr;
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
 }

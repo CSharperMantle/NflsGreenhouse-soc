@@ -1,5 +1,4 @@
 <?php
-  require 'assets\\php\\shared.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

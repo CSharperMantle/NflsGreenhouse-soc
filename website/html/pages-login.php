@@ -5,7 +5,10 @@
    * Partly use is not allowed.
    * Licensed under GPL-v3 Agreement
    */
-  require 'assets\\php\\shared.php';
+  require 'assets\\php\\shared_db.php';
+  require 'assets\\php\\shared_sql.php';
+  require 'assets\\php\\shared_html.php';
+  require 'assets\\php\\shared_util.php';
 
   $user_not_registered = false;
   $user_password_wrong = false;
@@ -16,7 +19,7 @@
 
       $db = new PDO(dbdsn, username, passwd);
 
-      $result = run_query($db, FETCH_USER_EXIST_SQL, array($_username));
+      $result = run_query_fetch($db, FETCH_USER_EXIST_SQL, array($_username));
       if ($result == NULL) {
         $user_not_registered = true;
       }
