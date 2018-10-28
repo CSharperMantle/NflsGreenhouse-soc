@@ -52,7 +52,7 @@
             $this->_pdo = new PDO(dbdsn, username, passwd);
         }
         private function __clone() {
-            throw new RuntimeException('');
+            throw new RuntimeException('DBConnectionSingleton cannot be cloned');
         }
     }
 ?>
