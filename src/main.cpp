@@ -275,6 +275,7 @@ PT_THREAD(readSensorData(struct pt *pt)) {
     currentAirHum = airSensor->getHumidity();
     currentGroundHum = analogRead(groundHumSensorPin);
     currentLightValue = analogRead(lightSensorPin);
+    PT_YIELD(pt);
     Serial.println(currentAirTemp);
     Serial.println(currentAirHum);
     Serial.println(currentGroundHum);
@@ -289,6 +290,7 @@ PT_THREAD(maintainEthernet(struct pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Maintaining Ethernet connection");
     Ethernet.maintain();
+    PT_YIELD(pt);
     Serial.println("Done.");
     PT_TIMER_DELAY(pt, maintainEthernetInterval);
     PT_END(pt);
@@ -305,22 +307,10 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
         }
         else
         {
-            Serial.println(String("Connection broken. Retry ") + String(index));
+            Serial.println(String("Connection broken. Yielding thread. Retry ") + String(index));
+            PT_YIELD(pt);
         }
     }
-    Serial.println(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
-            + String("&air_hum=") + currentAirHum \
-            + String("&air_light=") + currentLightValue \
-            + String("&ground_hum=") + currentGroundHum \
-            + String(" HTTP/1.1\r\n" \
-            "Accept: application/xml\r\n" \
-            "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
-            "User-Agent: arduino/mega2560\r\n" \
-            "Connection: close\r\n" \
-            "\r\n" \
-            ""
-        )
-    );
     clearWriteScreen(screen, "DATA UPLOAD", 300);
     webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
             + String("&air_hum=") + String(currentAirHum) \
@@ -335,7 +325,6 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
             ""
         ));
     clearAndResetScreen(screen);
-
     {
         String respond = String();
         do
@@ -346,14 +335,10 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
         } while (webUploader->available());
         http_parser_execute(httpParser, httpParserSettings, respond.c_str(), 0);
     }
-
     webUploader->stop();
     Serial.println("Done. Connection closed.");
     delay(1000);
     clearWriteScreen(screen, "DATA UPLOADED", 300);
-
-    clearWriteScreen(screen, "RESPONSE PARSED", 300);
-    
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
 }
