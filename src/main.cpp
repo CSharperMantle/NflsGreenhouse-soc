@@ -35,8 +35,9 @@ const int fanOnePin = 24;
 const int fanTwoPin = 25;
 const int waterPumpOnePin = 26;
 const int waterPumpTwoPin = 27;
+const int airCoolerPin = 28;
 
-const int dhtPin = 28;
+const int dhtPin = 29;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
 
