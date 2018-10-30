@@ -39,7 +39,7 @@
             if (!(DBConnectionSingleton::$_pdo_instance instanceof PDO)) {
                 DBConnectionSingleton::$_pdo_instance = new PDO(dbdsn, username, passwd);
             }
-            return DBConnectionSingleton::$_instance->$_pdo_instance;
+            return DBConnectionSingleton::$_pdo_instance;
         }
 
         private function __constructor() {
