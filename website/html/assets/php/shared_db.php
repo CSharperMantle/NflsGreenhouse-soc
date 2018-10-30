@@ -33,18 +33,16 @@
     }
 
     class DBConnectionSingleton {
-        private static $_instance;
+        private static $_pdo_instance;
         
         public static function getInstance() {
-            if (!(DBConnectionSingleton::$_instance instanceof DBConnectionSingleton)) {
-                DBConnectionSingleton::$_instance = new DBConnectionSingleton();
+            if (!(DBConnectionSingleton::$_pdo_instance instanceof PDO)) {
+                DBConnectionSingleton::$_pdo_instance = new PDO(dbdsn, username, passwd);
             }
-            return DBConnectionSingleton::$_instance->$_pdo;
+            return DBConnectionSingleton::$_instance->$_pdo_instance;
         }
 
-        private $_pdo;
         private function __constructor() {
-            $this->_pdo = new PDO(dbdsn, username, passwd);
         }
         private function __clone() {
             throw new RuntimeException('DBConnectionSingleton cannot be cloned');
