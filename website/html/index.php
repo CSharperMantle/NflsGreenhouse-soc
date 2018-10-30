@@ -40,7 +40,7 @@
     $now = new DateTime();
 
   }
-  catch (PDOException $e) {
+  catch (Exception $e) {
     $air_temp = 'None';
     $air_hum = 'None';
     $air_light = 'None';
