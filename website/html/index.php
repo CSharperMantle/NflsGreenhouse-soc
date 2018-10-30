@@ -9,7 +9,7 @@
   require 'assets\\php\\shared_db.php';
   require 'assets\\php\\shared_html.php';
 
-  try {
+  //try {
     $db = DBConnectionSingleton::getInstance();
 
     $result = run_query_fetch($db, FETCH_LATEST_SQL);
@@ -39,16 +39,16 @@
     
     $now = new DateTime();
 
-  }
-  catch (Exception $e) {
-    $air_temp = 'None';
-    $air_hum = 'None';
-    $air_light = 'None';
-    $ground_hum = 'None';
-    $total_commits = 0;
-    $total_alerts = 0;
-    $error_occur = true;
-  }
+  //}
+  //catch (Exception $e) {
+    //$air_temp = 'None';
+    //$air_hum = 'None';
+    //$air_light = 'None';
+    //$ground_hum = 'None';
+    //$total_commits = 0;
+    //$total_alerts = 0;
+    //$error_occur = true;
+  //}
 ?>
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
