@@ -68,6 +68,7 @@ float currentAirTemp = 0;
 float currentAirHum = 0;
 int currentLightValue = 0;
 int currentGroundHum = 0;
+bool isConnected = false;
 #pragma endregion
 
 #pragma region thread_controller
@@ -207,12 +208,14 @@ void initEthernet() {
         if (Ethernet.begin(mac) == 0) {
             Serial.println(String("DHCP failed. Retry ") + String(index));
             clearWriteScreen(screen, (String("ETH ERR: ") + String(index)).c_str(), 300);
+            isConnected = false;
         } else {
             Serial.println("DHCP OK.");
             Serial.println("    Ethernet information: IP, DNS, Gateway");
             Serial.println(Ethernet.localIP());
             Serial.println(Ethernet.dnsServerIP());
             Serial.println(Ethernet.gatewayIP());
+            isConnected = true;
             clearWriteScreen(screen, "ETH OK", 300);
             break;
         }
@@ -299,7 +302,7 @@ PT_THREAD(uploadSensorData(struct pt *pt)) {
         }
         else
         {
-            Serial.println(String("Connection broken. Yielding thread. Retry ") + String(index));
+            Serial.println(String("Connection broke. Yielding thread. Retry ") + String(index));
             PT_YIELD(pt);
         }
     }
