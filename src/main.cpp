@@ -55,6 +55,10 @@ http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
 struct ServerResponse {
     char *status = NULL;
     char *body = NULL;
+    ~ServerResponse() {
+        FREE_HEAP(this->body);
+        FREE_HEAP(this->status);
+    }
 };
 ServerResponse *server_response = new ServerResponse();
 #pragma endregion
@@ -142,22 +146,17 @@ void parseXmlStringAndExecute(const char * str) {
 #pragma endregion
 
 #pragma region callback
-int onMessageBeginCallback(http_parser *parser) {
-    if (server_response->body != NULL) {
-        free(server_response->body);
-        server_response->body = NULL;
-    }
-    if (server_response->status != NULL) {
-        free(server_response->status);
-        server_response->status = NULL;
-    }
+HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
+    FREE_HEAP(server_response->body);
+    FREE_HEAP(server_response->status);
     server_response->status = MALLOC_HEAP(1, char);
     server_response->body = MALLOC_HEAP(1, char);
     return 0;
 }
 
-long onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
+HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len)) {
     if (server_response->body != NULL) {
+        server_response->body = REALLOC_HEAP(server_response->body, strlen(server_response->body) + len, char);
         strcat(server_response->body, buf);
     } else {
         server_response->body = MALLOC_HEAP(len, char);
@@ -166,12 +165,10 @@ long onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len) {
     return 0;
 }
 
-long onMessageEndCallback(http_parser *parser) {
+HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     parseXmlStringAndExecute(server_response->body);
-    free(server_response->body);
-    free(server_response->status);
-    server_response->status = NULL;
-    server_response->body = NULL;
+    FREE_HEAP(server_response->body);
+    FREE_HEAP(server_response->status);
     return 0;
 }
 #pragma endregion
