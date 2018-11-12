@@ -17,10 +17,9 @@
     const groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
 
-    const skySheetOnePin = 22;
-    const skySheetTwoPin = 23;
-    const fanOnePin = 24;
-    const fanTwoPin = 25;
-    const waterPumpOnePin = 26;
-    const waterPumpTwoPin = 27;
+    const skySheetPin = 22;
+    const fanOnePin = 23;
+    const fanTwoPin = 24;
+    const waterPumpPin = 25;
+    const airTempStabilizerPin = 26;
 ?>

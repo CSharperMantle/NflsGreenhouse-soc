@@ -31,13 +31,11 @@ const int offlineAirLightSwitchValveLow = 100;
 const int offlineGroundHumSwitchValveLow = 700;
 const int offlineGroundHumSwitchValveHigh = 1000;
 
-const int skySheetOnePin = 22;
-const int skySheetTwoPin = 23;
-const int fanOnePin = 24;
-const int fanTwoPin = 25;
-const int waterPumpOnePin = 26;
-const int waterPumpTwoPin = 27;
-const int airCoolerPin = 28;
+const int skySheetPin = 22;
+const int fanOnePin = 23;
+const int fanTwoPin = 24;
+const int waterPumpPin = 25;
+const int airTempStabilizerPin = 26;
 
 const int dhtPin = 29;
 const int lightSensorPin = A1;
@@ -352,6 +350,7 @@ PT_THREAD(checkNetwork(pt *pt)) {
 
 PT_THREAD(offlineWork(pt *pt)) {
     PT_BEGIN(pt);
+    pinMode(fanOnePin, OUTPUT);
     int airTemp = airSensor->getTemperature();
     int airHum = airSensor->getHumidity();
     int airLight = analogRead(lightSensorPin);
@@ -377,17 +376,17 @@ PT_THREAD(offlineWork(pt *pt)) {
         digitalWrite(fanTwoPin, LOW);
     }
     if (airLight > offlineAirLightSwitchValveHigh) {
-        digitalWrite(skySheetOnePin, HIGH);
+        digitalWrite(skySheetPin, HIGH);
     } else if (airLight < offlineAirLightSwitchValveLow) {
-        digitalWrite(skySheetOnePin, LOW);
+        digitalWrite(skySheetPin, LOW);
     }
 
     if (groundHum > offlineGroundHumSwitchValveHigh) {
-        digitalWrite(waterPumpOnePin, HIGH);
+        digitalWrite(waterPumpPin, HIGH);
     } else if (groundHum < offlineGroundHumSwitchValveLow) {
-        digitalWrite(waterPumpOnePin, LOW);
+        digitalWrite(waterPumpPin, LOW);
     } else {
-        digitalWrite(waterPumpOnePin, LOW);
+        digitalWrite(waterPumpPin, LOW);
     }
     PT_END(pt);
 }

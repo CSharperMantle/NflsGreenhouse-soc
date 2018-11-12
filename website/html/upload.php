@@ -79,13 +79,11 @@
   //light
   if ($air_light > airLightSwitchValveHigh) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::HIGH));
-    $actions[count($actions)] = array(ActionType::RELAY_ACTION, skySheetOnePin, RelayAction::OFF);
-    $actions[count($actions)] = array(ActionType::RELAY_ACTION, skySheetTwoPin, RelayAction::OFF);
+    $actions[count($actions)] = array(ActionType::RELAY_ACTION, skySheetPin, RelayAction::OFF);
   }
   elseif ($air_light < airLightSwitchValveLow) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::LOW));
-    $actions[count($actions)] = array(ActionType::RELAY_ACTION, skySheetOnePin, RelayAction::ON);
-    $actions[count($actions)] = array(ActionType::RELAY_ACTION, skySheetTwoPin, RelayAction::ON);
+    $actions[count($actions)] = array(ActionType::RELAY_ACTION, skySheetPin, RelayAction::ON);
   }
   else {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::OK));
@@ -93,13 +91,11 @@
   //Ground checks - hum
   if ($ground_hum > groundHumSwitchValveHigh) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::GROUND_HUM, AlertType::LOW));
-    $actions[count($actions)] = array(ActionType::RELAY_ACTION, waterPumpOnePin, RelayAction::ON);
-    // $actions[count($actions)] = array(ActionType::RELAY_ACTION, waterPumpTwoPin, RelayAction::OFF);
+    $actions[count($actions)] = array(ActionType::RELAY_ACTION, waterPumpPin, RelayAction::ON);
   }
   elseif ($ground_hum < groundHumSwitchValveLow) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::GROUND_HUM, AlertType::HIGH));
-    $actions[count($actions)] = array(ActionType::RELAY_ACTION, waterPumpOnePin, RelayAction::OFF);
-    // $actions[count($actions)] = array(ActionType::RELAY_ACTION, waterPumpTwoPin, RelayAction::ON);
+    $actions[count($actions)] = array(ActionType::RELAY_ACTION, waterPumpPin, RelayAction::OFF);
   }
   else {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::GROUND_HUM, AlertType::OK));
