@@ -312,8 +312,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 "User-Agent: arduino/mega2560\r\n" \
                 "Connection: close\r\n" \
                 "\r\n" \
-                ""
-            ));
+                ""));
         clearAndResetScreen(screen);
         {
             String respond = String();
