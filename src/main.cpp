@@ -5,6 +5,7 @@
  * Licensed under GPL-v3 Agreement
  */
 #define PT_USE_TIMER
+#define PT_USE_SEM
 
 #include <stdlib.h>
 #include <string.h>
@@ -82,19 +83,17 @@ bool isConnected = false;
 pt uploadSensorData_ctrl;
 pt maintainEthernet_ctrl;
 pt readSensorData_ctrl;
-pt checkNetwork_ctrl;
 pt offlineWork_ctrl;
 #pragma endregion
 
 #pragma region helper
-void clearAndResetScreen(LiquidCrystal_I2C *lcd) {
+void clearResetScreen(LiquidCrystal_I2C *lcd) {
     lcd->home();
     lcd->clear();
 }
 
 void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayMillisecond) {
-    lcd->home();
-    lcd->clear();
+    clearResetScreen(lcd);
     lcd->print(text);
     delay(delayMillisecond);
 }
@@ -187,17 +186,17 @@ void printLicenseInfo() {
     Serial.println("HttpParser by Joyent, Inc. and other Node contributors");
     Serial.println("");
     screen->setBacklight(true);
-    clearAndResetScreen(screen);
+    clearResetScreen(screen);
     screen->print("Provided under");
     screen->setCursor(0, 1);
     screen->print("GPLv3");
     delay(1000);
-    clearAndResetScreen(screen);
+    clearResetScreen(screen);
     screen->print("Mantle &");
     screen->setCursor(0, 1);
     screen->print("iRed_K");
     delay(1000);
-    clearAndResetScreen(screen);
+    clearResetScreen(screen);
 }
 
 void initSerial() {
@@ -264,6 +263,15 @@ void initDht() {
     Serial.println(airSensor->getStatusString());
     Serial.println("Done.");
 }
+
+void checkNetwork() {
+    if (webUploader->connect(webServerAddress, webServerPort)) {
+        isConnected = true;
+        webUploader->stop();
+    } else {
+        isConnected = false;
+    }
+}
 #pragma endregion
 
 #pragma region threaded_worker
@@ -298,7 +306,6 @@ PT_THREAD(maintainEthernet(pt *pt)) {
 PT_THREAD(uploadSensorData(pt *pt)) {
     PT_BEGIN(pt);
     Serial.println("Uploading sensor data");
-    clearWriteScreen(screen, "DATA PREPARE", 300);
     if (webUploader->connect(webServerAddress, webServerPort)) {
         Serial.println("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
@@ -313,14 +320,15 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 "Connection: close\r\n" \
                 "\r\n" \
                 ""));
-        clearAndResetScreen(screen);
         {
             String respond = String();
+            clearResetScreen(screen);
             do
             {
                 String str = webUploader->readString();
                 Serial.println(str);
                 respond += str;
+                clearWriteScreen(screen, str.c_str, 1000);
             } while (webUploader->available());
             http_parser_execute(httpParser, httpParserSettings, respond.c_str(), 0);
         }
@@ -333,17 +341,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
         Serial.println("Connection broke.");
     }
     PT_TIMER_DELAY(pt, uploadInterval);
-    PT_END(pt);
-}
-
-PT_THREAD(checkNetwork(pt *pt)) {
-    PT_BEGIN(pt);
-    if (webUploader->connect(webServerAddress, webServerPort)) {
-        isConnected = true;
-        webUploader->stop();
-    } else {
-        isConnected = false;
-    }
     PT_END(pt);
 }
 
@@ -402,13 +399,12 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
     PT_INIT(&readSensorData_ctrl);
-    PT_INIT(&checkNetwork_ctrl);
     PT_INIT(&offlineWork_ctrl);
     Serial.println("Init done.");
 }
 
 void loop() {
-    checkNetwork(&checkNetwork_ctrl);
+    checkNetwork();
     if (isConnected) {
         readSensorData(&readSensorData_ctrl);
         uploadSensorData(&uploadSensorData_ctrl);
