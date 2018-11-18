@@ -317,108 +317,21 @@
               </div>
             </div>
         </div>
-        <div class="col-lg-4">
-          <div class="widget widget-fullwidth">
-            <div class="widget-head">
-              <div class="tools">
-                <span class="icon mdi mdi-chevron-down">
-                </span>
-              </div>
-              <span class="title">空气温度</span>
-            </div>
-            <div class="widget-chart-container">
-              <div class="counter">
-                <div class="value"><?= $air_temp . '°C'; ?></div>
-                <div class="desc">最新值</div>
-              </div>
-              <div id="air-temp-line-chart" style="height: 230px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="widget widget-fullwidth">
-            <div class="widget-head">
-              <div class="tools">
-                <span class="icon mdi mdi-chevron-down">
-                </span>
-              </div>
-              <span class="title">空气湿度</span>
-            </div>
-            <div class="widget-chart-container">
-              <div class="counter">
-                <div class="value"><?= $air_hum . '%'; ?></div>
-                <div class="desc">最新值</div>
-              </div>
-              <div id="air-hum-line-chart" style="height: 230px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="widget widget-fullwidth">
-            <div class="widget-head">
-              <div class="tools">
-                <span class="icon mdi mdi-chevron-down">
-                </span>
-              </div>
-              <span class="title">地面湿度</span>
-            </div>
-            <div class="widget-chart-container">
-              <div class="counter">
-                <div class="value"><?= $ground_hum; ?></div>
-                <div class="desc">最新值</div>
-              </div>
-              <div id="ground-hum-line-chart" style="height: 230px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="widget widget-fullwidth">
-            <div class="widget-head">
-              <div class="tools">
-                <span class="icon mdi mdi-chevron-down">
-                </span>
-              </div>
-              <span class="title">光强度</span>
-            </div>
-            <div class="widget-chart-container">
-              <div class="counter">
-                <div class="value"><?= $air_light; ?></div>
-                <div class="desc">最新值</div>
-              </div>
-              <div id="air-light-line-chart" style="height: 230px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-4">
-          <div class="card">
-            <div class="card-header card-header-divider pb-3">数据正常比例</div>
-            <div class="card-body pt-5">
-              <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">空气温度</span></div>
-                <div class="col-lg-7">
-                  <div class="progress">
-                    <div style="width: 40%" class="progress-bar bg-success"></div>
-                  </div>
+        <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header card-header-divider">
+                <div class="tools">
+                  <span class="icon mdi mdi-chevron-down"></span>
+                  <span class="icon mdi mdi-refresh-sync"></span>
+                  <span class="icon mdi mdi-close"></span>
                 </div>
+                <span class="title">空气湿度</span>
+                <span class="card-subtitle">This is a line chart created with Chart.js</span>
               </div>
-              <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title">空气湿度</span></div>
-                <div class="col-lg-7">
-                  <div class="progress">
-                    <div style="width: 65%" class="progress-bar bg-success"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row user-progress user-progress-small">
-                <div class="col-lg-5"><span class="title"></span></div>
-                <div class="col-lg-7">
-                  <div class="progress">
-                    <div style="width: 30%" class="progress-bar bg-success"></div>
-                  </div>
-                </div>
+              <div class="card-body">
+                <canvas id="air-hum-line-chart-canvas"></canvas>
               </div>
             </div>
-          </div>
         </div>
       </div>
       <div class="row">
