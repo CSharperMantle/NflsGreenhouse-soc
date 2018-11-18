@@ -644,7 +644,6 @@
       App.init();
       App.dashboard();
       App.dataTables();
-      App.ChartJs();
     });
   </script>
 </body>
