@@ -5,8 +5,6 @@
      * Partly use is not allowed.
      * Licensed under GPL-v3 Agreement
      */
-    
-    require "shared_xml.php";
 
     const USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
     const USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
@@ -124,7 +122,7 @@
         }
     }
 
-    function print_panel(string $caption, string $text, AlertInfo $alert_info) {
+    function print_panel(string $caption, string $text, int $alert_info) {
         switch ($alert_info) {
             case AlertInfo::INFO:
                 print "<div class=\"card card-border-color card-border-color-primary\">";
