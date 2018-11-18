@@ -126,7 +126,7 @@ var App = (function () {
  		function airLightLineChart() {
 			var appDangerColor = tinycolor( App.color.danger );
 			var appDangerColorLighten = tinycolor( App.color.danger ).lighten( 22 );
- 			var ctx = document.getElementById('ground-hum-line-chart-canvas');
+ 			var ctx = document.getElementById('air-light-line-chart-canvas');
  			var lineChartData = {
 	      		labels: [
 	      		<?php
