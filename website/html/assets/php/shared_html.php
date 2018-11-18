@@ -6,6 +6,7 @@
      * Licensed under GPL-v3 Agreement
      */
     
+    require "shared_xml.php";
 
     const USER_NOT_REGISTERED_MESSAGE = "<div class=\"alert-warning\">用户不存在</div>";
     const USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
@@ -123,6 +124,26 @@
         }
     }
 
+    function print_panel(string $caption, string $text, AlertInfo $alert_info) {
+        switch ($alert_info) {
+            case AlertInfo::INFO:
+                print "<div class=\"card card-border-color card-border-color-primary\">";
+                break;
+            case AlertInfo::GOOD:
+                print "<div class=\"card card-border-color card-border-color-success\">";
+                break;
+            case AlertInfo::WARNING:
+                print "<div class=\"card card-border-color card-border-color-warning\">";
+                break;
+            case AlertInfo::DANGER:
+                print "<div class=\"card card-border-color card-border-color-danger\">";
+                break;
+        }
+        print "<div class=\"card-header\">$caption</div>";
+        print "<div class=\"card-body\">$text</div>";
+        print "</div>"
+    }
+
     function set_session_logged_in(string $username) {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $username;
@@ -137,5 +158,4 @@
         header('Content-type: text/html;charset=uft-8');
         header("Location: $address");
     }
-    
 ?>

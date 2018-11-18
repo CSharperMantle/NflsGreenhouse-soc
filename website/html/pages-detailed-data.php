@@ -12,6 +12,12 @@
 
   try {
     $db = DBConnectionSingleton::getInstance();
+
+    $result = run_query($db, FETCH_LATEST_SQL);
+    $air_temp = $result['air_temp'];
+    $air_hum = $result['air_hum'];
+    $air_light = $result['air_light'];
+    $ground_hum = $result['ground_hum'];
   }
   catch (Exception $e) {
     $air_temp = 'None';
@@ -151,6 +157,7 @@
           </div>
         </div>
         <div class="progress-widget">
+          <div class="progress-data"><?= '页面更新时间: ' . date('H:m:s'); ?></div>
           <div class="progress-data"><span class="progress-value">50%</span><span class="name">完善程度</span></div>
           <div class="progress">
             <div style="width: 50%;" class="progress-bar progress-bar-primary"></div>
@@ -165,6 +172,27 @@
             print_alert(AlertInfo::DANGER, '使用了不支持的设置！', 'JavaScript加载失败。大部分功能将不能正常工作。');
           ?>
         </noscript>
+      <?php
+        if (isset($error_occur)) {
+          print_alert(AlertInfo::DANGER, '错误！', '加载页面时出错。页面不会正常工作。');
+          http_response_code(503);
+          exit();
+        }
+      ?>
+      <div class="row">
+        <div class="col-lg-3">
+          <?php print_panel("空气温度", $air_temp, AlertInfo::GOOD); ?>
+        </div>
+        <div class="col-lg-3">
+          <?php print_panel("空气湿度", $air_hum, AlertInfo::GOOD); ?>
+        </div>
+        <div class="col-lg-3">
+          <?php print_panel("地面湿度", $ground_hum, AlertInfo::GOOD); ?>
+        </div>
+        <div class="col-lg-3">
+          <?php print_panel("光强度", $air_light, AlertInfo::GOOD); ?>
+        </div>
+      </div>
       <div class="row">
         <div class="col-lg-6">
             <div class="card">
