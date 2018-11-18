@@ -377,8 +377,9 @@
         <div class="col-12 col-lg-6">
           <div class="widget be-loading">
             <div class="widget-head">
-              <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync toggle-loading"></span><span
-                  class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span></div>
+              <div class="tools">
+                <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
+              </div>
               <div class="title">植物分布图</div>
             </div>
             <div class="widget-chart-container">
