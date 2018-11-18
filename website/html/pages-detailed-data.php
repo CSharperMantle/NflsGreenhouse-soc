@@ -12,34 +12,6 @@
 
   try {
     $db = DBConnectionSingleton::getInstance();
-
-    $result = run_query_fetch($db, FETCH_LATEST_SQL);
-    $air_temp = $result['air_temp'];
-    $air_hum = $result['air_hum'];
-    $air_light = $result['air_light'];
-    $ground_hum = $result['ground_hum'];
-
-    $result = run_query_fetch($db, FETCH_TOTAL_COMMITS_SQL);
-    $total_commits = $result['count'];
-    $result = run_query_fetch($db, FETCH_TOTAL_ALERTS_SQL);
-    $total_alerts = $result['count'];
-    $result = run_query_fetch($db, FETCH_TODAY_COMMITS_COUNT_SQL);
-    $today_uploads = $result['count'];
-    $result = run_query_fetch($db, FETCH_TODAY_ALERTS_COUNT_SQL);
-    $today_alerts = $result['count'];
-    $result = run_query_fetch($db, FETCH_LATEST_AIR_TEMP_ALERT_SQL);
-    $air_temp_is_ok = $result['is_ok'];
-    $result = run_query_fetch($db, FETCH_LATEST_AIR_HUM_ALERT_SQL);
-    $air_hum_is_ok = $result['is_ok'];
-    $result = run_query_fetch($db, FETCH_LATEST_AIR_LIGHT_ALERT_SQL);
-    $air_light_is_ok = $result['is_ok'];
-    $result = run_query_fetch($db, FETCH_LATEST_GROUND_HUM_ALERT_SQL);
-    $ground_hum_is_ok = $result['is_ok'];
-
-    $all_commits = run_query_fetch_multi($db, FETCH_ALL_SQL);
-    
-    $now = new DateTime();
-
   }
   catch (Exception $e) {
     $air_temp = 'None';
@@ -61,7 +33,7 @@
   <meta name="description" content="宁波外国语学校大棚管理系统">
   <meta name="author" content="Mantle Jonse(CSharperMantle) & Jones Ma(iRed_K)">
   <link rel="shortcut icon" href="assets/img/logo-fav.png">
-  <title>宁波外国语学校大棚管理系统 - 仪表盘</title>
+  <title>宁波外国语学校大棚管理系统 - 详细数据</title>
   <link rel="stylesheet" type="text/css" href="assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css" />
   <link rel="stylesheet" type="text/css" href="assets/lib/material-design-icons/css/material-design-iconic-font.min.css" />
   <!--[if lt IE 9]>
@@ -164,15 +136,15 @@
       </div>
     </nav>
     <div class="be-left-sidebar">
-      <div class="left-sidebar-wrapper"><a href="#" class="left-sidebar-toggle">仪表盘</a>
+      <div class="left-sidebar-wrapper"><a href="#" class="left-sidebar-toggle">详细数据</a>
         <div class="left-sidebar-spacer">
           <div class="left-sidebar-scroll">
             <div class="left-sidebar-content">
               <ul class="sidebar-elements">
                 <li class="divider">菜单</li>
-                <li class="active"><a href="index.php"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
+                <li class=""><a href="index.php"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
                 </li>
-                <li class=""><a href="pages-detailed-data.php"><i class="icon mdi mdi-chart-donut"></i><span>详细数据</span></a>
+                <li class="active"><a href="pages-detailed-data.php"><i class="icon mdi mdi-chart-donut"></i><span>详细数据</span></a>
                 </li>
               </ul>
             </div>
@@ -193,115 +165,6 @@
             print_alert(AlertInfo::DANGER, '使用了不支持的设置！', 'JavaScript加载失败。大部分功能将不能正常工作。');
           ?>
         </noscript>
-        <?php
-            if (isset($error_occur)) {
-              print_alert(AlertInfo::DANGER, '错误！', '加载页面时出错。页面不会正常工作。');
-              http_response_code(503);
-              exit();
-            }
-            print_alert(AlertInfo::INFO, '', '页面更新于UTC ' . date('H:m:s'));
-            switch ($air_temp_is_ok) {
-              case AlertType::HIGH:
-                print_alert(AlertInfo::WARNING, '警告!', '空气温度过高。');
-                $is_all_fine = false;
-                break;
-              case AlertType::LOW:
-                print_alert(AlertInfo::WARNING, '警告!', '空气温度过低。');
-                $is_all_fine = false;
-                break;
-              default:
-                break;
-            }
-            switch ($air_hum_is_ok) {
-              case AlertType::HIGH:
-                print_alert(AlertInfo::WARNING, '警告!', '空气湿度过高。');
-                $is_all_fine = false;
-                break;
-              case AlertType::LOW:
-                print_alert(AlertInfo::WARNING, '警告!', '空气湿度过低。');
-                $is_all_fine = false;
-                break;
-              default:
-                break;
-            }
-            switch ($air_light_is_ok) {
-              case AlertType::HIGH:
-                print_alert(AlertInfo::WARNING, '警告!', '光线过强。');
-                $is_all_fine = false;
-                break;
-              case AlertType::LOW:
-                print_alert(AlertInfo::WARNING, '警告!', '光线过弱。');
-                $is_all_fine = false;
-                break;
-              default:
-                break;
-            }
-            switch ($ground_hum_is_ok) {
-              case AlertType::HIGH:
-                print_alert(AlertInfo::WARNING, '警告!', ' 土壤过湿。');
-                $is_all_fine = false;
-                break;
-              case AlertType::LOW:
-                print_alert(AlertInfo::WARNING, '警告!', '土壤过干。');
-                $is_all_fine = false;
-                break;
-              default:
-                break;
-            }
-            if (!isset($is_all_fine)) {
-              print_alert(AlertInfo::GOOD, '放心！', '一切正常。');
-            }
-          ?>
-      </div>
-
-      <div class="row">
-        <div class="col-12 col-lg-6 col-xl-3">
-          <div class="widget widget-tile">
-            <div id="all-commits-count-sparkline" class="chart sparkline"></div>
-            <div class="data-info">
-              <div class="desc">上传总数</div>
-              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?= $total_commits; ?>" class="number"><?= $total_commits; ?></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-6 col-xl-3">
-          <div class="widget widget-tile">
-            <div id="all-alerts-count-sparkline" class="chart sparkline"></div>
-            <div class="data-info">
-              <div class="desc">报警总数</div>
-              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?= $total_alerts; ?>" class="number"><?= $total_alerts; ?></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--mdi-chevron-up/down/left/right indicator-negative/positive/equal -->
-        <div class="col-12 col-lg-6 col-xl-3">
-          <div class="widget widget-tile">
-            <div id="today-commits-sparkline" class="chart sparkline"></div>
-            <div class="data-info">
-              <div class="desc">今日上传数</div>
-              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?= $today_uploads; ?>" class="number"><?= $today_uploads; ?></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-6 col-xl-3">
-          <div class="widget widget-tile">
-            <div id="today-alerts-sparkline" class="chart sparkline"></div>
-            <div class="data-info">
-              <div class="desc">今日报警数</div>
-              <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-right"></span>
-              <span data-toggle="counter" data-end="<?= $today_alerts; ?>" class="number">0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-lg-6">
             <div class="card">
@@ -335,97 +198,37 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12" id="history-data">
-          <div class="card card-table">
-            <div class="card-header">历史数据
-              <div class="tools dropdown">
-              </div><span class="card-subtitle">所有上传数据</span>
-            </div>
-            <div class="card-body">
-              <table id="table2" class="table table-striped table-hover table-fw-widget">
-                <thead>
-                  <tr>
-                    <th>时间</th>
-                    <th>空气温度 (°C)</th>
-                    <th>空气湿度 (%)</th>
-                    <th>地面湿度</th>
-                    <th>光强度</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php
-                    foreach ($all_commits as $key => $value) {
-                      $_air_temp = $value['air_temp'];
-                      $_air_light = $value['air_light'];
-                      $_air_hum = $value['air_hum'];
-                      $_ground_hum = $value['ground_hum'];
-                      $_timestamp = $value['timestamp'];
-                      $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
-                      print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
-                    }
-                ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      <div class="row">
-        <div class="col-12 col-lg-6">
-          <div class="card" id="latest-activities">
-            <div class="card-header">最新行为</div>
-            <div class="card-body">
-              <ul class="user-timeline user-timeline-compact">
-                <li class="latest">
-                  <div class="user-timeline-date">刚刚</div>
-                  <div class="user-timeline-title">浇灌植物</div>
-                  <div class="user-timeline-description">为大棚内 <b>玫瑰花#P02</b> 浇了 1.00 吨水</div>
-                </li>
-                <li>
-                  <div class="user-timeline-date">今天 - 15:35</div>
-                  <div class="user-timeline-title">打开大棚大门</div>
-                  <div class="user-timeline-description">打开 <b>大门#D01</b> </div>
-                </li>
-                <li>
-                  <div class="user-timeline-date">昨天 - 23:41</div>
-                  <div class="user-timeline-title">打开大棚遮光罩</div>
-                  <div class="user-timeline-description">打开 <b>遮光罩#S01</b> </div>
-                </li>
-                <li>
-                  <div class="user-timeline-date">昨天 - 3:02</div>
-                  <div class="user-timeline-title">浇灌植物</div>
-                  <div class="user-timeline-description">为大棚内 <b>牵牛花#P01</b> 浇了 0.48 吨水</div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-6">
-          <div class="widget be-loading">
-            <div class="widget-head">
-              <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync toggle-loading"></span><span
-                  class="icon mdi mdi-close"></span></div>
-              <div class="title">植物分布图</div>
-            </div>
-            <div class="widget-chart-container">
-              <div class="widget-chart-info mb-4">
-                <div class="indicator indicator-positive float-right"><span class="icon mdi mdi-chevron-up"></span><span
-                    class="number">100%</span></div>
-                <div class="counter counter-inline">
-                  <div class="value">1872</div>
-                  <div class="desc">植物数</div>
+        <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header card-header-divider">
+                <div class="tools">
+                  <span class="icon mdi mdi-chevron-down"></span>
+                  <span class="icon mdi mdi-refresh-sync"></span>
+                  <span class="icon mdi mdi-close"></span>
                 </div>
+                <span class="title">地面湿度</span>
               </div>
-              <div id="map-widget" style="height: 265px;"></div>
+              <div class="card-body">
+                <canvas id="ground-hum-line-chart-canvas"></canvas>
+              </div>
             </div>
-            <div class="be-spinner">
-              <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
-              </svg>
-            </div>
-          </div>
         </div>
+        <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header card-header-divider">
+                <div class="tools">
+                  <span class="icon mdi mdi-chevron-down"></span>
+                  <span class="icon mdi mdi-refresh-sync"></span>
+                  <span class="icon mdi mdi-close"></span>
+                </div>
+                <span class="title">光强度</span>
+              </div>
+              <div class="card-body">
+                <canvas id="air-light-line-chart-canvas"></canvas>
+              </div>
+            </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -661,7 +464,7 @@
   <script src="assets/lib/jqvmap/jquery.vmap.min.js" type="text/javascript"></script>
   <script src="assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
   <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
-  <script src="assets/js/app-dashboard.js.php" type="text/javascript"></script>
+  <script src="assets/js/app-detailed-data.js.php" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
@@ -670,12 +473,11 @@
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.print.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+  <script src="assets/js/app-tables-datatables.js" type="text/javascript"></script>
   <script type="text/javascript">
     $(document).ready(function () {
       //initialize the javascript
       App.init();
-      App.dashboard();
-      App.dataTables();
       App.ChartJs();
     });
   </script>
