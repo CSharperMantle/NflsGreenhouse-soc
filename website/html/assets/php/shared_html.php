@@ -141,7 +141,7 @@
         }
         print "<div class=\"card-header\">$caption</div>";
         print "<div class=\"card-body\">$text</div>";
-        print "</div>"
+        print "</div>";
     }
 
     function set_session_logged_in(string $username) {
