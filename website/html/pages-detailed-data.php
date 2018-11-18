@@ -271,7 +271,7 @@
                 <div class="tools">
                   <span class="icon mdi mdi-chevron-down"></span>
                   <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close" onclick="javascript:alert(1);"></span>
+                  <span class="icon mdi mdi-close" onclick="javascript:$(this).hide();"></span>
                 </div>
                 <span class="title">地面湿度</span>
               </div>
