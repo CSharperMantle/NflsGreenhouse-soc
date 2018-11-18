@@ -301,6 +301,22 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header card-header-divider">
+                <div class="tools">
+                  <span class="icon mdi mdi-chevron-down"></span>
+                  <span class="icon mdi mdi-refresh-sync"></span>
+                  <span class="icon mdi mdi-close"></span>
+                </div>
+                <span class="title">空气温度</span>
+                <span class="card-subtitle">This is a line chart created with Chart.js</span>
+              </div>
+              <div class="card-body">
+                <canvas id="air-temp-line-chart-canvas"></canvas>
+              </div>
+            </div>
+        </div>
         <div class="col-lg-4">
           <div class="widget widget-fullwidth">
             <div class="widget-head">
@@ -731,7 +747,9 @@
   <script src="assets/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
   <script src="assets/lib/jqvmap/jquery.vmap.min.js" type="text/javascript"></script>
   <script src="assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
+  <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
   <script src="assets/js/app-dashboard.js.php" type="text/javascript"></script>
+  <script src="assets/js/app-dashboard-chart.js.php" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
@@ -747,6 +765,7 @@
       App.init();
       App.dashboard();
       App.dataTables();
+      App.ChartJs();
     });
   </script>
 </body>
