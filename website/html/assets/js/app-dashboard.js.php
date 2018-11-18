@@ -458,14 +458,6 @@ var App = (function () {
     //Row 1
     sparklines();
 
-	  //Row 2
-    widgetAirTempLineChart();
-    widgetAirHumLineChart();
-    widgetGroundHumLineChart();
-
-    //Row 3
-    widgetAirLightLineChart();
-
     //Row 5
     map();
 
