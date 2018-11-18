@@ -110,7 +110,7 @@ var App = (function () {
 	      		  	data: [
 	      		  	<?php
 	      		  		foreach ($ground_hum_query as $id => $array) {
-	      		  			$_hum = $array['air_hum'];
+	      		  			$_hum = $array['ground_hum'];
 	      		  			print "$_hum,";
 	      		  		}
 	      		  	?>
