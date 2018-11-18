@@ -343,7 +343,11 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="card" id="latest-activities">
-            <div class="card-header">最新行为</div>
+            <div class="card-header">最新行为
+              <div class="tools dropdown">
+                <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
+              </div>
+            </div>
             <div class="card-body">
               <ul class="user-timeline user-timeline-compact">
                 <li class="latest">
