@@ -66,7 +66,7 @@
               </div>
             </li>
           </ul>
-          <div class="page-title"><span>仪表盘</span></div>
+          <div class="page-title"><span>详细数据</span></div>
           <ul class="nav navbar-nav float-right be-icons-nav">
             <li class="nav-item dropdown"><a href="#" role="button" aria-expanded="false" class="nav-link be-toggle-right-sidebar"><span
                   class="icon mdi mdi-settings"></span></a></li>

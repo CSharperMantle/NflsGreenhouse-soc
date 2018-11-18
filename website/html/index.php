@@ -303,38 +303,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header card-header-divider">
-                <div class="tools">
-                  <span class="icon mdi mdi-chevron-down"></span>
-                  <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close"></span>
-                </div>
-                <span class="title">空气温度</span>
-              </div>
-              <div class="card-body">
-                <canvas id="air-temp-line-chart-canvas"></canvas>
-              </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header card-header-divider">
-                <div class="tools">
-                  <span class="icon mdi mdi-chevron-down"></span>
-                  <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close"></span>
-                </div>
-                <span class="title">空气湿度</span>
-              </div>
-              <div class="card-body">
-                <canvas id="air-hum-line-chart-canvas"></canvas>
-              </div>
-            </div>
-        </div>
-      </div>
-      <div class="row">
         <div class="col-sm-12" id="history-data">
           <div class="card card-table">
             <div class="card-header">历史数据
