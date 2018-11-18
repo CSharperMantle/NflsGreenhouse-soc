@@ -307,6 +307,7 @@
           <div class="card card-table">
             <div class="card-header">历史数据
               <div class="tools dropdown">
+                <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
               </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">
@@ -373,7 +374,7 @@
           <div class="widget be-loading">
             <div class="widget-head">
               <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync toggle-loading"></span><span
-                  class="icon mdi mdi-close"></span></div>
+                  class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span></div>
               <div class="title">植物分布图</div>
             </div>
             <div class="widget-chart-container">
@@ -645,6 +646,11 @@
       App.dashboard();
       App.dataTables();
     });
+  </script>
+  <script type="text/javascript">
+    function fade_out(obj) {
+      obj.parent().parent().parent().parent().fadeOut();
+    }
   </script>
 </body>
 
