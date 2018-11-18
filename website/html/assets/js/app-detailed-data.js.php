@@ -123,9 +123,47 @@ var App = (function () {
 	    	});
  		}
 
+ 		function airLightLineChart() {
+			var appDangerColor = tinycolor( App.color.danger );
+			var appDangerColorLighten = tinycolor( App.color.danger ).lighten( 22 );
+ 			var ctx = document.getElementById('ground-hum-line-chart-canvas');
+ 			var lineChartData = {
+	      		labels: [
+	      		<?php
+	      			$light_id = 1;
+	      			foreach ($ground_hum_query as $id => $array) {
+	      				print "'$light_id',";
+	      				$light_id++;
+	      			}
+	      		?>],
+	      		tooltips: {
+	      			enabled: true,
+	      			position: 'average'
+	      		},
+	      		datasets: [{
+	      		  	label: "空气湿度",
+	      		  	borderColor: appDangerColor.toString(),
+	      		  	backgroundColor: appDangerColorLighten.toString(),
+	      		  	data: [
+	      		  	<?php
+	      		  		foreach ($air_light_query as $id => $array) {
+	      		  			$_light = $array['air_light'];
+	      		  			print "$_light,";
+	      		  		}
+	      		  	?>
+	      		  	]
+	      		}]
+	    	};
+	    	var line = new Chart(ctx, {
+				type: 'line',
+				data: lineChartData
+	    	});
+ 		}
+
  		airTempLineChart();
 		airHumLineChart();
 		groundHumLineChart();
+		airLightLineChart();
 	}
 
 	return App;
