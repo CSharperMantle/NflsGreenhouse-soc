@@ -179,7 +179,7 @@
           </div>
         </div>
         <div class="progress-widget">
-          <div class="progress-data"><?= date('H:m:s'); ?></div>
+          <div class="progress-data"><?= '页面更新时间: ' . date('H:m:s'); ?></div>
           <div class="progress-data"><span class="progress-value">50%</span><span class="name">完善程度</span></div>
           <div class="progress">
             <div style="width: 50%;" class="progress-bar progress-bar-primary"></div>
