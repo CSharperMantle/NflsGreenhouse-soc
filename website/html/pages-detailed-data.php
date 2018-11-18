@@ -9,6 +9,7 @@
   require 'assets\\php\\shared_db.php';
   require 'assets\\php\\shared_html.php';
   require 'assets\\php\\shared_xml.php';
+  require 'assets\\php\\shared_const.php';
 
   try {
     $db = DBConnectionSingleton::getInstance();
@@ -179,16 +180,56 @@
       ?>
       <div class="row">
         <div class="col-lg-3">
-          <?php print_panel("空气温度", $air_temp, AlertInfo::GOOD); ?>
+          <?php 
+            if ($air_temp > airTempSwitchValveHigh) {
+              print_panel("空气温度", $air_temp, AlertInfo::DANGER);
+            }
+            elseif ($air_temp < airTempSwitchValveLow) {
+              print_panel("空气温度", $air_temp, AlertInfo::WARNING);
+            }
+            else {
+              print_panel("空气温度", $air_temp, AlertInfo::GOOD);
+            }
+          ?>
         </div>
         <div class="col-lg-3">
-          <?php print_panel("空气湿度", $air_hum, AlertInfo::GOOD); ?>
+          <?php 
+            if ($air_temp > airHumSwitchValveHigh) {
+              print_panel("空气湿度", $air_hum, AlertInfo::DANGER);
+            }
+            elseif ($air_temp < airHumSwitchValveHigh) {
+              print_panel("空气湿度", $air_hum, AlertInfo::WARNING);
+            }
+            else {
+              print_panel("空气湿度", $air_hum, AlertInfo::GOOD);
+            }
+          ?>
         </div>
         <div class="col-lg-3">
-          <?php print_panel("地面湿度", $ground_hum, AlertInfo::GOOD); ?>
+          <?php 
+            if ($air_temp > airLightSwitchValveHigh) {
+              print_panel("光强度", $air_light, AlertInfo::DANGER);
+            }
+            elseif ($air_temp < airLightSwitchValveLow) {
+              print_panel("光强度", $air_light, AlertInfo::WARNING);
+            }
+            else {
+              print_panel("光强度", $air_light, AlertInfo::GOOD);
+            }
+          ?>
         </div>
         <div class="col-lg-3">
-          <?php print_panel("光强度", $air_light, AlertInfo::GOOD); ?>
+          <?php 
+            if ($air_temp > groundHumSwitchValveHigh) {
+              print_panel("地面湿度", $ground_hum, AlertInfo::DANGER);
+            }
+            elseif ($air_temp < groundHumSwitchValveHigh) {
+              print_panel("地面湿度", $ground_hum, AlertInfo::WARNING);
+            }
+            else {
+              print_panel("地面湿度", $ground_hum, AlertInfo::GOOD);
+            }
+          ?>
         </div>
       </div>
       <div class="row">
