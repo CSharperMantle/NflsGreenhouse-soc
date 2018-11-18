@@ -13,7 +13,7 @@
   try {
     $db = DBConnectionSingleton::getInstance();
 
-    $result = run_query($db, FETCH_LATEST_SQL);
+    $result = run_query_fetch($db, FETCH_LATEST_SQL);
     $air_temp = $result['air_temp'];
     $air_hum = $result['air_hum'];
     $air_light = $result['air_light'];
@@ -24,8 +24,6 @@
     $air_hum = 'None';
     $air_light = 'None';
     $ground_hum = 'None';
-    $total_commits = 0;
-    $total_alerts = 0;
     $error_occur = true;
   }
 ?>
