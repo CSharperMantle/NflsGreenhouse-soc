@@ -239,7 +239,7 @@
                 <div class="tools">
                   <span class="icon mdi mdi-chevron-down"></span>
                   <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close" onclick="javascript:$(this).parent().parent().parent().parent().fadeOut();"></span>
+                  <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
                 </div>
                 <span class="title">空气温度</span>
               </div>
@@ -254,7 +254,7 @@
                 <div class="tools">
                   <span class="icon mdi mdi-chevron-down"></span>
                   <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close" onclick="javascript:$(this).parent().parent().parent().parent().fadeOut();"></span>
+                  <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
                 </div>
                 <span class="title">空气湿度</span>
               </div>
@@ -271,7 +271,7 @@
                 <div class="tools">
                   <span class="icon mdi mdi-chevron-down"></span>
                   <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close" onclick="javascript:$(this).parent().parent().parent().parent().fadeOut();"></span>
+                  <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
                 </div>
                 <span class="title">地面湿度</span>
               </div>
@@ -286,7 +286,7 @@
                 <div class="tools">
                   <span class="icon mdi mdi-chevron-down"></span>
                   <span class="icon mdi mdi-refresh-sync"></span>
-                  <span class="icon mdi mdi-close" onclick="javascript:$(this).parent().parent().parent().parent().fadeOut();"></span>
+                  <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
                 </div>
                 <span class="title">光强度</span>
               </div>
@@ -547,6 +547,11 @@
       App.init();
       App.ChartJs();
     });
+  </script>
+  <script type="text/javascript">
+    function fade_out(obj) {
+      obj.parent().parent().parent().parent().fadeOut();
+    }
   </script>
 </body>
 
