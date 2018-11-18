@@ -85,10 +85,10 @@ var App = (function () {
 				data: lineChartData
 	    	});
  		}
-	}
 
-	airTempLineChart();
-	airHumLineChart();
+ 		airTempLineChart();
+		airHumLineChart();
+	}
 
 	return App;
 })(App || {});
