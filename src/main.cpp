@@ -37,6 +37,22 @@ const int fanOnePin = 23;
 const int fanTwoPin = 24;
 const int waterPumpPin = 25;
 const int airTempStabilizerPin = 26;
+/*
+const int waterPumpPin = 22;
+const int fanOnePin = 23;
+const int fanTwoPin = 24;
+const int airCoolerPin = 25;
+const int sideWindowOpenPin = 26;
+const int sideWindowClosePin = 27;
+const int topWindowOneOpenPin = 28;
+const int topWindowOneClosePin = 29;
+const int topWindowTwoOpenPin = 30;
+const int topWindowTwoClosePin = 31;
+const int skySheetOuterOpenPin = 32;
+const int skySheetOuterClosePin = 33;
+const int skySheetInnerOpenPin = 34;
+const int skySheetInnerClosePin = 35;
+*/
 
 const int dhtPin = 29;
 const int lightSensorPin = A1;
