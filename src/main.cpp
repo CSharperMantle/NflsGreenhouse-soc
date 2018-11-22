@@ -176,6 +176,7 @@ HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
 }
 
 HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len)) {
+    Serial.println("IN PARSING");
     if (server_response->body != NULL) {
         server_response->body = REALLOC_HEAP(server_response->body, strlen(server_response->body) + len, char);
         strcat(server_response->body, buf);
@@ -183,12 +184,12 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
         server_response->body = MALLOC_HEAP(len, char);
         strcat(server_response->body, buf);
     }
-    Serial.print(buf);
     return 0;
 }
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     Serial.println("STOP PARSING");
+    Serial.println(server_response->body);
     parseXmlStringAndExecute(server_response->body);
     FREE_HEAP(server_response->body);
     FREE_HEAP(server_response->status);
@@ -341,17 +342,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 "Connection: close\r\n" \
                 "\r\n" \
                 ""));
-            Serial.println(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
-                + String("&air_hum=") + String(currentAirHum) \
-                + String("&air_light=") + String(currentLightValue) \
-                + String("&ground_hum=") + String(currentGroundHum) \
-                + String(" HTTP/1.1\r\n" \
-                "Accept: application/xml\r\n" \
-                "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
-                "User-Agent: arduino/mega2560\r\n" \
-                "Connection: close\r\n" \
-                "\r\n" \
-                ""));
         {
             String respond = String();
             clearResetScreen(screen);
@@ -361,7 +351,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 respond += str;
                 clearWriteScreen(screen, str.c_str(), 1000);
             } while (webUploader->available());
-            Serial.println(respond.c_str());
             http_parser_execute(httpParser, httpParserSettings, respond.c_str(), strlen(respond.c_str()));
         }
         webUploader->stop();

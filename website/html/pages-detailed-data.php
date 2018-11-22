@@ -197,7 +197,7 @@
             if ($air_temp > airHumSwitchValveHigh) {
               print_panel("空气湿度", $air_hum, AlertInfo::DANGER);
             }
-            elseif ($air_temp < airHumSwitchValveHigh) {
+            elseif ($air_temp < airHumSwitchValveLow) {
               print_panel("空气湿度", $air_hum, AlertInfo::WARNING);
             }
             else {
