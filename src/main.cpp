@@ -58,12 +58,12 @@ const int dhtPin = 29;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
 
-const long uploadInterval = 1000L * 20; //MS->S S->M M->H
+const long uploadInterval = 1000L * 10; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
-const long checkSensorInterval = 1000L * 15;
+const long checkSensorInterval = 1000L * 5;
 const long checkNetworkInterval = 1000L * 60;
 
-const char *webServerAddress = "192.168.1.114";
+const char *webServerAddress = "10.24.141.75";
 const int webServerPort = 80;
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
@@ -325,7 +325,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     if (webUploader->connect(webServerAddress, webServerPort)) {
         Serial.println("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
-        webUploader->print(String("GET /upload.php?air_temp=") + String(currentAirTemp) \
+        webUploader->print(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
                 + String("&air_light=") + String(currentLightValue) \
                 + String("&ground_hum=") + String(currentGroundHum) \
@@ -346,7 +346,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 respond += str;
                 clearWriteScreen(screen, str.c_str, 1000);
             } while (webUploader->available());
-            http_parser_execute(httpParser, httpParserSettings, respond.c_str(), 0);
+            //http_parser_execute(httpParser, httpParserSettings, respond.c_str(), 0);
         }
         webUploader->stop();
         Serial.println("Done. Connection closed.");
