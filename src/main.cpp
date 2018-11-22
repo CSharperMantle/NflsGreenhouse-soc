@@ -54,7 +54,7 @@ const int skySheetInnerOpenPin = 34;
 const int skySheetInnerClosePin = 35;
 */
 
-const int dhtPin = 29;
+const int dhtPin = 53;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
 
@@ -167,6 +167,7 @@ void parseXmlStringAndExecute(const char * str) {
 
 #pragma region callback
 HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
+    Serial.println("START PARSING");
     FREE_HEAP(server_response->body);
     FREE_HEAP(server_response->status);
     server_response->status = MALLOC_HEAP(1, char);
@@ -182,10 +183,12 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
         server_response->body = MALLOC_HEAP(len, char);
         strcat(server_response->body, buf);
     }
+    Serial.print(buf);
     return 0;
 }
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
+    Serial.println("STOP PARSING");
     parseXmlStringAndExecute(server_response->body);
     FREE_HEAP(server_response->body);
     FREE_HEAP(server_response->status);
@@ -262,6 +265,8 @@ void initEthernet() {
     http_parser_settings_init(httpParserSettings);
     http_parser_init(httpParser, http_parser_type::HTTP_RESPONSE);
     httpParserSettings->on_body = onBodyReceivedCallback;
+    httpParserSettings->on_message_begin = onMessageBeginCallback;
+    httpParserSettings->on_message_complete = onMessageEndCallback;
     Serial.println("Done.");
 }
 
@@ -336,17 +341,28 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 "Connection: close\r\n" \
                 "\r\n" \
                 ""));
+            Serial.println(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
+                + String("&air_hum=") + String(currentAirHum) \
+                + String("&air_light=") + String(currentLightValue) \
+                + String("&ground_hum=") + String(currentGroundHum) \
+                + String(" HTTP/1.1\r\n" \
+                "Accept: application/xml\r\n" \
+                "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
+                "User-Agent: arduino/mega2560\r\n" \
+                "Connection: close\r\n" \
+                "\r\n" \
+                ""));
         {
             String respond = String();
             clearResetScreen(screen);
             do
             {
                 String str = webUploader->readString();
-                Serial.println(str);
                 respond += str;
-                clearWriteScreen(screen, str.c_str, 1000);
+                clearWriteScreen(screen, str.c_str(), 1000);
             } while (webUploader->available());
-            //http_parser_execute(httpParser, httpParserSettings, respond.c_str(), 0);
+            Serial.println(respond.c_str());
+            http_parser_execute(httpParser, httpParserSettings, respond.c_str(), strlen(respond.c_str()));
         }
         webUploader->stop();
         Serial.println("Done. Connection closed.");

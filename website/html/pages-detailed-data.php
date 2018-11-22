@@ -273,7 +273,7 @@
                   <span class="icon mdi mdi-refresh-sync"></span>
                   <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
                 </div>
-                <span class="title">地面湿度</span>
+                <span class="title">土壤湿度</span>
               </div>
               <div class="card-body">
                 <canvas id="ground-hum-line-chart-canvas"></canvas>

@@ -104,7 +104,7 @@ var App = (function () {
 	      			position: 'average'
 	      		},
 	      		datasets: [{
-	      		  	label: "空气湿度",
+	      		  	label: "土壤湿度",
 	      		  	borderColor: appWarningColor.toString(),
 	      		  	backgroundColor: appWarningColorLighten.toString(),
 	      		  	data: [
@@ -131,7 +131,7 @@ var App = (function () {
 	      		labels: [
 	      		<?php
 	      			$light_id = 1;
-	      			foreach ($ground_hum_query as $id => $array) {
+	      			foreach ($air_light_query as $id => $array) {
 	      				print "'$light_id',";
 	      				$light_id++;
 	      			}
@@ -141,7 +141,7 @@ var App = (function () {
 	      			position: 'average'
 	      		},
 	      		datasets: [{
-	      		  	label: "空气湿度",
+	      		  	label: "光强度",
 	      		  	borderColor: appDangerColor.toString(),
 	      		  	backgroundColor: appDangerColorLighten.toString(),
 	      		  	data: [
