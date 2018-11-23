@@ -58,10 +58,9 @@ const int dhtPin = 53;
 const int lightSensorPin = A1;
 const int groundHumSensorPin = A0;
 
-const long uploadInterval = 1000L * 10; //MS->S S->M M->H
+const long uploadInterval = 1000L * 5; //MS->S S->M M->H
 const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
-const long checkSensorInterval = 1000L * 5;
-const long checkNetworkInterval = 1000L * 60;
+const long checkSensorInterval = 1000L * 2;
 
 const char *webServerAddress = "10.24.141.75";
 const int webServerPort = 80;
@@ -77,12 +76,7 @@ EthernetClient *webUploader = new EthernetClient();
 http_parser_settings *httpParserSettings = new http_parser_settings();
 http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
 struct ServerResponse {
-    char *status = NULL;
     char *body = NULL;
-    ~ServerResponse() {
-        FREE_HEAP(this->body);
-        FREE_HEAP(this->status);
-    }
 };
 ServerResponse *server_response = new ServerResponse();
 #pragma endregion
@@ -96,10 +90,9 @@ bool isConnected = false;
 #pragma endregion
 
 #pragma region thread_controller
-pt uploadSensorData_ctrl;
-pt maintainEthernet_ctrl;
-pt readSensorData_ctrl;
-pt offlineWork_ctrl;
+pt uploadSensorData_ctrl = pt();
+pt maintainEthernet_ctrl = pt();
+pt readSensorData_ctrl = pt();
 #pragma endregion
 
 #pragma region helper
@@ -114,7 +107,8 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
     delay(delayMillisecond);
 }
 
-void parseXmlStringAndExecute(const char * str) {
+void inline parseXmlStringAndExecute(const char * str) {
+    Serial.println("PARSING XML");
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
 
@@ -132,14 +126,17 @@ void parseXmlStringAndExecute(const char * str) {
             // Relay action requested
             pinMode(targetIdValue, OUTPUT);
             if (!strcmp(paramValue, "0")) {
+                Serial.println(String("OFF action on") + String(targetIdValue));
                 digitalWrite(targetIdValue, LOW);
             } else {
+                Serial.println(String("ON action on") + String(targetIdValue));
                 digitalWrite(targetIdValue, HIGH);
             }
         } else if (typeValue == ActionType::DEVICE_ACTION) {
             // Action with other devices requested
             if (targetIdValue == DeviceId::DEVICE_LCD)
             {
+                Serial.println(String("DISPLAY action on") + String(targetIdValue));
                 screen->clear();
                 screen->home();
                 screen->print(paramValue);
@@ -150,8 +147,10 @@ void parseXmlStringAndExecute(const char * str) {
         } else if (typeValue == ActionType::RETRANSMIT_ACTION) {
             // Retransmitting requested
             //TODO: Add retransmitter
+            Serial.println(String("RETRANS action on") + String(targetIdValue));
         } else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
             // LCD backlight setting requested
+            Serial.println(String("BKLT action on") + String(targetIdValue));
             screen->setBacklight(atoi(paramValue));
         }
         else {
@@ -162,37 +161,36 @@ void parseXmlStringAndExecute(const char * str) {
     //FIXME: Maybe a bug
     delete handle;
     delete doc;
+    Serial.println("DONE PARSING XML");
 }
 #pragma endregion
 
 #pragma region callback
 HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
     Serial.println("START PARSING");
-    FREE_HEAP(server_response->body);
-    FREE_HEAP(server_response->status);
-    server_response->status = MALLOC_HEAP(1, char);
-    server_response->body = MALLOC_HEAP(1, char);
     return 0;
 }
 
 HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len)) {
     Serial.println("IN PARSING");
     if (server_response->body != NULL) {
-        server_response->body = REALLOC_HEAP(server_response->body, strlen(server_response->body) + len, char);
-        strcat(server_response->body, buf);
+        Serial.println("NOT EMPTY");
+        server_response->body = REALLOC_HEAP(server_response->body, strlen(server_response->body) + strlen(buf), char);
+        strncat(server_response->body, buf, len);
     } else {
-        server_response->body = MALLOC_HEAP(len, char);
-        strcat(server_response->body, buf);
+        Serial.println("EMPTY");
+        server_response->body = MALLOC_HEAP(strlen(buf) + 1, char);
+        strncpy(server_response->body, buf, len);
     }
     return 0;
 }
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     Serial.println("STOP PARSING");
-    Serial.println(server_response->body);
+    Serial.print(server_response->body);
     parseXmlStringAndExecute(server_response->body);
     FREE_HEAP(server_response->body);
-    FREE_HEAP(server_response->status);
+    Serial.println("ALL DONE");
     return 0;
 }
 #pragma endregion
@@ -299,9 +297,16 @@ void checkNetwork() {
 #pragma region threaded_worker
 PT_THREAD(readSensorData(pt *pt)) {
     PT_BEGIN(pt);
+    static unsigned long start = millis();
     Serial.println("Refreshing sensor data");
     currentAirTemp = airSensor->getTemperature();
     currentAirHum = airSensor->getHumidity();
+    do {
+        currentAirTemp = airSensor->getTemperature();
+        currentAirHum = airSensor->getHumidity();
+        delay(2000);
+    } while ((isnan(currentAirHum) || isnan(currentAirTemp)) && (millis() - start < 5000));
+
     currentGroundHum = analogRead(groundHumSensorPin);
     currentLightValue = analogRead(lightSensorPin);
     PT_YIELD(pt);
@@ -331,7 +336,19 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     if (webUploader->connect(webServerAddress, webServerPort)) {
         Serial.println("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
+          
         webUploader->print(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
+                + String("&air_hum=") + String(currentAirHum) \
+                + String("&air_light=") + String(currentLightValue) \
+                + String("&ground_hum=") + String(currentGroundHum) \
+                + String(" HTTP/1.1\r\n" \
+                "Accept: application/xml\r\n" \
+                "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
+                "User-Agent: arduino/mega2560\r\n" \
+                "Connection: close\r\n" \
+                "\r\n" \
+                ""));
+        Serial.println(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
                 + String("&air_light=") + String(currentLightValue) \
                 + String("&ground_hum=") + String(currentGroundHum) \
@@ -365,48 +382,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     PT_END(pt);
 }
 
-PT_THREAD(offlineWork(pt *pt)) {
-    PT_BEGIN(pt);
-    pinMode(fanOnePin, OUTPUT);
-    int airTemp = airSensor->getTemperature();
-    int airHum = airSensor->getHumidity();
-    int airLight = analogRead(lightSensorPin);
-    int groundHum = analogRead(groundHumSensorPin);
-    if (airTemp > offlineAirTempSwitchValveHigh) {
-        digitalWrite(fanOnePin, HIGH);
-        digitalWrite(fanTwoPin, HIGH);
-    } else if (airTemp < offlineAirTempSwitchValveLow) {
-        digitalWrite(fanOnePin, LOW);
-        digitalWrite(fanTwoPin, LOW);
-    } else {
-        digitalWrite(fanOnePin, LOW);
-        digitalWrite(fanTwoPin, LOW);
-    }
-    if (airHum > offlineAirHumSwitchValveHigh) {
-        digitalWrite(fanOnePin, HIGH);
-        digitalWrite(fanTwoPin, HIGH);
-    } else if (airHum < offlineAirHumSwitchValveLow) {
-        digitalWrite(fanOnePin, LOW);
-        digitalWrite(fanTwoPin, LOW);
-    } else {
-        digitalWrite(fanOnePin, LOW);
-        digitalWrite(fanTwoPin, LOW);
-    }
-    if (airLight > offlineAirLightSwitchValveHigh) {
-        digitalWrite(skySheetPin, HIGH);
-    } else if (airLight < offlineAirLightSwitchValveLow) {
-        digitalWrite(skySheetPin, LOW);
-    }
-
-    if (groundHum > offlineGroundHumSwitchValveHigh) {
-        digitalWrite(waterPumpPin, HIGH);
-    } else if (groundHum < offlineGroundHumSwitchValveLow) {
-        digitalWrite(waterPumpPin, LOW);
-    } else {
-        digitalWrite(waterPumpPin, LOW);
-    }
-    PT_END(pt);
-}
 #pragma endregion
 
 #pragma region main
@@ -420,18 +395,13 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
     PT_INIT(&readSensorData_ctrl);
-    PT_INIT(&offlineWork_ctrl);
+
     Serial.println("Init done.");
 }
 
 void loop() {
-    checkNetwork();
-    if (isConnected) {
-        readSensorData(&readSensorData_ctrl);
-        uploadSensorData(&uploadSensorData_ctrl);
-        maintainEthernet(&maintainEthernet_ctrl);
-    } else {
-        offlineWork(&offlineWork_ctrl);
-    }
+    readSensorData(&readSensorData_ctrl);
+    uploadSensorData(&uploadSensorData_ctrl);
+    maintainEthernet(&maintainEthernet_ctrl);
 }
 #pragma endregion
