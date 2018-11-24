@@ -32,12 +32,6 @@ const int offlineAirLightSwitchValveLow = 100;
 const int offlineGroundHumSwitchValveLow = 700;
 const int offlineGroundHumSwitchValveHigh = 1000;
 
-const int skySheetPin = 22;
-const int fanOnePin = 23;
-const int fanTwoPin = 24;
-const int waterPumpPin = 25;
-const int airTempStabilizerPin = 26;
-/*
 const int waterPumpPin = 22;
 const int fanOnePin = 23;
 const int fanTwoPin = 24;
@@ -52,7 +46,6 @@ const int skySheetOuterOpenPin = 32;
 const int skySheetOuterClosePin = 33;
 const int skySheetInnerOpenPin = 34;
 const int skySheetInnerClosePin = 35;
-*/
 
 const int dhtPin = 53;
 const int lightSensorPin = A1;
