@@ -92,7 +92,6 @@ bool isConnected = false;
 #pragma region thread_controller
 pt uploadSensorData_ctrl = pt();
 pt maintainEthernet_ctrl = pt();
-pt readSensorData_ctrl = pt();
 #pragma endregion
 
 #pragma region helper
@@ -284,41 +283,9 @@ void initDht() {
     Serial.println("Done.");
 }
 
-void checkNetwork() {
-    if (webUploader->connect(webServerAddress, webServerPort)) {
-        isConnected = true;
-        webUploader->stop();
-    } else {
-        isConnected = false;
-    }
-}
 #pragma endregion
 
 #pragma region threaded_worker
-PT_THREAD(readSensorData(pt *pt)) {
-    PT_BEGIN(pt);
-    static unsigned long start = millis();
-    Serial.println("Refreshing sensor data");
-    currentAirTemp = airSensor->getTemperature();
-    currentAirHum = airSensor->getHumidity();
-    do {
-        currentAirTemp = airSensor->getTemperature();
-        currentAirHum = airSensor->getHumidity();
-        delay(2000);
-    } while ((isnan(currentAirHum) || isnan(currentAirTemp)) && (millis() - start < 5000));
-
-    currentGroundHum = analogRead(groundHumSensorPin);
-    currentLightValue = analogRead(lightSensorPin);
-    PT_YIELD(pt);
-    Serial.println(currentAirTemp);
-    Serial.println(currentAirHum);
-    Serial.println(currentGroundHum);
-    Serial.println(currentLightValue);
-    Serial.println("Done.");
-    clearWriteScreen(screen, "REFRESH SENSOR", 0);
-    PT_TIMER_DELAY(pt, checkSensorInterval);
-    PT_END(pt);
-}
 
 PT_THREAD(maintainEthernet(pt *pt)) {
     PT_BEGIN(pt);
@@ -332,6 +299,11 @@ PT_THREAD(maintainEthernet(pt *pt)) {
 
 PT_THREAD(uploadSensorData(pt *pt)) {
     PT_BEGIN(pt);
+    currentGroundHum = analogRead(groundHumSensorPin);
+    currentLightValue = analogRead(lightSensorPin);
+    currentAirTemp = airSensor->getTemperature();
+    currentAirHum = airSensor->getHumidity();
+
     Serial.println("Uploading sensor data");
     if (webUploader->connect(webServerAddress, webServerPort)) {
         Serial.println("Connection established.");
@@ -394,13 +366,11 @@ void setup() {
     initDht();
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
-    PT_INIT(&readSensorData_ctrl);
 
     Serial.println("Init done.");
 }
 
 void loop() {
-    readSensorData(&readSensorData_ctrl);
     uploadSensorData(&uploadSensorData_ctrl);
     maintainEthernet(&maintainEthernet_ctrl);
 }
