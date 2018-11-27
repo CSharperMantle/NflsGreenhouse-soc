@@ -4,10 +4,10 @@
 
   	$db = DBConnectionSingleton::getInstance();
 
-  	$air_temp_query = run_query_fetch_multi($db, FETCH_AIR_TEMP_SQL);
-  	$air_hum_query = run_query_fetch_multi($db, FETCH_AIR_HUM_SQL);
-  	$air_light_query = run_query_fetch_multi($db, FETCH_AIR_LIGHT_SQL);
-  	$ground_hum_query = run_query_fetch_multi($db, FETCH_GROUND_HUM_SQL);
+  	$air_temp_query = array_reverse(run_query_fetch_multi($db, FETCH_AIR_TEMP_SQL));
+  	$air_hum_query = array_reverse(run_query_fetch_multi($db, FETCH_AIR_HUM_SQL));
+  	$air_light_query = array_reverse(run_query_fetch_multi($db, FETCH_AIR_LIGHT_SQL));
+  	$ground_hum_query = array_reverse(run_query_fetch_multi($db, FETCH_GROUND_HUM_SQL));
 ?>
 var App = (function () {
 	'use strict';
