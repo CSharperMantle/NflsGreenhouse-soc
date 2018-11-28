@@ -17,9 +17,11 @@
         "Dunkels",
         "Ningbo",
         "Uploader",
+        "bklt",
         "println",
         "reexecute",
-        "sparkline"
+        "sparkline",
+        "tixml"
     ],
     "php.suggest.basic": false,
     "python.jediEnabled": true,

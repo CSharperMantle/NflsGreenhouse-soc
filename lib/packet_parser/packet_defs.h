@@ -21,6 +21,7 @@
 
 #define PACKET_SIZE(packet, type) (sizeof(packet) / sizeof(type))
 #define MALLOC_HEAP(size, type) ((type *)malloc(size * sizeof(type)))
+#define CALLOC_HEAP(n_elem, type) ((type *)calloc(n_elem, sizeof(type)))
 #define REALLOC_HEAP(pointer, size, type) ((type *)realloc(pointer, size * sizeof(type)))
 #define FREE_HEAP(pointer) \
 if (pointer != NULL) { \

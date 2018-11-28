@@ -57,6 +57,7 @@ const long checkSensorInterval = 1000L * 2;
 
 const char *webServerAddress = "10.24.141.75";
 const int webServerPort = 80;
+const IPAddress *webServerIp = new IPAddress(10, 24, 141, 75);
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
@@ -67,7 +68,7 @@ LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
 http_parser_settings *httpParserSettings = new http_parser_settings();
-http_parser *httpParser = (http_parser *)malloc(sizeof(http_parser));
+http_parser *httpParser = new http_parser();
 struct ServerResponse {
     char *body = NULL;
 };
@@ -103,7 +104,7 @@ void inline parseXmlStringAndExecute(const char * str) {
     Serial.println("PARSING XML");
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
-
+    Serial.println("EXECUTING XML");
     TiXmlHandle *handle = new TiXmlHandle(doc);
     TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
     for ( ; action; action = action->NextSiblingElement()) {
@@ -171,7 +172,7 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
         strncat(server_response->body, buf, len);
     } else {
         Serial.println("EMPTY");
-        server_response->body = MALLOC_HEAP(strlen(buf) + 1, char);
+        server_response->body = CALLOC_HEAP(strlen(buf) + 1, char);
         strncpy(server_response->body, buf, len);
     }
     return 0;
@@ -298,10 +299,10 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     currentAirHum = airSensor->getHumidity();
 
     Serial.println("Uploading sensor data");
-    if (webUploader->connect(webServerAddress, webServerPort)) {
+    if (webUploader->connect(*webServerIp, webServerPort)) {
         Serial.println("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
-          
+
         webUploader->print(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
                 + String("&air_light=") + String(currentLightValue) \
@@ -342,6 +343,8 @@ PT_THREAD(uploadSensorData(pt *pt)) {
         break;
     } else {
         Serial.println("Connection broke.");
+        webUploader->flush();
+        webUploader->stop();
     }
     PT_TIMER_DELAY(pt, uploadInterval);
     PT_END(pt);
