@@ -107,15 +107,15 @@ void inline parseXmlStringAndExecute(const char * str) {
     TiXmlHandle *handle = new TiXmlHandle(doc);
     TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
     for ( ; action; action = action->NextSiblingElement()) {
-        TiXmlElement *type = action->FirstChildElement("type");
-        TiXmlElement *targetId = action->FirstChildElement("target_id");
-        TiXmlElement *param = action->FirstChildElement("param");
+        TiXmlNode *type = action->FirstChildElement("type")->FirstChild();
+        TiXmlNode *targetId = action->FirstChildElement("target_id")->FirstChild();
+        TiXmlNode *param = action->FirstChildElement("param")->FirstChild();
         int typeValue = atoi(type->ToText()->Value());
-        int targetIdValue = atoi(targetId->ToText()->Value());
-        const char *paramValue = param->ToText()->Value();
         
         if (typeValue == ActionType::RELAY_ACTION) {
             // Relay action requested
+            const char *paramValue = param->ToText()->Value();
+            int targetIdValue = atoi(targetId->ToText()->Value());
             pinMode(targetIdValue, OUTPUT);
             if (!strcmp(paramValue, "0")) {
                 Serial.println(String("OFF action on") + String(targetIdValue));
@@ -126,6 +126,8 @@ void inline parseXmlStringAndExecute(const char * str) {
             }
         } else if (typeValue == ActionType::DEVICE_ACTION) {
             // Action with other devices requested
+            int targetIdValue = atoi(targetId->ToText()->Value());
+            const char *paramValue = param->ToText()->Value();
             if (targetIdValue == DeviceId::DEVICE_LCD)
             {
                 Serial.println(String("DISPLAY action on") + String(targetIdValue));
@@ -139,9 +141,11 @@ void inline parseXmlStringAndExecute(const char * str) {
         } else if (typeValue == ActionType::RETRANSMIT_ACTION) {
             // Retransmitting requested
             //TODO: Add retransmitter
-            Serial.println(String("RETRANS action on") + String(targetIdValue));
+            Serial.println("RETRANS action");
         } else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
             // LCD backlight setting requested
+            const char *paramValue = param->ToText()->Value();
+            int targetIdValue = atoi(targetId->ToText()->Value());
             Serial.println(String("BKLT action on") + String(targetIdValue));
             screen->setBacklight(atoi(paramValue));
         }
