@@ -184,7 +184,7 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     Serial.println("STOP PARSING");
     Serial.print(server_response->body);
-    //parseXmlStringAndExecute(server_response->body);
+    parseXmlStringAndExecute(server_response->body);
     FREE_HEAP(server_response->body);
     Serial.println("ALL DONE");
     return 0;
