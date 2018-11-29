@@ -99,7 +99,7 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
     delay(delayMillisecond);
 }
 
-void inline parseXmlStringAndExecute(const char * str) {
+void parseXmlStringAndExecute(const char * str) {
     Serial.println("PARSING XML");
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
@@ -184,7 +184,7 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     Serial.println("STOP PARSING");
     Serial.print(server_response->body);
-    parseXmlStringAndExecute(server_response->body);
+    //parseXmlStringAndExecute(server_response->body);
     FREE_HEAP(server_response->body);
     Serial.println("ALL DONE");
     return 0;
@@ -335,6 +335,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 respond += str;
                 clearWriteScreen(screen, str.c_str(), 1000);
             } while (webUploader->available());
+            http_parser_init(httpParser, HTTP_RESPONSE);
             http_parser_execute(httpParser, httpParserSettings, respond.c_str(), strlen(respond.c_str()));
         }
         webUploader->stop();
