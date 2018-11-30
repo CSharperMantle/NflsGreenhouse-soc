@@ -7,24 +7,24 @@
      */
 
     function xml_print_header(string $version = '1.0', string $encoding = 'UTF-8') {
-        print "<?xml version=\"$version\" encoding=\"$encoding\" ?>\n";
+        print "<?xml version=\"$version\" encoding=\"$encoding\"?>";
     }
 
     function xml_print_root_begin() {
-        print "<root>\n";
+        print "<root>";
     }
 
     function xml_print_root_end() {
-        print "</root>\n";
+        print "</root>";
     }
 
     function xml_print_actions_begin() {
-        print "<actions>\n";
+        print "<actions>";
 
     }
 
     function xml_print_actions_end() {
-        print "</actions>\n";
+        print "</actions>";
     }
 
     function xml_print_action(int $type, int $target_id, string $param) {
@@ -35,11 +35,11 @@
             <param>1</param>
         </action>
         */
-        print "<action>\n";
-        print "    <type>$type</type>\n";
-        print "    <target_id>$target_id</target_id>\n";
-        print "    <param>$param</param>\n";
-        print "</action>\n";
+        print "<action>";
+        print "    <type>$type</type>";
+        print "    <target_id>$target_id</target_id>";
+        print "    <param>$param</param>";
+        print "</action>";
     }
 
     class AlertType {

@@ -184,7 +184,7 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     Serial.println("STOP PARSING");
     Serial.print(server_response->body);
-    parseXmlStringAndExecute(server_response->body);
+    //parseXmlStringAndExecute(server_response->body);
     FREE_HEAP(server_response->body);
     Serial.println("ALL DONE");
     return 0;
@@ -304,18 +304,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
         Serial.println("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
 
-        webUploader->print(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
-                + String("&air_hum=") + String(currentAirHum) \
-                + String("&air_light=") + String(currentLightValue) \
-                + String("&ground_hum=") + String(currentGroundHum) \
-                + String(" HTTP/1.1\r\n" \
-                "Accept: application/xml\r\n" \
-                "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
-                "User-Agent: arduino/mega2560\r\n" \
-                "Connection: close\r\n" \
-                "\r\n" \
-                ""));
-        Serial.println(String("GET /api/upload.php?air_temp=") + String(currentAirTemp) \
+        webUploader->print(String("GET /api/v1.0/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
                 + String("&air_light=") + String(currentLightValue) \
                 + String("&ground_hum=") + String(currentGroundHum) \
