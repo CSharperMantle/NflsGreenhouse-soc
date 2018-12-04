@@ -22,41 +22,41 @@
 #include <http_parser.h>
 
 #pragma region constant
-const int offlineAirTempSwitchValveLow = 10;
-const int offlineAirTempSwitchValveHigh = 30;
-const int offlineAirHumSwitchValveLow = 35;
-const int offlineAirHumSwitchValveHigh = 70;
-const int offlineLightSwitchValveLow = 100;
-const int offlineAirLightSwitchValveHigh = 500;
-const int offlineAirLightSwitchValveLow = 100;
-const int offlineGroundHumSwitchValveLow = 700;
-const int offlineGroundHumSwitchValveHigh = 1000;
+const PROGMEM int offlineAirTempSwitchValveLow = 10;
+const PROGMEM int offlineAirTempSwitchValveHigh = 30;
+const PROGMEM int offlineAirHumSwitchValveLow = 35;
+const PROGMEM int offlineAirHumSwitchValveHigh = 70;
+const PROGMEM int offlineLightSwitchValveLow = 100;
+const PROGMEM int offlineAirLightSwitchValveHigh = 500;
+const PROGMEM int offlineAirLightSwitchValveLow = 100;
+const PROGMEM int offlineGroundHumSwitchValveLow = 700;
+const PROGMEM int offlineGroundHumSwitchValveHigh = 1000;
 
-const int waterPumpPin = 22;
-const int fanOnePin = 23;
-const int fanTwoPin = 24;
-const int airCoolerPin = 25;
-const int sideWindowOpenPin = 26;
-const int sideWindowClosePin = 27;
-const int topWindowOneOpenPin = 28;
-const int topWindowOneClosePin = 29;
-const int topWindowTwoOpenPin = 30;
-const int topWindowTwoClosePin = 31;
-const int skySheetOuterOpenPin = 32;
-const int skySheetOuterClosePin = 33;
-const int skySheetInnerOpenPin = 34;
-const int skySheetInnerClosePin = 35;
+const PROGMEM int waterPumpPin = 22;
+const PROGMEM int fanOnePin = 23;
+const PROGMEM int fanTwoPin = 24;
+const PROGMEM int airCoolerPin = 25;
+const PROGMEM int sideWindowOpenPin = 26;
+const PROGMEM int sideWindowClosePin = 27;
+const PROGMEM int topWindowOneOpenPin = 28;
+const PROGMEM int topWindowOneClosePin = 29;
+const PROGMEM int topWindowTwoOpenPin = 30;
+const PROGMEM int topWindowTwoClosePin = 31;
+const PROGMEM int skySheetOuterOpenPin = 32;
+const PROGMEM int skySheetOuterClosePin = 33;
+const PROGMEM int skySheetInnerOpenPin = 34;
+const PROGMEM int skySheetInnerClosePin = 35;
 
-const int dhtPin = 53;
-const int lightSensorPin = A1;
-const int groundHumSensorPin = A0;
+const PROGMEM int dhtPin = 53;
+const PROGMEM int lightSensorPin = A1;
+const PROGMEM int groundHumSensorPin = A0;
 
-const long uploadInterval = 1000L * 5; //MS->S S->M M->H
-const long maintainEthernetInterval = 1000L * 60 * 60 * 2;
-const long checkSensorInterval = 1000L * 2;
+const PROGMEM long uploadInterval = 1000L * 5; //MS->S S->M M->H
+const PROGMEM long maintainEthernetInterval = 1000L * 60 * 60 * 2;
+const PROGMEM long checkSensorInterval = 1000L * 2;
 
 const char *webServerAddress = "10.24.141.75";
-const int webServerPort = 80;
+const PROGMEM int webServerPort = 80;
 const IPAddress *webServerIp = new IPAddress(10, 24, 141, 75);
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
@@ -99,7 +99,7 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
     delay(delayMillisecond);
 }
 
-void parseXmlTiny(const char * str) {
+void parseXmlTiny(const char *str) {
     Serial.println("PARSING XML");
     TiXmlDocument *doc = new TiXmlDocument();
     doc->Parse(str);
@@ -118,10 +118,10 @@ void parseXmlTiny(const char * str) {
             int targetIdValue = atoi(targetId->ToText()->Value());
             pinMode(targetIdValue, OUTPUT);
             if (!strcmp(paramValue, "0")) {
-                Serial.println(String("OFF action on") + String(targetIdValue));
+                Serial.println(String("OFF action on ") + String(targetIdValue));
                 digitalWrite(targetIdValue, LOW);
             } else {
-                Serial.println(String("ON action on") + String(targetIdValue));
+                Serial.println(String("ON action on ") + String(targetIdValue));
                 digitalWrite(targetIdValue, HIGH);
             }
         } else if (typeValue == ActionType::DEVICE_ACTION) {
@@ -130,7 +130,7 @@ void parseXmlTiny(const char * str) {
             const char *paramValue = param->ToText()->Value();
             if (targetIdValue == DeviceId::DEVICE_LCD)
             {
-                Serial.println(String("DISPLAY action on") + String(targetIdValue));
+                Serial.println(String("DISPLAY action on ") + String(targetIdValue));
                 screen->clear();
                 screen->home();
                 screen->print(paramValue);
@@ -146,7 +146,7 @@ void parseXmlTiny(const char * str) {
             // LCD backlight setting requested
             const char *paramValue = param->ToText()->Value();
             int targetIdValue = atoi(targetId->ToText()->Value());
-            Serial.println(String("BKLT action on") + String(targetIdValue));
+            Serial.println(String("BKLT action on ") + String(targetIdValue));
             screen->setBacklight(atoi(paramValue));
         }
         else {
@@ -236,22 +236,6 @@ void initEthernet() {
         }
     }
     Serial.println("Done.");
-
-    Serial.println("Running tests on EthernetClient");
-    for (int index = 1; index <= 5; index++) {
-        if (webUploader->connect(webServerAddress, webServerPort)) {
-            Serial.println("Test connection established.");
-            webUploader->flush();
-            Serial.println("Test connection flushed.");
-            webUploader->stop();
-            Serial.println("Test connection closed.");
-            clearWriteScreen(screen, "CONN OK", 300);
-            break;
-        } else {
-            Serial.println(String("Test connection broken. Retry ") + String(index));
-            clearWriteScreen(screen, (String("CONN ERR:") + String(index)).c_str(), 300);
-        }
-    }
 
     Serial.println("Setting up HTTP Parser");
     clearWriteScreen(screen, "PARSER SETUP", 300);
