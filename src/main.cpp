@@ -107,6 +107,9 @@ void parseXmlTiny(const char *str) {
     TiXmlHandle *handle = new TiXmlHandle(doc);
     TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
     TiXmlElement *timestamp = handle->FirstChild("root").FirstChild("timestamp").ToElement();
+    int hour = atoi(timestamp->FirstChild("hour")->ToText()->Value());
+    int minute = atoi(timestamp->FirstChild("minute")->ToText()->Value());
+    int second = atoi(timestamp->FirstChild("second")->ToText()->Value());
     for ( ; action; action = action->NextSiblingElement()) {
         TiXmlNode *type = action->FirstChildElement("type")->FirstChild();
         TiXmlNode *targetId = action->FirstChildElement("target_id")->FirstChild();
