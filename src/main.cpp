@@ -7,9 +7,6 @@
 #define PT_USE_TIMER
 #define PT_USE_SEM
 
-#define PUGIXML_NO_EXCEPTIONS
-#define PUGIXML_NO_STL
-
 #include <stdlib.h>
 #include <string.h>
 #include <Arduino.h>
@@ -21,7 +18,6 @@
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <tinyxml.h>
-#include <pugixml.hpp>
 #include <packet_defs.h>
 #include <http_parser.h>
 
@@ -101,61 +97,6 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
     clearResetScreen(lcd);
     lcd->print(text);
     delay(delayMillisecond);
-}
-
-void parseXmlPugi(const char *str) {
-    Serial.println("PARSING XML");
-    pugi::xml_document *doc = new pugi::xml_document();
-    doc->load_string(str);
-    Serial.println("EXECUTING XML");
-    pugi::xml_node root = doc->root();
-    pugi::xml_node actions = root.child("actions");
-    for (pugi::xml_node each_act = actions.child("action"); each_act; each_act = each_act.next_sibling("action")) {
-        int typeValue = atoi(each_act.child_value("type"));
-        if (typeValue == ActionType::RELAY_ACTION) {
-            // Relay action requested
-            int targetIdValue = atoi(each_act.child_value("target_id"));
-            const char *paramValue = each_act.child_value("param");
-            pinMode(targetIdValue, OUTPUT);
-            if (!strcmp(paramValue, "0")) {
-                Serial.println(String("OFF action on") + String(targetIdValue));
-                digitalWrite(targetIdValue, LOW);
-            } else {
-                Serial.println(String("ON action on") + String(targetIdValue));
-                digitalWrite(targetIdValue, HIGH);
-            }
-        } else if (typeValue == ActionType::DEVICE_ACTION) {
-            // Action with other devices requested
-            int targetIdValue = atoi(each_act.child_value("target_id"));
-            const char *paramValue = each_act.child_value("param");
-            if (targetIdValue == DeviceId::DEVICE_LCD)
-            {
-                Serial.println(String("DISPLAY action on") + String(targetIdValue));
-                screen->clear();
-                screen->home();
-                screen->print(paramValue);
-            } else {
-                Serial.println(String("Unknown device: ") + String(targetIdValue));
-            }
-            //TODO: Add more devices
-        } else if (typeValue == ActionType::RETRANSMIT_ACTION) {
-            // Retransmitting requested
-            //TODO: Add retransmitter
-            Serial.println("RETRANS action");
-        } else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
-            // LCD backlight setting requested
-            int targetIdValue = atoi(each_act.child_value("target_id"));
-            const char *paramValue = each_act.child_value("param");
-            Serial.println(String("BKLT action on") + String(targetIdValue));
-            screen->setBacklight(atoi(paramValue));
-        }
-        else {
-            Serial.println(String("Unknown XML action received: ") + String(typeValue));
-        }
-    }
-
-    delete doc;
-    Serial.println("DONE PARSING XML");
 }
 
 void parseXmlTiny(const char * str) {
