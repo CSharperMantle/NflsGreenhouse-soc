@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
+    <timestamp>
+        <hour>14</hour>
+        <minute>32</minute>
+        <second>54</second>
+    </timestamp>
     <actions>
         <!--Action types: 
             1: RELAY (with params)

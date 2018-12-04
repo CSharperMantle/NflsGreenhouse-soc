@@ -11,6 +11,8 @@
   require '..\\..\\assets\\php\\shared_xml.php';
   require '..\\..\\assets\\php\\shared_const.php';
 
+  date_default_timezone_set('PRC');
+
   if ((!isset($_GET['air_temp'])) || (!isset($_GET['air_hum'])) || (!isset($_GET['air_light'])) || (!isset($_GET['ground_hum']))) {
     http_response_code(400);
     header('Reason: Values not set');
@@ -27,6 +29,7 @@
   $air_hum = purify_data($_GET['air_hum']);
   $air_light = purify_data($_GET['air_light']);
   $ground_hum = purify_data($_GET['ground_hum']);
+
   
   try {
     $db = DBConnectionSingleton::getInstance();
@@ -105,6 +108,7 @@
   }
   xml_print_header();
   xml_print_root_begin();
+  xml_print_timestamp(time("H"), time("i"), time("s"));
   xml_print_actions_begin();
   foreach ($actions as $index => $array) {
     xml_print_action($array[0], $array[1], $array[2]);

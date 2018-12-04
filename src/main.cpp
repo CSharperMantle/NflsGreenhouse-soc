@@ -22,41 +22,41 @@
 #include <http_parser.h>
 
 #pragma region constant
-const PROGMEM int offlineAirTempSwitchValveLow = 10;
-const PROGMEM int offlineAirTempSwitchValveHigh = 30;
-const PROGMEM int offlineAirHumSwitchValveLow = 35;
-const PROGMEM int offlineAirHumSwitchValveHigh = 70;
-const PROGMEM int offlineLightSwitchValveLow = 100;
-const PROGMEM int offlineAirLightSwitchValveHigh = 500;
-const PROGMEM int offlineAirLightSwitchValveLow = 100;
-const PROGMEM int offlineGroundHumSwitchValveLow = 700;
-const PROGMEM int offlineGroundHumSwitchValveHigh = 1000;
+const __ATTR_PROGMEM__ int offlineAirTempSwitchValveLow = 10;
+const __ATTR_PROGMEM__ int offlineAirTempSwitchValveHigh = 30;
+const __ATTR_PROGMEM__ int offlineAirHumSwitchValveLow = 35;
+const __ATTR_PROGMEM__ int offlineAirHumSwitchValveHigh = 70;
+const __ATTR_PROGMEM__ int offlineLightSwitchValveLow = 100;
+const __ATTR_PROGMEM__ int offlineAirLightSwitchValveHigh = 500;
+const __ATTR_PROGMEM__ int offlineAirLightSwitchValveLow = 100;
+const __ATTR_PROGMEM__ int offlineGroundHumSwitchValveLow = 700;
+const __ATTR_PROGMEM__ int offlineGroundHumSwitchValveHigh = 1000;
 
-const PROGMEM int waterPumpPin = 22;
-const PROGMEM int fanOnePin = 23;
-const PROGMEM int fanTwoPin = 24;
-const PROGMEM int airCoolerPin = 25;
-const PROGMEM int sideWindowOpenPin = 26;
-const PROGMEM int sideWindowClosePin = 27;
-const PROGMEM int topWindowOneOpenPin = 28;
-const PROGMEM int topWindowOneClosePin = 29;
-const PROGMEM int topWindowTwoOpenPin = 30;
-const PROGMEM int topWindowTwoClosePin = 31;
-const PROGMEM int skySheetOuterOpenPin = 32;
-const PROGMEM int skySheetOuterClosePin = 33;
-const PROGMEM int skySheetInnerOpenPin = 34;
-const PROGMEM int skySheetInnerClosePin = 35;
+const __ATTR_PROGMEM__ int waterPumpPin = 22;
+const __ATTR_PROGMEM__ int fanOnePin = 23;
+const __ATTR_PROGMEM__ int fanTwoPin = 24;
+const __ATTR_PROGMEM__ int airCoolerPin = 25;
+const __ATTR_PROGMEM__ int sideWindowOpenPin = 26;
+const __ATTR_PROGMEM__ int sideWindowClosePin = 27;
+const __ATTR_PROGMEM__ int topWindowOneOpenPin = 28;
+const __ATTR_PROGMEM__ int topWindowOneClosePin = 29;
+const __ATTR_PROGMEM__ int topWindowTwoOpenPin = 30;
+const __ATTR_PROGMEM__ int topWindowTwoClosePin = 31;
+const __ATTR_PROGMEM__ int skySheetOuterOpenPin = 32;
+const __ATTR_PROGMEM__ int skySheetOuterClosePin = 33;
+const __ATTR_PROGMEM__ int skySheetInnerOpenPin = 34;
+const __ATTR_PROGMEM__ int skySheetInnerClosePin = 35;
 
-const PROGMEM int dhtPin = 53;
-const PROGMEM int lightSensorPin = A1;
-const PROGMEM int groundHumSensorPin = A0;
+const __ATTR_PROGMEM__ int dhtPin = 53;
+const __ATTR_PROGMEM__ int lightSensorPin = A1;
+const __ATTR_PROGMEM__ int groundHumSensorPin = A0;
 
-const PROGMEM long uploadInterval = 1000L * 5; //MS->S S->M M->H
-const PROGMEM long maintainEthernetInterval = 1000L * 60 * 60 * 2;
-const PROGMEM long checkSensorInterval = 1000L * 2;
+const __ATTR_PROGMEM__ long uploadInterval = 1000L * 5; //MS->S S->M M->H
+const __ATTR_PROGMEM__ long maintainEthernetInterval = 1000L * 60 * 60 * 2;
+const __ATTR_PROGMEM__ long checkSensorInterval = 1000L * 2;
 
 const char *webServerAddress = "10.24.141.75";
-const PROGMEM int webServerPort = 80;
+const __ATTR_PROGMEM__ int webServerPort = 80;
 const IPAddress *webServerIp = new IPAddress(10, 24, 141, 75);
 
 byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
@@ -106,6 +106,7 @@ void parseXmlTiny(const char *str) {
     Serial.println("EXECUTING XML");
     TiXmlHandle *handle = new TiXmlHandle(doc);
     TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
+    TiXmlElement *timestamp = handle->FirstChild("root").FirstChild("timestamp").ToElement();
     for ( ; action; action = action->NextSiblingElement()) {
         TiXmlNode *type = action->FirstChildElement("type")->FirstChild();
         TiXmlNode *targetId = action->FirstChildElement("target_id")->FirstChild();

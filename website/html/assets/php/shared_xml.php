@@ -18,6 +18,10 @@
         print "</root>";
     }
 
+    function xml_print_timestamp(int $hour, int $minute, int $second) {
+        print "<timestamp><hour>$hour</hour><minute>$minute</minute><second>$second</second></timestamp>";
+    }
+
     function xml_print_actions_begin() {
         print "<actions>";
 
