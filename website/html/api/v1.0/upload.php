@@ -108,7 +108,7 @@
   }
   xml_print_header();
   xml_print_root_begin();
-  xml_print_timestamp(time("H"), time("i"), time("s"));
+  xml_print_timestamp(date("H"), date("i"), date("s"));
   xml_print_actions_begin();
   foreach ($actions as $index => $array) {
     xml_print_action($array[0], $array[1], $array[2]);
