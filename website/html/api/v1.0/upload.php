@@ -21,7 +21,7 @@
 
   if ((!is_numeric($_GET['air_temp'])) || (!is_numeric($_GET['air_hum'])) || (!is_numeric($_GET['air_light'])) || (!is_numeric($_GET['ground_hum']))) {
     http_response_code(400);
-    header('Reason: Expected numbers');
+    header('Reason: Numbers expected');
     exit();
   }
 
