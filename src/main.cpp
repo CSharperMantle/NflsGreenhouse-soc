@@ -56,11 +56,11 @@ const PROGMEM long uploadInterval = 1000L * 5; //MS->S S->M M->H
 const PROGMEM long maintainEthernetInterval = 1000L * 60 * 60 * 2;
 const PROGMEM long checkSensorInterval = 1000L * 2;
 
-const PROGMEM char webServerAddress[] = "10.24.141.75";
+const char webServerAddress[] = "10.24.141.75";
 const PROGMEM int webServerPort = 80;
 const PROGMEM IPAddress webServerIp = IPAddress(10, 24, 141, 75);
 
-const PROGMEM byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
+byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
 #pragma endregion
 
