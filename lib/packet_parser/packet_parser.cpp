@@ -13,6 +13,7 @@
 */
 #include "packet_parser.h"
 
+#ifdef USING_PACKET_PARSING
 bool isPacket(byte *packet) {
     
     if (packet[0] != packetBegin 
@@ -75,3 +76,5 @@ byte *getPacketContent(byte *packet) {
     }
     return content;
 }
+#endif /* USING_PACKET_PARSING */
+

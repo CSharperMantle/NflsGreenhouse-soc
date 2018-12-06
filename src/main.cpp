@@ -7,11 +7,12 @@
 #define PT_USE_TIMER
 #define PT_USE_SEM
 
+#define USING_PACKET_ENUM
+
 #include <stdlib.h>
 #include <string.h>
 #include <Arduino.h>
 #include <WString.h>
-#include <utility/w5100.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
 #include <DHT.h>

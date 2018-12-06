@@ -29,7 +29,7 @@ if (pointer != NULL) { \
     pointer = NULL; \
 }
 
-
+#ifdef USING_PACKET_PARSING
 typedef enum {
     pSystemOn = 0x00,
     pSystemOff = 0x01,
@@ -48,15 +48,20 @@ const byte packetEnd = 0xF2;
 //Example packet for systemOn event
 const byte systemOnPacket[] = {packetBegin, 0x01, 0x00, PacketType::pSystemOn, 0x00, 0x00, 0x00, packetEnd};
 
-enum ActionType {
+#endif /* USING_PACKET_PARSING */
+
+#ifdef USING_PACKET_ENUM
+enum PROGMEM ActionType {
     RELAY_ACTION = 1,
     DEVICE_ACTION = 2,
     RETRANSMIT_ACTION = 3,
     LCD_BACKLIGHT_SET = 4,
 };
 
-enum DeviceId {
+enum PROGMEM DeviceId {
     DEVICE_LCD = -1,
 };
+
+#endif /* USING_PACKET_ENUM */
 
 #endif /* __PACKET_DEFS_H__ */
