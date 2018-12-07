@@ -103,7 +103,7 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
 void parseXmlTiny(const char *str) {
     Serial.println("PARSING XML");
     TiXmlDocument *doc = new TiXmlDocument();
-    doc->Parse(str);
+    doc->Parse(str, NULL, TIXML_ENCODING_UTF8);
     Serial.println("EXECUTING XML");
     TiXmlHandle *handle = new TiXmlHandle(doc);
     TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
@@ -168,26 +168,17 @@ void parseXmlTiny(const char *str) {
 
 #pragma region callback
 HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
-    Serial.println("START PARSING");
+    Serial.println("START ACCEPTING");
     return 0;
 }
 
 HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf, size_t len)) {
-    Serial.println("IN PARSING");
-    if (server_response->body != NULL) {
-        Serial.println("NOT EMPTY");
-        server_response->body = REALLOC_HEAP(server_response->body, strlen(server_response->body) + strlen(buf), char);
-        strncat(server_response->body, buf, len);
-    } else {
-        Serial.println("EMPTY");
-        server_response->body = CALLOC_HEAP(strlen(buf) + 1, char);
-        strncpy(server_response->body, buf, len);
-    }
+    server_response->body = CALLOC_HEAP(strlen(buf) + 1, char);
+    strncpy(server_response->body, buf, len);
     return 0;
 }
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
-    Serial.println("STOP PARSING");
     Serial.print(server_response->body);
     parseXmlTiny(server_response->body);
     FREE_HEAP(server_response->body);

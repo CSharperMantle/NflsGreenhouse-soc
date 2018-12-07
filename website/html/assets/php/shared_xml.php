@@ -34,15 +34,15 @@
     function xml_print_action(int $type, int $target_id, string $param) {
         /*
         <action>
-            <type>1</type>
-            <target_id>22</target_id>
-            <param>1</param>
+        <type>1</type>
+        <target_id>22</target_id>
+        <param>1</param>
         </action>
         */
         print "<action>";
-        print "    <type>$type</type>";
-        print "    <target_id>$target_id</target_id>";
-        print "    <param>$param</param>";
+        print "<type>$type</type>";
+        print "<target_id>$target_id</target_id>";
+        print "<param>$param</param>";
         print "</action>";
     }
 
