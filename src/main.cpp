@@ -8,8 +8,7 @@
 #define PT_USE_SEM
 
 #define USING_PACKET_ENUM
-
-
+#define USING_PACKET_MARCO
 
 #include <stdlib.h>
 #include <string.h>
@@ -125,19 +124,22 @@ void parseJsonCJson(const char *str) {
         int action_type = cJSON_GetObjectItemCaseSensitive(each_action, "action_type")->valueint;
         switch (action_type)
         {
-            case ActionType::RELAY_ACTION:
-                int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
-                int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
-                pinMode(target_id, OUTPUT);
-                if (param == 0) {
-                    Serial.println(String("OFF action on ") + String(target_id));
-                    digitalWrite(target_id, LOW);
-                } else {
-                    Serial.println(String("ON action on ") + String(target_id));
-                    digitalWrite(target_id, HIGH);
-                }
-                break;
+            case ActionType::RELAY_ACTION: 
+            {
+                    int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
+                    int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
+                    pinMode(target_id, OUTPUT);
+                    if (param == 0) {
+                        Serial.println(String("OFF action on ") + String(target_id));
+                        digitalWrite(target_id, LOW);
+                    } else {
+                        Serial.println(String("ON action on ") + String(target_id));
+                        digitalWrite(target_id, HIGH);
+                    }
+            }
+            break;
             case ActionType::DEVICE_ACTION:
+            {
                 int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
                 const char* param = cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring;
                 switch (target_id)
@@ -152,19 +154,28 @@ void parseJsonCJson(const char *str) {
                         Serial.println(String("Unknown device: ") + String(target_id));
                         break;
                 }
-                break;
+            }
+            break;
+            
             case ActionType::RETRANSMIT_ACTION:
+            {
                 // Retransmitting requested
                 //TODO: Add retransmitter
                 Serial.println("RETRANS action");
+            }
                 break;
-            case ActionType::LCD_BACKLIGHT_SET:
-                int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
-                int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
-                Serial.println(String("BKLT action on ") + String(target_id));
-                screen->setBacklight(param);
-            default:
+            case ActionType::LCD_BACKLIGHT_SET: 
+            {
+                    int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
+                    int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
+                    Serial.println(String("BKLT action on ") + String(target_id));
+                    screen->setBacklight(param);
+            }
+            break;
+            default: 
+            {
                 Serial.println(String("Unknown JSON action received: ") + String(action_type));
+            }
                 break;
         }
     }

@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <WString.h>
 
+#ifdef USING_PACKET_MARCO
 #define PACKET_SIZE(packet, type) (sizeof(packet) / sizeof(type))
 #define MALLOC_HEAP(size, type) ((type *)malloc((size) * sizeof(type)))
 #define CALLOC_HEAP(n_elem, type) ((type *)calloc((n_elem), sizeof(type)))
@@ -28,6 +29,7 @@ if (pointer != NULL) { \
     free(pointer); \
     pointer = NULL; \
 }
+#endif
 
 #ifdef USING_PACKET_PARSING
 typedef enum {
