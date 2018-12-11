@@ -210,7 +210,8 @@ HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
 
 void printLicenseInfo() {
     Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
-    Serial.println("Libs in use: TinyXML by Lee Thomason");
+    Serial.println("Libs in use:");
+    Serial.println("cJSON by Dave Gamble and cJSON contributors");
     Serial.println("ProtoThreads by Adam Dunkels");
     Serial.println("HttpParser by Joyent, Inc. and other Node contributors");
     Serial.println("");
