@@ -9,14 +9,7 @@
 
 #define USING_PACKET_ENUM
 
-#define CJSON_CHECK_PTR(ptr) \
-if (!ptr) { \
-    Serial.println("ERROR found."); \
-    Serial.println(cJSON_GetErrorPtr()); \
-    return; \
-}
-#define CJSON_DEL_PTR(ptr) \
-if (ptr) cJSON_Delete(ptr);
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +22,7 @@ if (ptr) cJSON_Delete(ptr);
 #include <pt.h>
 #include <tinyxml.h>
 #include <cJSON.h>
+#include <cJSON_Marcos.h>
 #include <packet_defs.h>
 #include <http_parser.h>
 
@@ -112,11 +106,70 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
 
 void parseJsonCJson(const char *str) {
     Serial.println("PARSING JSON");
+
+    Serial.println("    SCANNING TIMESTAMP");
     cJSON *root = cJSON_Parse(str);
     CJSON_CHECK_PTR(root);
-    Serial.println("EXECUTING JSON");
     cJSON *timestamp = cJSON_GetObjectItemCaseSensitive(root, "timestamp");
     CJSON_CHECK_PTR(timestamp);
+    cJSON *timestamp_hour = cJSON_GetObjectItemCaseSensitive(timestamp, "hour");
+    cJSON *timestamp_minute = cJSON_GetObjectItemCaseSensitive(timestamp, "minute");
+    cJSON *timestamp_second = cJSON_GetObjectItemCaseSensitive(timestamp, "second");
+    //TODO: Add logics here for time-based activities.
+    Serial.println("    TIMESTAMP DONE.");
+
+    Serial.println("    EXECUTING REQUESTED ACTIVITIES");
+    cJSON *actions = cJSON_GetObjectItemCaseSensitive(root, "actions");
+    CJSON_CHECK_PTR(actions);
+    for (cJSON *each_action = actions->child; each_action; each_action = each_action->next ) {
+        int action_type = cJSON_GetObjectItemCaseSensitive(each_action, "action_type")->valueint;
+        switch (action_type)
+        {
+            case ActionType::RELAY_ACTION:
+                int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
+                int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
+                pinMode(target_id, OUTPUT);
+                if (param == 0) {
+                    Serial.println(String("OFF action on ") + String(target_id));
+                    digitalWrite(target_id, LOW);
+                } else {
+                    Serial.println(String("ON action on ") + String(target_id));
+                    digitalWrite(target_id, HIGH);
+                }
+                break;
+            case ActionType::DEVICE_ACTION:
+                int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
+                const char* param = cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring;
+                switch (target_id)
+                {
+                    case DeviceId::DEVICE_LCD:
+                        Serial.println(String("DISPLAY action on ") + String(target_id));
+                        screen->clear();
+                        screen->home();
+                        screen->print(param);
+                        break;
+                    default:
+                        Serial.println(String("Unknown device: ") + String(target_id));
+                        break;
+                }
+                break;
+            case ActionType::RETRANSMIT_ACTION:
+                // Retransmitting requested
+                //TODO: Add retransmitter
+                Serial.println("RETRANS action");
+                break;
+            case ActionType::LCD_BACKLIGHT_SET:
+                int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
+                int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
+                Serial.println(String("BKLT action on ") + String(target_id));
+                screen->setBacklight(param);
+            default:
+                Serial.println(String("Unknown JSON action received: ") + String(action_type));
+                break;
+        }
+    }
+    Serial.println("    ACTIVITIES EXECUTED");
+    
     CJSON_DEL_PTR(root);
     Serial.println("DONE PARSING");
 }
