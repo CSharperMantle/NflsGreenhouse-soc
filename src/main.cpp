@@ -9,6 +9,15 @@
 
 #define USING_PACKET_ENUM
 
+#define CJSON_CHECK_PTR(ptr) \
+if (!ptr) { \
+    Serial.println("ERROR found."); \
+    Serial.println(cJSON_GetErrorPtr()); \
+    return; \
+}
+#define CJSON_DEL_PTR(ptr) \
+if (ptr) cJSON_Delete(ptr);
+
 #include <stdlib.h>
 #include <string.h>
 #include <Arduino.h>
@@ -19,6 +28,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <tinyxml.h>
+#include <cJSON.h>
 #include <packet_defs.h>
 #include <http_parser.h>
 
@@ -98,6 +108,17 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
     clearResetScreen(lcd);
     lcd->print(text);
     delay(delayMillisecond);
+}
+
+void parseJsonCJson(const char *str) {
+    Serial.println("PARSING JSON");
+    cJSON *root = cJSON_Parse(str);
+    CJSON_CHECK_PTR(root);
+    Serial.println("EXECUTING JSON");
+    cJSON *timestamp = cJSON_GetObjectItemCaseSensitive(root, "timestamp");
+    CJSON_CHECK_PTR(timestamp);
+    CJSON_DEL_PTR(root);
+    Serial.println("DONE PARSING");
 }
 
 void parseXmlTiny(const char *str) {
