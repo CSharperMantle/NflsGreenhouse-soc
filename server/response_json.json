@@ -1,0 +1,36 @@
+{
+    "timestamp":
+    {
+        "hour":"12",
+        "minute":"44",
+        "second":"21"
+    },
+    "actions":
+    [
+        {
+            "action_type":1,
+            "target_id":23,
+            "param":"0"
+        },
+        {
+            "action_type":1,
+            "target_id":23,
+            "param":"0"
+        },
+        {
+            "action_type":2,
+            "target_id":-1,
+            "param":"Hello, LCD"
+        },
+        {
+            "action_type":3,
+            "target_id":null,
+            "param":null
+        },
+        {
+            "action_type":4,
+            "target_id":-1,
+            "param":"1"
+        }
+    ]
+}
