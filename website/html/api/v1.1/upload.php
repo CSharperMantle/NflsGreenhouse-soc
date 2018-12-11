@@ -108,4 +108,5 @@
   }
   $timestamp = array('hour' => date('H'), 'minute' => date('i'), 'second' => date('s'));
   $data = array('timestamp' => $timestamp, 'actions' => $actions);
+  print json_encode($data);
 ?>
