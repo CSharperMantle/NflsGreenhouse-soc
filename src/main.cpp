@@ -19,7 +19,6 @@
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
-#include <tinyxml.h>
 #include <cJSON.h>
 #include <cJSON_Marcos.h>
 #include <packet_defs.h>
@@ -184,71 +183,6 @@ void parseJsonCJson(const char *str) {
     CJSON_DEL_PTR(root);
     Serial.println("DONE PARSING");
 }
-
-void parseXmlTiny(const char *str) {
-    Serial.println("PARSING XML");
-    TiXmlDocument *doc = new TiXmlDocument();
-    doc->Parse(str, NULL, TIXML_ENCODING_UTF8);
-    Serial.println("EXECUTING XML");
-    TiXmlHandle *handle = new TiXmlHandle(doc);
-    TiXmlElement *action = handle->FirstChild("root").FirstChild("actions").FirstChild("action").ToElement();
-    TiXmlElement *timestamp = handle->FirstChild("root").FirstChild("timestamp").ToElement();
-    int hour = atoi(timestamp->FirstChild("hour")->ToText()->Value());
-    int minute = atoi(timestamp->FirstChild("minute")->ToText()->Value());
-    int second = atoi(timestamp->FirstChild("second")->ToText()->Value());
-    for ( ; action; action = action->NextSiblingElement()) {
-        TiXmlNode *type = action->FirstChildElement("type")->FirstChild();
-        TiXmlNode *targetId = action->FirstChildElement("target_id")->FirstChild();
-        TiXmlNode *param = action->FirstChildElement("param")->FirstChild();
-        int typeValue = atoi(type->ToText()->Value());
-        
-        if (typeValue == ActionType::RELAY_ACTION) {
-            // Relay action requested
-            const char *paramValue = param->ToText()->Value();
-            int targetIdValue = atoi(targetId->ToText()->Value());
-            pinMode(targetIdValue, OUTPUT);
-            if (!strcmp(paramValue, "0")) {
-                Serial.println(String("OFF action on ") + String(targetIdValue));
-                digitalWrite(targetIdValue, LOW);
-            } else {
-                Serial.println(String("ON action on ") + String(targetIdValue));
-                digitalWrite(targetIdValue, HIGH);
-            }
-        } else if (typeValue == ActionType::DEVICE_ACTION) {
-            // Action with other devices requested
-            int targetIdValue = atoi(targetId->ToText()->Value());
-            const char *paramValue = param->ToText()->Value();
-            if (targetIdValue == DeviceId::DEVICE_LCD)
-            {
-                Serial.println(String("DISPLAY action on ") + String(targetIdValue));
-                screen->clear();
-                screen->home();
-                screen->print(paramValue);
-            } else {
-                Serial.println(String("Unknown device: ") + String(targetIdValue));
-            }
-            //TODO: Add more devices
-        } else if (typeValue == ActionType::RETRANSMIT_ACTION) {
-            // Retransmitting requested
-            //TODO: Add retransmitter
-            Serial.println("RETRANS action");
-        } else if (typeValue == ActionType::LCD_BACKLIGHT_SET) {
-            // LCD backlight setting requested
-            const char *paramValue = param->ToText()->Value();
-            int targetIdValue = atoi(targetId->ToText()->Value());
-            Serial.println(String("BKLT action on ") + String(targetIdValue));
-            screen->setBacklight(atoi(paramValue));
-        }
-        else {
-            Serial.println(String("Unknown XML action received: ") + String(typeValue));
-        }
-    }
-
-    //FIXME: Maybe a bug
-    delete handle;
-    delete doc;
-    Serial.println("DONE PARSING XML");
-}
 #pragma endregion
 
 #pragma region callback
@@ -265,7 +199,7 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
     Serial.print(server_response->body);
-    parseXmlTiny(server_response->body);
+    parseJsonCJson(server_response->body);
     FREE_HEAP(server_response->body);
     Serial.println("ALL DONE");
     return 0;
@@ -369,7 +303,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
         Serial.println("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
 
-        webUploader->print(String("GET /api/v1.0/upload.php?air_temp=") + String(currentAirTemp) \
+        webUploader->print(String("GET /api/v1.1/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
                 + String("&air_light=") + String(currentLightValue) \
                 + String("&ground_hum=") + String(currentGroundHum) \
