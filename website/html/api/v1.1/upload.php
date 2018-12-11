@@ -9,7 +9,6 @@
   require '..\\..\\assets\\php\\shared_util.php';
   require '..\\..\\assets\\php\\shared_sql.php';
   require '..\\..\\assets\\php\\shared_json.php';
-  require '..\\..\\assets\\php\\shared_json.php';
   require '..\\..\\assets\\php\\shared_const.php';
 
   date_default_timezone_set('PRC');
