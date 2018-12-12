@@ -11,6 +11,8 @@
   require 'assets\\php\\shared_xml.php';
   require 'assets\\php\\shared_const.php';
 
+  session_start();
+
   try {
     $db = DBConnectionSingleton::getInstance();
 

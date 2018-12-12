@@ -10,6 +10,8 @@
   require 'assets\\php\\shared_html.php';
   require 'assets\\php\\shared_xml.php';
 
+  session_start();
+
   try {
     $db = DBConnectionSingleton::getInstance();
 
