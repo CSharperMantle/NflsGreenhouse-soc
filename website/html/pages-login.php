@@ -10,8 +10,6 @@
   require 'assets\\php\\shared_html.php';
   require 'assets\\php\\shared_util.php';
 
-  session_start();
-
   $user_not_registered = false;
   $user_password_wrong = false;
   if (array_key_exists('username', $_POST) && array_key_exists('password', $_POST)) {

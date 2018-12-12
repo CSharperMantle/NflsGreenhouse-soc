@@ -7,8 +7,6 @@
    */
     require 'assets\\php\\shared_html.php';
 
-    session_start();
-
     set_session_logged_off();
     redirect_to('index.php');
 ?>
