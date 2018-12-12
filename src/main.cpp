@@ -356,7 +356,7 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
 
-    logger->Debug("Init done.");
+    logger->Info("Init done.");
 }
 
 void loop() {
