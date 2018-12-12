@@ -9,6 +9,7 @@
   require 'assets\\php\\shared_db.php';
   require 'assets\\php\\shared_html.php';
   require 'assets\\php\\shared_xml.php';
+  require 'assets\\php\\shared_const.php';
 
   try {
     $db = DBConnectionSingleton::getInstance();
