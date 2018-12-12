@@ -11,6 +11,10 @@
   require '..\\..\\assets\\php\\shared_xml.php';
   require '..\\..\\assets\\php\\shared_const.php';
 
+  http_response_code(410);
+  header('Reason: Deprecated API');
+  exit();
+
   date_default_timezone_set('PRC');
 
   if ((!isset($_GET['air_temp'])) || (!isset($_GET['air_hum'])) || (!isset($_GET['air_light'])) || (!isset($_GET['ground_hum']))) {
@@ -50,7 +54,7 @@
     http_response_code(406);
     exit();
   }
-  
+
   // Air checks - temp
   if ($air_temp > airTempSwitchValveHigh) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_TEMP, AlertType::HIGH));

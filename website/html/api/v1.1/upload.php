@@ -36,7 +36,8 @@
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
   catch (PDOException $e) {
-    exit(500);
+    http_response_code(500);
+    exit();
   }
 
   $actions = array();
