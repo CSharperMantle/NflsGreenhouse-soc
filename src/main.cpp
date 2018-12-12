@@ -22,6 +22,7 @@
 #include <cJSON.h>
 #include <cJSON_Marcos.h>
 #include <packet_defs.h>
+#include <logger.hpp>
 #include <http_parser.h>
 
 #pragma region constant
@@ -76,6 +77,7 @@ struct ServerResponse {
     char *body = NULL;
 };
 ServerResponse *server_response = new ServerResponse();
+Logger *logger = new Logger(&Serial);
 #pragma endregion
 
 #pragma region var
@@ -103,9 +105,9 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
 }
 
 void parseJsonCJson(const char *str) {
-    Serial.println("PARSING JSON");
+    logger->Info("PARSING JSON");
 
-    Serial.println("    SCANNING TIMESTAMP");
+    logger->Debug("    SCANNING TIMESTAMP");
     cJSON *root = cJSON_Parse(str);
     CJSON_CHECK_PTR(root);
     cJSON *timestamp = cJSON_GetObjectItemCaseSensitive(root, "timestamp");
@@ -114,9 +116,9 @@ void parseJsonCJson(const char *str) {
     cJSON *timestamp_minute = cJSON_GetObjectItemCaseSensitive(timestamp, "minute");
     cJSON *timestamp_second = cJSON_GetObjectItemCaseSensitive(timestamp, "second");
     //TODO: Add logics here for time-based activities.
-    Serial.println("    TIMESTAMP DONE.");
+    logger->Debug("    TIMESTAMP DONE.");
 
-    Serial.println("    EXECUTING REQUESTED ACTIVITIES");
+    logger->Debug("    EXECUTING REQUESTED ACTIVITIES");
     cJSON *actions = cJSON_GetObjectItemCaseSensitive(root, "actions");
     CJSON_CHECK_PTR(actions);
     for (cJSON *each_action = actions->child; each_action; each_action = each_action->next ) {
@@ -129,10 +131,10 @@ void parseJsonCJson(const char *str) {
                     int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
                     pinMode(target_id, OUTPUT);
                     if (param == 0) {
-                        Serial.println(String("OFF action on ") + String(target_id));
+                        logger->Debug(String("OFF action on ") + String(target_id));
                         digitalWrite(target_id, LOW);
                     } else {
-                        Serial.println(String("ON action on ") + String(target_id));
+                        logger->Debug(String("ON action on ") + String(target_id));
                         digitalWrite(target_id, HIGH);
                     }
             }
@@ -144,13 +146,13 @@ void parseJsonCJson(const char *str) {
                 switch (target_id)
                 {
                     case DeviceId::DEVICE_LCD:
-                        Serial.println(String("DISPLAY action on ") + String(target_id));
+                        logger->Debug(String("DISPLAY action on ") + String(target_id));
                         screen->clear();
                         screen->home();
                         screen->print(param);
                         break;
                     default:
-                        Serial.println(String("Unknown device: ") + String(target_id));
+                        logger->Debug(String("Unknown device: ") + String(target_id));
                         break;
                 }
             }
@@ -160,34 +162,34 @@ void parseJsonCJson(const char *str) {
             {
                 // Retransmitting requested
                 //TODO: Add retransmitter
-                Serial.println("RETRANS action");
+                logger->Debug("RETRANS action");
             }
                 break;
             case ActionType::LCD_BACKLIGHT_SET: 
             {
                     int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
                     int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
-                    Serial.println(String("BKLT action on ") + String(target_id));
+                    logger->Debug(String("BKLT action on ") + String(target_id));
                     screen->setBacklight(param);
             }
             break;
             default: 
             {
-                Serial.println(String("Unknown JSON action received: ") + String(action_type));
+                logger->Debug(String("Unknown JSON action received: ") + String(action_type));
             }
                 break;
         }
     }
-    Serial.println("    ACTIVITIES EXECUTED");
+    logger->Debug("    ACTIVITIES EXECUTED");
     
     CJSON_DEL_PTR(root);
-    Serial.println("DONE PARSING");
+    logger->Info("DONE PARSING");
 }
 #pragma endregion
 
 #pragma region callback
 HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
-    Serial.println("START ACCEPTING");
+    logger->Debug("START ACCEPTING");
     return 0;
 }
 
@@ -198,10 +200,10 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
 }
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
-    Serial.print(server_response->body);
+    logger->Debug(server_response->body);
     parseJsonCJson(server_response->body);
     FREE_HEAP(server_response->body);
-    Serial.println("ALL DONE");
+    logger->Debug("ALL DONE");
     return 0;
 }
 #pragma endregion
@@ -209,12 +211,12 @@ HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
 #pragma region init_script
 
 void printLicenseInfo() {
-    Serial.println("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
-    Serial.println("Libs in use:");
-    Serial.println("cJSON by Dave Gamble and cJSON contributors");
-    Serial.println("ProtoThreads by Adam Dunkels");
-    Serial.println("HttpParser by Joyent, Inc. and other Node contributors");
-    Serial.println("");
+    logger->Info("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
+    logger->Info("Libs in use:");
+    logger->Info("cJSON by Dave Gamble and cJSON contributors");
+    logger->Info("ProtoThreads by Adam Dunkels");
+    logger->Info("HttpParser by Joyent, Inc. and other Node contributors");
+    logger->Info("");
     screen->setBacklight(true);
     clearResetScreen(screen);
     screen->print("Provided under");
@@ -232,50 +234,50 @@ void printLicenseInfo() {
 void initSerial() {
     Serial.begin(115200);
     Serial.flush();
-    Serial.println("Serial opened.");
+    logger->Debug("Serial opened.");
 }
 
 void initEthernet() {
-    Serial.println("Initializing Ethernet");
+    logger->Info("Initializing Ethernet");
     for (int index = 1; index <= 5; index++) {
         if (Ethernet.begin(const_cast<byte *>(mac)) == 0) {
-            Serial.println(String("DHCP failed. Retry ") + String(index));
+            logger->Error(String("DHCP failed. Retry ") + String(index));
             clearWriteScreen(screen, (String("ETH ERR: ") + String(index)).c_str(), 300);
         } else {
-            Serial.println("DHCP OK.");
-            Serial.println("    Ethernet information: IP, DNS, Gateway");
-            Serial.println(Ethernet.localIP());
-            Serial.println(Ethernet.dnsServerIP());
-            Serial.println(Ethernet.gatewayIP());
+            logger->Debug("DHCP OK.");
+            logger->Debug("    Ethernet information: IP, DNS, Gateway");
+            logger->Debug(String(Ethernet.localIP()));
+            logger->Debug(String(Ethernet.dnsServerIP()));
+            logger->Debug(String(Ethernet.gatewayIP()));
             clearWriteScreen(screen, "ETH OK", 300);
             break;
         }
     }
-    Serial.println("Done.");
+    logger->Info("Done.");
 
-    Serial.println("Setting up HTTP Parser");
+    logger->Info("Setting up HTTP Parser");
     clearWriteScreen(screen, "PARSER SETUP", 300);
     http_parser_settings_init(httpParserSettings);
     http_parser_init(httpParser, http_parser_type::HTTP_RESPONSE);
     httpParserSettings->on_body = onBodyReceivedCallback;
     httpParserSettings->on_message_begin = onMessageBeginCallback;
     httpParserSettings->on_message_complete = onMessageEndCallback;
-    Serial.println("Done.");
+    logger->Info("Done.");
 }
 
 void initLcd() {
-    Serial.println("Initializing LCD");
+    logger->Info("Initializing LCD");
     screen->init();
     screen->clear();
     screen->setBacklight(true);
-    Serial.println("Done.");
+    logger->Info("Done.");
 }
 
 void initDht() {
-    Serial.println("Initializing DHT");
+    logger->Info("Initializing DHT");
     airSensor->setup(dhtPin, DHT::DHT_MODEL_t::DHT11);
-    Serial.println(airSensor->getStatusString());
-    Serial.println("Done.");
+    logger->Debug(airSensor->getStatusString());
+    logger->Info("Done.");
 }
 
 #pragma endregion
@@ -284,10 +286,10 @@ void initDht() {
 
 PT_THREAD(maintainEthernet(pt *pt)) {
     PT_BEGIN(pt);
-    Serial.println("Maintaining Ethernet connection");
+    logger->Info("Maintaining Ethernet connection");
     Ethernet.maintain();
     PT_YIELD(pt);
-    Serial.println("Done.");
+    logger->Info("Done.");
     PT_TIMER_DELAY(pt, maintainEthernetInterval);
     PT_END(pt);
 }
@@ -299,9 +301,9 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     currentAirTemp = airSensor->getTemperature();
     currentAirHum = airSensor->getHumidity();
 
-    Serial.println("Uploading sensor data");
+    logger->Info("Uploading sensor data");
     if (webUploader->connect(webServerIp, webServerPort)) {
-        Serial.println("Connection established.");
+        logger->Debug("Connection established.");
         clearWriteScreen(screen, "DATA UPLOAD", 300);
 
         webUploader->print(String("GET /api/v1.1/upload.php?air_temp=") + String(currentAirTemp) \
@@ -328,12 +330,12 @@ PT_THREAD(uploadSensorData(pt *pt)) {
             http_parser_execute(httpParser, httpParserSettings, respond.c_str(), strlen(respond.c_str()));
         }
         webUploader->stop();
-        Serial.println("Done. Connection closed.");
+        logger->Info("Done. Connection closed.");
         delay(1000);
         clearWriteScreen(screen, "DATA UPLOADED", 300);
         break;
     } else {
-        Serial.println("Connection broke.");
+        logger->Error("Connection broke.");
         webUploader->flush();
         webUploader->stop();
     }
@@ -354,7 +356,7 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
 
-    Serial.println("Init done.");
+    logger->Debug("Init done.");
 }
 
 void loop() {
