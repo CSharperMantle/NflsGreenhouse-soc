@@ -190,6 +190,7 @@ void parseJsonCJson(const char *str) {
 #pragma region callback
 HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
     logger->Debug("START ACCEPTING");
+    clearResetScreen(screen);
     return 0;
 }
 
@@ -304,7 +305,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     logger->Info("Uploading sensor data");
     if (webUploader->connect(webServerIp, webServerPort)) {
         logger->Debug("Connection established.");
-        clearWriteScreen(screen, "DATA UPLOAD", 300);
 
         webUploader->print(String("GET /api/v1.1/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
@@ -319,12 +319,10 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 ""));
         {
             String respond = String();
-            clearResetScreen(screen);
             do
             {
                 String str = webUploader->readString();
                 respond += str;
-                clearWriteScreen(screen, str.c_str(), 1000);
             } while (webUploader->available());
             http_parser_init(httpParser, HTTP_RESPONSE);
             http_parser_execute(httpParser, httpParserSettings, respond.c_str(), strlen(respond.c_str()));
@@ -332,7 +330,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
         webUploader->stop();
         logger->Info("Done. Connection closed.");
         delay(1000);
-        clearWriteScreen(screen, "DATA UPLOADED", 300);
         break;
     } else {
         logger->Error("Connection broke.");
