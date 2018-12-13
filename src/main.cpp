@@ -21,7 +21,7 @@
 #include <pt.h>
 #include <cJSON.h>
 #include <cJSON_Marcos.h>
-#include <packet_defs.h>
+#include <packet_defs.hpp>
 #include <logger.hpp>
 #include <http_parser.h>
 

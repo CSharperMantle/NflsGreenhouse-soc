@@ -12,8 +12,8 @@
 */
 
 #pragma once
-#ifndef __PACKET_DEFS_H__
-#define __PACKET_DEFS_H__
+#ifndef __PACKET_DEFS__HPP__
+#define __PACKET_DEFS__HPP__
 #include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -66,4 +66,4 @@ enum PROGMEM DeviceId {
 
 #endif /* USING_PACKET_ENUM */
 
-#endif /* __PACKET_DEFS_H__ */
+#endif /* __PACKET_DEFS__HPP__ */

@@ -4,14 +4,14 @@
  * Written by Mantle Jonse and Jones Ma.
  * Defined methods in "packet_parser.h"
  * Dependencies:
- * "packet_parser.h"
- * |--"packet_defs.h"
+ * "packet_parser.hpp"
+ * |--"packet_defs.hpp"
  *    |--<stdint.h>
  *    |--<stddef.h>
  *    |--<stdlib.h>
  * Licensed under GNU GPLv3
 */
-#include "packet_parser.h"
+#include "packet_parser.hpp"
 
 #ifdef USING_PACKET_PARSING
 bool isPacket(byte *packet) {
