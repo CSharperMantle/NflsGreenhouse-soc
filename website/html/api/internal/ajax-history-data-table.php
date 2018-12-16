@@ -2,6 +2,7 @@
     require '..\\..\\assets\\php\\shared_db.php';
     require '..\\..\\assets\\php\\shared_util.php';
     require '..\\..\\assets\\php\\shared_sql.php';
+    require '..\\..\\assets\\php\\shared_html.php';
 
     try {
         $db = DBConnectionSingleton::getInstance();
