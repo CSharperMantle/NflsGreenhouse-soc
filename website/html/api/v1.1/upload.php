@@ -49,7 +49,7 @@
   }
   catch (PDOException $e) {
     http_response_code(406);
-    exit();
+    print $e;
   }
   
   // Air checks - temp

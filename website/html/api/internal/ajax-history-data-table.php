@@ -12,6 +12,8 @@
     }
 
     $all_commits = run_query_fetch_multi($db, FETCH_ALL_HISTORY_DATA_SQL);
+    
+    $data_array = array();
 
     foreach ($all_commits as $key => $value) {
         $_air_temp = $value['air_temp'];

@@ -195,6 +195,7 @@
             print_alert(AlertInfo::DANGER, '使用了不支持的设置！', 'JavaScript加载失败。大部分功能将不能正常工作。');
           ?>
         </noscript>
+        <div id="alert-div">
         <?php
             if (isset($error_occur)) {
               print_alert(AlertInfo::DANGER, '错误！', '加载页面时出错。页面不会正常工作。');
@@ -252,7 +253,8 @@
             if (!isset($is_all_fine)) {
               print_alert(AlertInfo::GOOD, '放心！', '一切正常。');
             }
-          ?>
+        ?>
+        </div>
       </div>
 
       <div class="row">
@@ -324,7 +326,7 @@
                 </thead>
                 <tbody id="history-data-table-tbody">
                 <?php
-                  /*foreach ($all_commits as $key => $value) {
+                  foreach ($all_commits as $key => $value) {
                     $_air_temp = $value['air_temp'];
                     $_air_light = $value['air_light'];
                     $_air_hum = $value['air_hum'];
@@ -332,7 +334,7 @@
                     $_timestamp = $value['timestamp'];
                     $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
                     print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
-                  }*/
+                  }
                 ?>
                 </tbody>
               </table>
