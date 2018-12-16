@@ -5,6 +5,7 @@ var App = (() => {
         setInterval(() => {
             $.get('api/internal/ajax-history-data-table.php', (result) => {
                 $('#history-data-table-tbody').html = result;
+                console.log("ajax applied");
             });
         }, 1000);
     }
