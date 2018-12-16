@@ -37,7 +37,7 @@
     $result = run_query_fetch($db, FETCH_LATEST_GROUND_HUM_ALERT_SQL);
     $ground_hum_is_ok = $result['is_ok'];
 
-    $all_commits = run_query_fetch_multi($db, FETCH_ALL_SQL);
+    $all_commits = run_query_fetch_multi($db, FETCH_ALL_HISTORY_DATA_SQL);
     
     $now = new DateTime();
 
@@ -312,7 +312,7 @@
               </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">
-              <table id="table2" class="table table-striped table-hover table-fw-widget">
+              <table id="history-data-table" class="table table-striped table-hover table-fw-widget">
                 <thead>
                   <tr>
                     <th>时间</th>
@@ -322,17 +322,17 @@
                     <th>光强度</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="history-data-table-tbody">
                 <?php
-                    foreach ($all_commits as $key => $value) {
-                      $_air_temp = $value['air_temp'];
-                      $_air_light = $value['air_light'];
-                      $_air_hum = $value['air_hum'];
-                      $_ground_hum = $value['ground_hum'];
-                      $_timestamp = $value['timestamp'];
-                      $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
-                      print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
-                    }
+                  foreach ($all_commits as $key => $value) {
+                    $_air_temp = $value['air_temp'];
+                    $_air_light = $value['air_light'];
+                    $_air_hum = $value['air_hum'];
+                    $_ground_hum = $value['ground_hum'];
+                    $_timestamp = $value['timestamp'];
+                    $_oddity = (($key + 1) % 2) == 0 ? 'odd' : 'even';
+                    print_all_commits_each_item($_timestamp, $_oddity, $_air_temp, $_air_hum, $_ground_hum, $_air_light);
+                  }
                 ?>
                 </tbody>
               </table>
@@ -637,6 +637,7 @@
   <script src="assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
   <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
   <script src="assets/js/app-dashboard.js.php" type="text/javascript"></script>
+  <script src="assets/js/app-dashboard-ajax.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
@@ -651,6 +652,7 @@
       App.init();
       App.dashboard();
       App.dataTables();
+      App.ajax_apply();
     });
   </script>
   <script type="text/javascript">

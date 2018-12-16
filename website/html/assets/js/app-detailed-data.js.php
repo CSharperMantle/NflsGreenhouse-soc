@@ -9,9 +9,9 @@
   	$air_light_query = array_reverse(run_query_fetch_multi($db, FETCH_AIR_LIGHT_SQL));
   	$ground_hum_query = array_reverse(run_query_fetch_multi($db, FETCH_GROUND_HUM_SQL));
 ?>
-var App = (function () {
+var App = (() => {
 	'use strict';
-	App.ChartJs = function() {
+	App.ChartJs = () => {
  		function airTempLineChart() {
  			var appPrimaryColor = tinycolor( App.color.primary );
 			var appPrimaryColorLighten = tinycolor( App.color.primary ).lighten( 22 );
