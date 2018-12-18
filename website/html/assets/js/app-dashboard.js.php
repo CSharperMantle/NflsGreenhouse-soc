@@ -5,10 +5,10 @@
   $db = DBConnectionSingleton::getInstance();
 ?>
 
-var App = (function () {
+var App = (() => {
   'use strict';
   
-  App.dashboard = function( ){
+  App.dashboard = () => {
 
     //Counter
     function counter(){
@@ -177,7 +177,7 @@ var App = (function () {
     $("#table1").dataTable();
 
     //Remove search & paging dropdown
-    $("#table2").dataTable({
+    $("#history-data-table").dataTable({
       pageLength: 5,
       dom:  "<'row be-datatable-body'<'col-sm-12'tr>>" +
             "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"

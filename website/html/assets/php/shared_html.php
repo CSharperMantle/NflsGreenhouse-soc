@@ -10,15 +10,13 @@
     const USER_PASSWORD_WRONG_MESSAGE = "<div class=\"alert-danger\">密码或用户名错误</div>";
 
     function print_all_commits_each_item(string $timestamp, string $oddity, string $air_temp, string $air_hum, string $air_light, string $ground_hum) {
-        print "
-            <tr class=\"$oddity\">
-                <td>$timestamp</td>
-                <td>$air_temp</td>
-                <td>$air_hum</td>
-                <td>$air_light</td>
-                <td>$ground_hum</td>
-            </tr>
-        ";
+        print "<tr class=\"$oddity\">" .
+                "<td>$timestamp</td>" .
+                "<td>$air_temp</td>" .
+                "<td>$air_hum</td>" .
+                "<td>$air_light</td>" .
+                "<td>$ground_hum</td>" .
+            "</tr>";
     }
 
     function print_user_info() {
@@ -44,76 +42,68 @@
     function print_user_status(string $username, string $current_status) {
         if ($current_status == 'online') $text = '在线';
         else $text = '离线';
-        print "
-            <div class=\"user-name\">$username</div>
-            <div class=\"user-position $current_status\">$text</div>
-        ";
+        print "<div class=\"user-name\">$username</div>" .
+            "<div class=\"user-position $current_status\">$text</div>";
     }
 
     function print_login_button() {
-        print "
-            <a href=\"pages-login.php\" class=\"dropdown-item\">
-                <span class=\"icon mdi mdi-power\"></span> 登录
-            </a>
-        ";
+        print "<a href=\"pages-login.php\" class=\"dropdown-item\">" .
+                "<span class=\"icon mdi mdi-power\"></span> 登录" .
+            "</a>";
     }
 
     function print_logoff_button() {
-        print "
-            <a href=\"pages-logoff.php\" class=\"dropdown-item\">
-                <span class=\"icon mdi mdi-power\"></span> 注销
-            </a>
-        ";
+        print "<a href=\"pages-logoff.php\" class=\"dropdown-item\">" .
+                "<span class=\"icon mdi mdi-power\"></span> 注销" .
+            "</a>";
     }
 
     function print_settings_button() {
-        print "
-            <a href=\"pages-settings.php\" class=\"dropdown-item\">
-                <span class=\"icon mdi mdi-settings\"></span> 设置
-            </a>
-        ";
+        print "<a href=\"pages-settings.php\" class=\"dropdown-item\">" .
+                "<span class=\"icon mdi mdi-settings\"></span> 设置" .
+            "</a>";
     }
 
     function print_alert(int $alert_info, string $strong, string $caption) {
         switch ($alert_info) {
             case AlertInfo::GOOD:
-                print " <div role=\"alert\" class=\"alert alert-success alert-icon alert-dismissible\">
-                            <div class=\"icon\"><span class=\"mdi mdi-check\"></span></div>
+                print "<div role=\"alert\" class=\"alert alert-success alert-icon alert-dismissible\">" .
+                            "<div class=\"icon\"><span class=\"mdi mdi-check\"></span></div>" .
                             
-                            <div class=\"message\">
-                                <button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">
-                                    <span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>
-                                </button>
-                                <strong>$strong</strong> $caption
-                            </div>
-                        </div>";
+                            "<div class=\"message\">" .
+                                "<button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">" .
+                                    "<span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>" .
+                                "</button>" .
+                                "<strong>$strong</strong> $caption" .
+                            "</div>" .
+                        "</div>";
                 break;
             case AlertInfo::INFO:
-                print " <div role=\"alert\" class=\"alert alert-primary alert-icon alert-dismissible\">
-                            <div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>
-                            <div class=\"message\">
-                                <button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">
-                                    <span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>
-                                </button>
-                                <strong>$strong</strong> $caption
-                            </div>
-                        </div>";
+                print "<div role=\"alert\" class=\"alert alert-primary alert-icon alert-dismissible\">" .
+                            "<div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>" .
+                            "<div class=\"message\">" .
+                                "<button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">" .
+                                    "<span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>" .
+                                "</button>" .
+                                "<strong>$strong</strong> $caption" .
+                            "</div>" .
+                        "</div>";
                 break;
             case AlertInfo::WARNING:
-                print " <div role=\"alert\" class=\"alert alert-warning alert-icon\">
-                            <div class=\"icon\"><span class=\"mdi mdi-alert-triangle\"></span></div>
-                            <div class=\"message\">
-                                <strong>$strong</strong> $caption
-                            </div>
-                        </div>";
+                print "<div role=\"alert\" class=\"alert alert-warning alert-icon\">" .
+                            "<div class=\"icon\"><span class=\"mdi mdi-alert-triangle\"></span></div>" .
+                            "<div class=\"message\">" .
+                                "<strong>$strong</strong> $caption" .
+                            "</div>" .
+                        "</div>";
                 break;
             case AlertInfo::DANGER:
-                print " <div role=\"alert\" class=\"alert alert-danger alert-icon\">
-                            <div class=\"icon\"><span class=\"mdi mdi-close-circle-o\"></span></div>
-                            <div class=\"message\">
-                                <strong>$strong</strong> $caption
-                            </div>
-                        </div>";
+                print "<div role=\"alert\" class=\"alert alert-danger alert-icon\">" .
+                            "<div class=\"icon\"><span class=\"mdi mdi-close-circle-o\"></span></div>" .
+                            "<div class=\"message\">" .
+                                "<strong>$strong</strong> $caption" .
+                            "</div>" .
+                        "</div>";
                 break;
             
             default:

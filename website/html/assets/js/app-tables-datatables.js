@@ -1,7 +1,7 @@
-var App = (function () {
+var App = (() => {
   'use strict';
 
-  App.dataTables = function( ){
+  App.dataTables = () => {
 
     //We use this to apply style to certain elements
     $.extend( true, $.fn.dataTable.defaults, {
@@ -14,7 +14,7 @@ var App = (function () {
     $("#table1").dataTable();
 
     //Remove search & paging dropdown
-    $("#table2").dataTable({
+    $("#history-data-table").dataTable({
       pageLength: 5,
       dom:  "<'row be-datatable-body'<'col-sm-12'tr>>" +
             "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
