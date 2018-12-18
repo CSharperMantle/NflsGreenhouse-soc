@@ -106,18 +106,8 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
 
 void parseJsonCJson(const char *str) {
     logger->Info("PARSING JSON");
-
-    logger->Debug("    SCANNING TIMESTAMP");
     cJSON *root = cJSON_Parse(str);
     CJSON_CHECK_PTR(root);
-    cJSON *timestamp = cJSON_GetObjectItemCaseSensitive(root, "timestamp");
-    CJSON_CHECK_PTR(timestamp);
-    cJSON *timestamp_hour = cJSON_GetObjectItemCaseSensitive(timestamp, "hour");
-    cJSON *timestamp_minute = cJSON_GetObjectItemCaseSensitive(timestamp, "minute");
-    cJSON *timestamp_second = cJSON_GetObjectItemCaseSensitive(timestamp, "second");
-    //TODO: Add logics here for time-based activities.
-    logger->Debug("    TIMESTAMP DONE.");
-
     logger->Debug("    EXECUTING REQUESTED ACTIVITIES");
     cJSON *actions = cJSON_GetObjectItemCaseSensitive(root, "actions");
     CJSON_CHECK_PTR(actions);
