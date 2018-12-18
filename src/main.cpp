@@ -77,7 +77,7 @@ struct ServerResponse {
     char *body = NULL;
 };
 ServerResponse *server_response = new ServerResponse();
-Logger *logger = new Logger(&Serial);
+Logger *logger = new Logger(&Serial, LoggingLevel::INFO);
 #pragma endregion
 
 #pragma region var

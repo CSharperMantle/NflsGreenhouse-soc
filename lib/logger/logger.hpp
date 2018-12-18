@@ -2,45 +2,64 @@
 #define LOGGER__HPP
 
 #include <HardwareSerial.h>
+
+enum LoggingLevel {
+    DEBUG = 0,
+    INFO,
+    WARNING,
+    ERROR
+};
+
 class Logger {
 public:
-    Logger(HardwareSerial *pHS) {
-        this->serial = pHS;
+    Logger(HardwareSerial *pHardwareSerial, LoggingLevel loggingLevel) {
+        this->serial = pHardwareSerial;
+        this->loggingLevel = loggingLevel;
     }
-    Logger(HardwareSerial hs) {
-        this->serial = &hs;
+    Logger(HardwareSerial hardwareSerial, LoggingLevel loggingLevel) {
+        this->serial = &hardwareSerial;
+        this->loggingLevel = loggingLevel;
     }
     ~Logger() {
         this->serial = NULL;
     }
 
     void Info(const char *str) {
-        this->serial->println(String("[INFO]>> ") + String(str));
+        if (this->loggingLevel <= LoggingLevel::INFO)
+            this->serial->println(String("[INFO]>> ") + String(str));
     }
     void Debug(const char *str) {
-        this->serial->println(String("[DEBUG]>> ") + String(str));
+        if (this->loggingLevel <= LoggingLevel::DEBUG)
+            this->serial->println(String("[DEBUG]>> ") + String(str));
     }
     void Warning(const char *str) {
-        this->serial->println(String("[WARNING]>> ") + String(str));
+        if (this->loggingLevel <= LoggingLevel::WARNING)
+            this->serial->println(String("[WARNING]>> ") + String(str));
     }
     void Error(const char *str) {
-        this->serial->println(String("[ERROR]>> ") + String(str));
+        if (this->loggingLevel <= LoggingLevel::ERROR)
+            this->serial->println(String("[ERROR]>> ") + String(str));
     }
 
     void Info(String str) {
-        this->serial->println(String("[INFO]>> ") + str);
+        if (this->loggingLevel <= LoggingLevel::INFO)
+            this->serial->println(String("[INFO]>> ") + str);
     }
     void Debug(String str) {
-        this->serial->println(String("[DEBUG]>> ") + str);
+        if (this->loggingLevel <= LoggingLevel::DEBUG)
+            this->serial->println(String("[DEBUG]>> ") + str);
     }
     void Warning(String str) {
-        this->serial->println(String("[WARNING]>> ") + str);
+        if (this->loggingLevel <= LoggingLevel::WARNING)
+            this->serial->println(String("[WARNING]>> ") + str);
     }
     void Error(String str) {
-        this->serial->println(String("[ERROR]>> ") + str);
+        if (this->loggingLevel <= LoggingLevel::ERROR)
+            this->serial->println(String("[ERROR]>> ") + str);
     }
 private:
     HardwareSerial *serial = NULL;
+    LoggingLevel loggingLevel = LoggingLevel::ERROR;
 };
 
 #endif
