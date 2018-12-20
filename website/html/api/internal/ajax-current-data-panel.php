@@ -10,6 +10,14 @@
         exit();
     }
 
+    try {
+        $db = DBConnectionSingleton::getInstance();
+    }
+    catch (PDOException $e) {
+        http_response_code(500);
+        exit();
+    }
+
     $result = run_query_fetch($db, FETCH_LATEST_SQL);
     $air_temp = $result['air_temp'];
     $air_hum = $result['air_hum'];
