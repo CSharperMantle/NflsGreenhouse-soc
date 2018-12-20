@@ -24,7 +24,7 @@
     $air_light = $result['air_light'];
     $ground_hum = $result['ground_hum'];
 
-    switch ($_GET['id']) {
+    switch ($_POST['id']) {
         case AjaxCurrentDataType::AIR_TEMP:
             if ($air_temp > airTempSwitchValveHigh) {
                 print_panel("空气温度", $air_temp, AlertInfo::DANGER);
