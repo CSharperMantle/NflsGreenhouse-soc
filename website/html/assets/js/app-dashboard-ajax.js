@@ -1,7 +1,7 @@
 var App = (() => {
     'use strict';
 
-    App.ajax_apply = function () {
+    App.ajaxApply = () => {
         setInterval(() => {
             $('#alert-div').load('api/internal/ajax-alert-div.php');
         }, 5000);

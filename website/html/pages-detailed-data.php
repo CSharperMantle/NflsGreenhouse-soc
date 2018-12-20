@@ -179,58 +179,10 @@
         }
       ?>
       <div class="row">
-        <div class="col-lg-3">
-          <?php 
-            if ($air_temp > airTempSwitchValveHigh) {
-              print_panel("空气温度", $air_temp, AlertInfo::DANGER);
-            }
-            elseif ($air_temp < airTempSwitchValveLow) {
-              print_panel("空气温度", $air_temp, AlertInfo::WARNING);
-            }
-            else {
-              print_panel("空气温度", $air_temp, AlertInfo::GOOD);
-            }
-          ?>
-        </div>
-        <div class="col-lg-3">
-          <?php 
-            if ($air_temp > airHumSwitchValveHigh) {
-              print_panel("空气湿度", $air_hum, AlertInfo::DANGER);
-            }
-            elseif ($air_temp < airHumSwitchValveLow) {
-              print_panel("空气湿度", $air_hum, AlertInfo::WARNING);
-            }
-            else {
-              print_panel("空气湿度", $air_hum, AlertInfo::GOOD);
-            }
-          ?>
-        </div>
-        <div class="col-lg-3">
-          <?php 
-            if ($air_temp > airLightSwitchValveHigh) {
-              print_panel("光强度", $air_light, AlertInfo::DANGER);
-            }
-            elseif ($air_temp < airLightSwitchValveLow) {
-              print_panel("光强度", $air_light, AlertInfo::WARNING);
-            }
-            else {
-              print_panel("光强度", $air_light, AlertInfo::GOOD);
-            }
-          ?>
-        </div>
-        <div class="col-lg-3">
-          <?php 
-            if ($air_temp > groundHumSwitchValveHigh) {
-              print_panel("地面湿度", $ground_hum, AlertInfo::DANGER);
-            }
-            elseif ($air_temp < groundHumSwitchValveHigh) {
-              print_panel("地面湿度", $ground_hum, AlertInfo::WARNING);
-            }
-            else {
-              print_panel("地面湿度", $ground_hum, AlertInfo::GOOD);
-            }
-          ?>
-        </div>
+        <div id="air-temp-card-holder" class="col-lg-3"></div>
+        <div id="air-hum-card-holder" class="col-lg-3"></div>
+        <div id="air-light-card-holder" class="col-lg-3"></div>
+        <div id="ground-hum-card-holder" class="col-lg-3"></div>
       </div>
       <div class="row">
         <div class="col-lg-6">
@@ -532,6 +484,7 @@
   <script src="assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
   <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
   <script src="assets/js/app-detailed-data.js.php" type="text/javascript"></script>
+  <script src="assets/js/app-detailed-data-ajax.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
@@ -546,6 +499,7 @@
       //initialize the javascript
       App.init();
       App.ChartJs();
+      App.ajaxApply();
     });
   </script>
   <script type="text/javascript">

@@ -595,7 +595,7 @@
       App.init();
       App.dashboard();
       App.dataTables();
-      App.ajax_apply();
+      App.ajaxApply();
     });
   </script>
   <script type="text/javascript">
