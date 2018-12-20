@@ -1,5 +1,8 @@
 <?php
     require '..\\..\\assets\\php\\shared_html.php';
+    require '..\\..\\assets\\php\\shared_const.php';
+    require '..\\..\\assets\\php\\shared_sql.php';
+    require '..\\..\\assets\\php\\shared_db.php';
     require '..\\..\\assets\\php\\shared_ajax.php';
 
     if (!isset($_POST['id'])) {
