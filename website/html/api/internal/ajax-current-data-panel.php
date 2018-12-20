@@ -27,46 +27,46 @@
     switch ($_POST['id']) {
         case AjaxCurrentDataType::AIR_TEMP:
             if ($air_temp > airTempSwitchValveHigh) {
-                print_panel("空气温度", $air_temp, AlertInfo::DANGER);
+                print_panel("空气温度", $air_temp . 'C', AlertInfo::DANGER);
             }
             elseif ($air_temp < airTempSwitchValveLow) {
-                print_panel("空气温度", $air_temp, AlertInfo::WARNING);
+                print_panel("空气温度", $air_temp . 'C', AlertInfo::WARNING);
             }
             else {
-                print_panel("空气温度", $air_temp, AlertInfo::GOOD);
+                print_panel("空气温度", $air_temp . 'C', AlertInfo::GOOD);
             }
             break;
         case AjaxCurrentDataType::AIR_HUM:
             if ($air_hum > airHumSwitchValveHigh) {
-                print_panel("空气湿度", $air_hum, AlertInfo::DANGER);
+                print_panel("空气湿度", $air_hum . '%', AlertInfo::DANGER);
             }
             elseif ($air_hum < airHumSwitchValveLow) {
-                print_panel("空气湿度", $air_hum, AlertInfo::WARNING);
+                print_panel("空气湿度", $air_hum . '%', AlertInfo::WARNING);
             }
             else {
-                print_panel("空气湿度", $air_hum, AlertInfo::GOOD);
+                print_panel("空气湿度", $air_hum . '%', AlertInfo::GOOD);
             }
             break;
         case AjaxCurrentDataType::AIR_LIGHT:
             if ($air_light > airLightSwitchValveHigh) {
-                print_panel("光强度", $air_light, AlertInfo::DANGER);
+                print_panel("光强度", $air_light . '/1000%', AlertInfo::DANGER);
             }
             elseif ($air_light < airLightSwitchValveLow) {
-                print_panel("光强度", $air_light, AlertInfo::WARNING);
+                print_panel("光强度", $air_light . '/1000%', AlertInfo::WARNING);
             }
             else {
-                print_panel("光强度", $air_light, AlertInfo::GOOD);
+                print_panel("光强度", $air_light . '/1000%', AlertInfo::GOOD);
             }
             break;
         case AjaxCurrentDataType::GROUND_HUM:
             if ($ground_hum > groundHumSwitchValveHigh) {
-                print_panel("地面湿度", $ground_hum, AlertInfo::DANGER);
+                print_panel("地面湿度", $ground_hum . '/1000%', AlertInfo::DANGER);
             }
             elseif ($ground_hum < groundHumSwitchValveHigh) {
-                print_panel("地面湿度", $ground_hum, AlertInfo::WARNING);
+                print_panel("地面湿度", $ground_hum . '/1000%', AlertInfo::WARNING);
             }
             else {
-                print_panel("地面湿度", $ground_hum, AlertInfo::GOOD);
+                print_panel("地面湿度", $ground_hum . '/1000%', AlertInfo::GOOD);
             }
             break;
         
