@@ -590,10 +590,11 @@
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
   <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(() => {
       //initialize the javascript
       App.init();
       App.dashboard();
+      App.firstTimeLoad();
       App.dataTables();
       App.ajaxApply();
     });
