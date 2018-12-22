@@ -11,23 +11,10 @@ var App = (() => {
         "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
     } );
 
-    $("#table1").dataTable();
-
     //Remove search & paging dropdown
     $("#history-data-table").dataTable({
       pageLength: 5,
       dom:  "<'row be-datatable-body'<'col-sm-12'tr>>" +
-            "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-    });
-
-    //Enable toolbar button functions
-    $("#table3").dataTable({
-      buttons: [
-        'copy', 'excel', 'pdf', 'print'
-      ],
-      "lengthMenu": [[6, 10, 25, 50, -1], [6, 10, 25, 50, "All"]],
-      dom:  "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6 text-right'B>>" +
-            "<'row be-datatable-body'<'col-sm-12'tr>>" +
             "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
     });
 
