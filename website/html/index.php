@@ -204,8 +204,8 @@
             <div id="all-commits-count-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">上传总数</div>
-              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?= $total_commits; ?>" class="number"><?= $total_commits; ?></span>
+              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+              <span data-toggle="counter" data-end="<?= $total_commits; ?>" class="number"><?= $total_commits; ?></span>
               </div>
             </div>
           </div>
@@ -216,8 +216,8 @@
             <div id="all-alerts-count-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">报警总数</div>
-              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?= $total_alerts; ?>" class="number"><?= $total_alerts; ?></span>
+              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+              <span data-toggle="counter" data-end="<?= $total_alerts; ?>" class="number"><?= $total_alerts; ?></span>
               </div>
             </div>
           </div>
@@ -228,8 +228,8 @@
             <div id="today-commits-sparkline" class="chart sparkline"></div>
             <div class="data-info">
               <div class="desc">今日上传数</div>
-              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter"
-                  data-end="<?= $today_uploads; ?>" class="number"><?= $today_uploads; ?></span>
+              <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+              <span data-toggle="counter" data-end="<?= $today_uploads; ?>" class="number"><?= $today_uploads; ?></span>
               </div>
             </div>
           </div>
