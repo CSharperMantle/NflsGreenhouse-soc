@@ -77,7 +77,8 @@
         <div class="be-right-navbar">
           <ul class="nav navbar-nav float-right be-user-nav">
             <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-              <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name"><?php print_user_name(); ?></span></a>
+                <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">
+                  <?php print_user_name(); ?></span></a>
               <div role="menu" class="dropdown-menu">
                 <!--online away busy-->
                 <div class="user-info">
@@ -172,7 +173,9 @@
           </div>
         </div>
         <div class="progress-widget">
-          <div class="progress-data"><?= '页面更新时间: ' . date('H:m:s'); ?></div>
+          <div class="progress-data">
+            <?= '页面更新时间: ' . date('H:m:s'); ?>
+          </div>
           <div class="progress-data"><span class="progress-value">50%</span><span class="name">完善程度</span></div>
           <div class="progress">
             <div style="width: 50%;" class="progress-bar progress-bar-primary"></div>
@@ -188,7 +191,7 @@
           ?>
         </noscript>
         <div id="alert-div">
-        <?php
+          <?php
             if (isset($error_occur)) {
               print_alert(AlertInfo::DANGER, '错误！', '加载页面时出错。页面不会正常工作。');
               http_response_code(503);
@@ -205,7 +208,8 @@
             <div class="data-info">
               <div class="desc">上传总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
-              <span data-toggle="counter" data-end="<?= $total_commits; ?>" class="number"><?= $total_commits; ?></span>
+                <span data-toggle="counter" data-end="<?= $total_commits; ?>" class="number">
+                  <?= $total_commits; ?></span>
               </div>
             </div>
           </div>
@@ -217,7 +221,8 @@
             <div class="data-info">
               <div class="desc">报警总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
-              <span data-toggle="counter" data-end="<?= $total_alerts; ?>" class="number"><?= $total_alerts; ?></span>
+                <span data-toggle="counter" data-end="<?= $total_alerts; ?>" class="number">
+                  <?= $total_alerts; ?></span>
               </div>
             </div>
           </div>
@@ -229,7 +234,8 @@
             <div class="data-info">
               <div class="desc">今日上传数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
-              <span data-toggle="counter" data-end="<?= $today_uploads; ?>" class="number"><?= $today_uploads; ?></span>
+                <span data-toggle="counter" data-end="<?= $today_uploads; ?>" class="number">
+                  <?= $today_uploads; ?></span>
               </div>
             </div>
           </div>
@@ -240,7 +246,7 @@
             <div class="data-info">
               <div class="desc">今日报警数</div>
               <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-right"></span>
-              <span data-toggle="counter" data-end="<?= $today_alerts; ?>" class="number">0</span>
+                <span data-toggle="counter" data-end="<?= $today_alerts; ?>" class="number">0</span>
               </div>
             </div>
           </div>
@@ -266,7 +272,7 @@
                   </tr>
                 </thead>
                 <tbody id="history-data-table-tbody">
-                <?php
+                  <?php
                   foreach ($all_commits as $key => $value) {
                     $_air_temp = $value['air_temp'];
                     $_air_light = $value['air_light'];
@@ -282,7 +288,7 @@
             </div>
           </div>
         </div>
-        
+
       </div>
       <div class="row">
         <div class="col-12 col-lg-6">
