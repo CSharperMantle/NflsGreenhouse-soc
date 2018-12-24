@@ -292,10 +292,11 @@
       </div>
       <div class="row">
         <div class="col-12 col-lg-6">
-          <div class="card" id="latest-activities">
+          <div class="card be-loading" id="latest-activities">
             <div class="card-header">最新行为
               <div class="tools dropdown">
                 <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
+                <span class="icon mdi mdi-refresh-sync"></span>
               </div>
             </div>
             <div class="card-body">
@@ -321,6 +322,11 @@
                   <div class="user-timeline-description">为大棚内 <b>牵牛花#P01</b> 浇了 0.48 吨水</div>
                 </li>
               </ul>
+            </div>
+            <div class="be-spinner">
+              <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
+              </svg>
             </div>
           </div>
         </div>
