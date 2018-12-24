@@ -296,7 +296,7 @@
             <div class="card-header">最新行为
               <div class="tools dropdown">
                 <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
-                <span class="icon mdi mdi-refresh-sync"></span>
+                <span class="icon mdi mdi-refresh-sync toggle-loading"></span>
               </div>
             </div>
             <div class="card-body">
