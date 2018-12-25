@@ -80,14 +80,14 @@
   }
   //light
   if ($air_light > airLightSwitchValveHigh) {
-    run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::HIGH));
-    $actions[count($actions)] = create_action_array(ActionType::RELAY_ACTION, skySheetInnerOpenPin, RelayAction::OFF);
-    $actions[count($actions)] = create_action_array(ActionType::RELAY_ACTION, skySheetInnerClosePin, RelayAction::ON);
-  }
-  elseif ($air_light < airLightSwitchValveLow) {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::LOW));
     $actions[count($actions)] = create_action_array(ActionType::RELAY_ACTION, skySheetInnerOpenPin, RelayAction::ON);
     $actions[count($actions)] = create_action_array(ActionType::RELAY_ACTION, skySheetInnerClosePin, RelayAction::OFF);
+  }
+  elseif ($air_light < airLightSwitchValveLow) {
+    run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::HIGH));
+    $actions[count($actions)] = create_action_array(ActionType::RELAY_ACTION, skySheetInnerOpenPin, RelayAction::OFF);
+    $actions[count($actions)] = create_action_array(ActionType::RELAY_ACTION, skySheetInnerClosePin, RelayAction::ON);
   }
   else {
     run_query($db, INSERT_ALERT_SQL, array(AlertType::AIR_LIGHT, AlertType::OK));
