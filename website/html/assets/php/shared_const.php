@@ -12,7 +12,7 @@
     const airHumSwitchValveHigh = 70;
     const lightSwitchValveLow = 100;
     const airLightSwitchValveHigh = 965;
-    const airLightSwitchValveLow = 955;
+    const airLightSwitchValveLow = 950;
     const groundHumSwitchValveLow = 700;
     const groundHumSwitchValveHigh = 1000;
     //TODO: Real value needed.
