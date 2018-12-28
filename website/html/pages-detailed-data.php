@@ -499,7 +499,7 @@
       //initialize the javascript
       App.init();
       App.ChartJs();
-      App.firstTimeLoad();
+      App.loadContent();
       App.ajaxApply();
     });
   </script>

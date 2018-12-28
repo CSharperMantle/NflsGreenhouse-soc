@@ -1,7 +1,7 @@
 var App = (() => {
     'use strict';
 
-    App.firstTimeLoad = () => {
+    App.loadContent = () => {
         $('#alert-div').load('api/internal/ajax-alert-div.php');
     }
 
