@@ -45,15 +45,13 @@ var App = (() => {
 
     //Show loading class toggle
     function toggleLoader(){
-      $('.toggle-loading').on('click',function() {
-        console.log('Clicked');
-        console.log(this);
-        var parent = $(this).parents('.widget, .panel, .card');
-        console.log(parent);
+      $('.toggle-loading').on('click',function(){
+        var parent = $(this).parents('.widget, .panel');
         if( parent.length ){
           parent.addClass('be-loading-active');
 
-          setTimeout(function() {
+          setTimeout(function(){
+            this.document.location.reload();
             parent.removeClass('be-loading-active');
           }, 300);
         }
@@ -166,7 +164,7 @@ var App = (() => {
 
   };
 
-  App.dataTables = () => {
+  App.dataTables = function( ){
 
     //We use this to apply style to certain elements
     $.extend( true, $.fn.dataTable.defaults, {

@@ -295,8 +295,8 @@
           <div class="card be-loading" id="latest-activities">
             <div class="card-header">最新行为
               <div class="tools dropdown">
-                <span class="icon mdi mdi-refresh-sync toggle-loading"></span>
                 <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
+                <span class="icon mdi mdi-refresh-sync toggle-loading"></span>
               </div>
             </div>
             <div class="card-body">
@@ -606,7 +606,7 @@
       //initialize the javascript
       App.init();
       App.dashboard();
-      App.loadContent();
+      App.firstTimeLoad();
       App.dataTables();
       App.ajaxApply();
     });
