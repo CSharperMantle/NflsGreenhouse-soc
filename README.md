@@ -7,7 +7,7 @@ This project is developed to be an automatic greenhouse controller.
 * Required `session.auto_start=1`
 * Required settings in Apache: `ErrorDocument 404 .../NflsWatering/website/html/pages-404.html`
 ## API
-APIs are provided in RESTful or SOAP styles.
+APIs are provided in RESTful or XML-like styles.
 ```
 website |--api
         |   |--v1.0 = SOAP APIs
