@@ -204,7 +204,7 @@ HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
 void printLicenseInfo() {
     logger->Info("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
     logger->Info("Libs in use:");
-    logger->Info("cJSON by Dave Gamble and cJSON contributors");
+    logger->Info("cJSON by Dave Gamble and other cJSON contributors");
     logger->Info("ProtoThreads by Adam Dunkels");
     logger->Info("HttpParser by Joyent, Inc. and other Node contributors");
     logger->Info("");

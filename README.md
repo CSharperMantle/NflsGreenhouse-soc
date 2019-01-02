@@ -25,4 +25,4 @@ website |--api
 * `LiquidCrystal_I2C` in Arduino C++ by Frank de Brabander
 * `PacketParser` in C++ by Mantle Jonse and iRed_K
 * `ProtoThreads` in C by Adam Dunkels
-* `TinyXML` in C++ by Lee Thomason
+* `cJSON` in C by Dave Gamble and other cJSON contributors
