@@ -10,6 +10,8 @@
 #define USING_PACKET_ENUM
 #define USING_PACKET_MARCO
 
+#define CONST_CAST(src, dst_type) (const_cast<dst_type>(src))
+
 #include <stdlib.h>
 #include <string.h>
 #include <Arduino.h>
@@ -25,7 +27,6 @@
 #include <logger.hpp>
 #include <http_parser.h>
 
-#pragma region constant
 const PROGMEM int offlineAirTempSwitchValveLow = 10;
 const PROGMEM int offlineAirTempSwitchValveHigh = 30;
 const PROGMEM int offlineAirHumSwitchValveLow = 35;
@@ -63,11 +64,8 @@ const char webServerAddress[] = "10.24.141.75";
 const PROGMEM int webServerPort = 80;
 const PROGMEM IPAddress webServerIp = IPAddress(10, 24, 141, 75);
 
-byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
+const byte mac[] = {0xB0, 0x83, 0xFE, 0x69, 0x1C, 0x9A};
 
-#pragma endregion
-
-#pragma region object
 LiquidCrystal_I2C *screen = new LiquidCrystal_I2C(0x27, 16, 2);
 DHT *airSensor = new DHT();
 EthernetClient *webUploader = new EthernetClient();
@@ -77,22 +75,16 @@ struct ServerResponse {
     char *body = NULL;
 };
 ServerResponse *server_response = new ServerResponse();
-Logger *logger = new Logger(&Serial, LoggingLevel::INFO);
-#pragma endregion
+const Logger *logger = new Logger(&Serial, LoggingLevel::INFO);
 
-#pragma region var
 float currentAirTemp = 0;
 float currentAirHum = 0;
 int currentLightValue = 0;
 int currentGroundHum = 0;
-#pragma endregion
 
-#pragma region thread_controller
 pt uploadSensorData_ctrl = pt();
 pt maintainEthernet_ctrl = pt();
-#pragma endregion
 
-#pragma region helper
 void clearResetScreen(LiquidCrystal_I2C *lcd) {
     lcd->home();
     lcd->clear();
@@ -105,10 +97,10 @@ void clearWriteScreen(LiquidCrystal_I2C *lcd, const char *text, const int delayM
 }
 
 void parseJsonCJson(const char *str) {
-    logger->Info("PARSING JSON");
+    CONST_CAST(logger, Logger *)->Info("PARSING JSON");
     cJSON *root = cJSON_Parse(str);
     CJSON_CHECK_PTR(root);
-    logger->Debug("    EXECUTING REQUESTED ACTIVITIES");
+    CONST_CAST(logger, Logger *)->Debug("    EXECUTING REQUESTED ACTIVITIES");
     cJSON *actions = cJSON_GetObjectItemCaseSensitive(root, "actions");
     CJSON_CHECK_PTR(actions);
     for (cJSON *each_action = actions->child; each_action; each_action = each_action->next ) {
@@ -121,10 +113,10 @@ void parseJsonCJson(const char *str) {
                     int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
                     pinMode(target_id, OUTPUT);
                     if (param == 0) {
-                        logger->Debug(String("OFF action on ") + String(target_id));
+                        CONST_CAST(logger, Logger *)->Debug(String("OFF action on ") + String(target_id));
                         digitalWrite(target_id, LOW);
                     } else {
-                        logger->Debug(String("ON action on ") + String(target_id));
+                        CONST_CAST(logger, Logger *)->Debug(String("ON action on ") + String(target_id));
                         digitalWrite(target_id, HIGH);
                     }
             }
@@ -136,13 +128,13 @@ void parseJsonCJson(const char *str) {
                 switch (target_id)
                 {
                     case DeviceId::DEVICE_LCD:
-                        logger->Debug(String("DISPLAY action on ") + String(target_id));
+                        CONST_CAST(logger, Logger *)->Debug(String("DISPLAY action on ") + String(target_id));
                         screen->clear();
                         screen->home();
                         screen->print(param);
                         break;
                     default:
-                        logger->Debug(String("Unknown device: ") + String(target_id));
+                        CONST_CAST(logger, Logger *)->Debug(String("Unknown device: ") + String(target_id));
                         break;
                 }
             }
@@ -152,34 +144,32 @@ void parseJsonCJson(const char *str) {
             {
                 // Retransmitting requested
                 //TODO: Add retransmitter
-                logger->Debug("RETRANS action");
+                CONST_CAST(logger, Logger *)->Debug("RETRANS action");
             }
                 break;
             case ActionType::LCD_BACKLIGHT_SET: 
             {
                     int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
                     int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
-                    logger->Debug(String("BKLT action on ") + String(target_id));
+                    CONST_CAST(logger, Logger *)->Debug(String("BKLT action on ") + String(target_id));
                     screen->setBacklight(param);
             }
             break;
             default: 
             {
-                logger->Debug(String("Unknown JSON action received: ") + String(action_type));
+                CONST_CAST(logger, Logger *)->Debug(String("Unknown JSON action received: ") + String(action_type));
             }
                 break;
         }
     }
-    logger->Debug("    ACTIVITIES EXECUTED");
+    CONST_CAST(logger, Logger *)->Debug("    ACTIVITIES EXECUTED");
     
     CJSON_DEL_PTR(root);
-    logger->Info("DONE PARSING");
+    CONST_CAST(logger, Logger *)->Info("DONE PARSING");
 }
-#pragma endregion
 
-#pragma region callback
 HTTP_PARSER_CALLBACK(onMessageBeginCallback(http_parser *parser)) {
-    logger->Debug("START ACCEPTING");
+    CONST_CAST(logger, Logger *)->Debug("START ACCEPTING");
     clearResetScreen(screen);
     return 0;
 }
@@ -191,23 +181,20 @@ HTTP_PARSER_CALLBACK(onBodyReceivedCallback(http_parser *parser, const char *buf
 }
 
 HTTP_PARSER_CALLBACK(onMessageEndCallback(http_parser *parser)) {
-    logger->Debug(server_response->body);
+    CONST_CAST(logger, Logger *)->Debug(server_response->body);
     parseJsonCJson(server_response->body);
     FREE_HEAP(server_response->body);
-    logger->Debug("ALL DONE");
+    CONST_CAST(logger, Logger *)->Debug("ALL DONE");
     return 0;
 }
-#pragma endregion
-
-#pragma region init_script
 
 void printLicenseInfo() {
-    logger->Info("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
-    logger->Info("Libs in use:");
-    logger->Info("cJSON by Dave Gamble and other cJSON contributors");
-    logger->Info("ProtoThreads by Adam Dunkels");
-    logger->Info("HttpParser by Joyent, Inc. and other Node contributors");
-    logger->Info("");
+    CONST_CAST(logger, Logger *)->Info("This project is made by Mantle & iRed_K. Licensed under GPLv3.");
+    CONST_CAST(logger, Logger *)->Info("Libs in use:");
+    CONST_CAST(logger, Logger *)->Info("cJSON by Dave Gamble and other cJSON contributors");
+    CONST_CAST(logger, Logger *)->Info("ProtoThreads by Adam Dunkels");
+    CONST_CAST(logger, Logger *)->Info("HttpParser by Joyent, Inc. and other Node contributors");
+    CONST_CAST(logger, Logger *)->Info("");
     screen->setBacklight(true);
     clearResetScreen(screen);
     screen->print("Provided under");
@@ -225,62 +212,58 @@ void printLicenseInfo() {
 void initSerial() {
     Serial.begin(115200);
     Serial.flush();
-    logger->Debug("Serial opened.");
+    CONST_CAST(logger, Logger *)->Debug("Serial opened.");
 }
 
 void initEthernet() {
-    logger->Info("Initializing Ethernet");
+    CONST_CAST(logger, Logger *)->Info("Initializing Ethernet");
     for (int index = 1; index <= 5; index++) {
         if (Ethernet.begin(const_cast<byte *>(mac)) == 0) {
-            logger->Error(String("DHCP failed. Retry ") + String(index));
+            CONST_CAST(logger, Logger *)->Error(String("DHCP failed. Retry ") + String(index));
             clearWriteScreen(screen, (String("ETH ERR: ") + String(index)).c_str(), 300);
         } else {
-            logger->Debug("DHCP OK.");
-            logger->Debug("    Ethernet information: IP, DNS, Gateway");
-            logger->Debug(String(Ethernet.localIP()));
-            logger->Debug(String(Ethernet.dnsServerIP()));
-            logger->Debug(String(Ethernet.gatewayIP()));
+            CONST_CAST(logger, Logger *)->Debug("DHCP OK.");
+            CONST_CAST(logger, Logger *)->Debug("    Ethernet information: IP, DNS, Gateway");
+            CONST_CAST(logger, Logger *)->Debug(String(Ethernet.localIP()));
+            CONST_CAST(logger, Logger *)->Debug(String(Ethernet.dnsServerIP()));
+            CONST_CAST(logger, Logger *)->Debug(String(Ethernet.gatewayIP()));
             clearWriteScreen(screen, "ETH OK", 300);
             break;
         }
     }
-    logger->Info("Done.");
+    CONST_CAST(logger, Logger *)->Info("Done.");
 
-    logger->Info("Setting up HTTP Parser");
+    CONST_CAST(logger, Logger *)->Info("Setting up HTTP Parser");
     clearWriteScreen(screen, "PARSER SETUP", 300);
     http_parser_settings_init(httpParserSettings);
     http_parser_init(httpParser, http_parser_type::HTTP_RESPONSE);
     httpParserSettings->on_body = onBodyReceivedCallback;
     httpParserSettings->on_message_begin = onMessageBeginCallback;
     httpParserSettings->on_message_complete = onMessageEndCallback;
-    logger->Info("Done.");
+    CONST_CAST(logger, Logger *)->Info("Done.");
 }
 
 void initLcd() {
-    logger->Info("Initializing LCD");
+    CONST_CAST(logger, Logger *)->Info("Initializing LCD");
     screen->init();
     screen->clear();
     screen->setBacklight(true);
-    logger->Info("Done.");
+    CONST_CAST(logger, Logger *)->Info("Done.");
 }
 
 void initDht() {
-    logger->Info("Initializing DHT");
+    CONST_CAST(logger, Logger *)->Info("Initializing DHT");
     airSensor->setup(dhtPin, DHT::DHT_MODEL_t::DHT11);
-    logger->Debug(airSensor->getStatusString());
-    logger->Info("Done.");
+    CONST_CAST(logger, Logger *)->Debug(airSensor->getStatusString());
+    CONST_CAST(logger, Logger *)->Info("Done.");
 }
-
-#pragma endregion
-
-#pragma region threaded_worker
 
 PT_THREAD(maintainEthernet(pt *pt)) {
     PT_BEGIN(pt);
-    logger->Info("Maintaining Ethernet connection");
+    CONST_CAST(logger, Logger *)->Info("Maintaining Ethernet connection");
     Ethernet.maintain();
     PT_YIELD(pt);
-    logger->Info("Done.");
+    CONST_CAST(logger, Logger *)->Info("Done.");
     PT_TIMER_DELAY(pt, maintainEthernetInterval);
     PT_END(pt);
 }
@@ -292,9 +275,9 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     currentAirTemp = airSensor->getTemperature();
     currentAirHum = airSensor->getHumidity();
 
-    logger->Info("Uploading sensor data");
+    CONST_CAST(logger, Logger *)->Info("Uploading sensor data");
     if (webUploader->connect(webServerIp, webServerPort)) {
-        logger->Debug("Connection established.");
+        CONST_CAST(logger, Logger *)->Debug("Connection established.");
 
         webUploader->print(String("GET /api/v1.1/upload.php?air_temp=") + String(currentAirTemp) \
                 + String("&air_hum=") + String(currentAirHum) \
@@ -318,11 +301,11 @@ PT_THREAD(uploadSensorData(pt *pt)) {
             http_parser_execute(httpParser, httpParserSettings, respond.c_str(), strlen(respond.c_str()));
         }
         webUploader->stop();
-        logger->Info("Done. Connection closed.");
+        CONST_CAST(logger, Logger *)->Info("Done. Connection closed.");
         delay(1000);
         break;
     } else {
-        logger->Error("Connection broke.");
+        CONST_CAST(logger, Logger *)->Error("Connection broke.");
         webUploader->flush();
         webUploader->stop();
     }
@@ -330,9 +313,6 @@ PT_THREAD(uploadSensorData(pt *pt)) {
     PT_END(pt);
 }
 
-#pragma endregion
-
-#pragma region main
 void setup() {
     //Startup scripts
     initSerial();
@@ -343,11 +323,10 @@ void setup() {
     PT_INIT(&uploadSensorData_ctrl);
     PT_INIT(&maintainEthernet_ctrl);
 
-    logger->Info("Init done.");
+    CONST_CAST(logger, Logger *)->Info("Init done.");
 }
 
 void loop() {
     uploadSensorData(&uploadSensorData_ctrl);
     maintainEthernet(&maintainEthernet_ctrl);
 }
-#pragma endregion
