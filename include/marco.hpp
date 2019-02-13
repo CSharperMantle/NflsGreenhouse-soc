@@ -1,5 +1,5 @@
-#ifndef cJSON_Marcos__h
-#define cJSON_Marcos__h
+#ifndef __MARCO_HPP__
+#define __MARCO_HPP__
 
 #ifdef __cplusplus
 extern "C"
@@ -27,8 +27,11 @@ if (ptr) { \
     ptr = NULL; \
 }
 
+#define CONST_CAST(src, dst_type) (const_cast<dst_type>(src))
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+
+#endif // __MARCO_HPP__

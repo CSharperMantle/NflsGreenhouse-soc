@@ -10,8 +10,6 @@
 #define USING_PACKET_ENUM
 #define USING_PACKET_MARCO
 
-#define CONST_CAST(src, dst_type) (const_cast<dst_type>(src))
-
 #include <stdlib.h>
 #include <string.h>
 #include <Arduino.h>
@@ -22,10 +20,10 @@
 #include <LiquidCrystal_I2C.h>
 #include <pt.h>
 #include <cJSON.h>
-#include <cJSON_Marcos.h>
 #include <packet_defs.hpp>
 #include <logger.hpp>
 #include <http_parser.h>
+#include "marco.hpp"
 
 const PROGMEM int offlineAirTempSwitchValveLow = 10;
 const PROGMEM int offlineAirTempSwitchValveHigh = 30;
