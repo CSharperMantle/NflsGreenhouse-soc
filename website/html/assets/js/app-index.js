@@ -11,7 +11,7 @@ var App = (() => {
 
 
     App.counter = function () {
-
+        //FIXME: Prettify vars init steps.
         $('[data-toggle="counter"]').each(function (_index, _element) {
             var elem = $(this);
             var prefix = '';
@@ -48,6 +48,7 @@ var App = (() => {
     }
 
     App.toggleLoadingButton = function () {
+        //TODO: Prevent the use of jQuery. Use DOM-based funcs instead.
         $('.toggle-loading').on('click', function () {
             var parent = $(this).parents('.widget, .panel');
             if (parent.length) {
@@ -62,6 +63,7 @@ var App = (() => {
     }
 
     App.toggleCloseButton = function () {
+        //TODO: Prevent the use of jQuery. Use DOM-based funcs instead.
         $('.toggle-close').on('click', function () {
             var parent = $(this).parents('.card, .widget, .panel');
             if (parent.length) {
@@ -71,7 +73,7 @@ var App = (() => {
     }
 
     App.sparkline = function () {
-
+        //TODO: VERY UGLY ALGORITHM. Do some clean-up.
         var colorPrimary = App.color.primary;
         var colorWarning = App.color.warning;
         var colorSuccess = App.color.success;
@@ -138,11 +140,14 @@ var App = (() => {
 
     App.map = function () {
 
-        var color1 = tinycolor(App.color.primary).lighten(15).toHexString();
-        var color2 = tinycolor(App.color.primary).lighten(8).toHexString();
-        var color3 = tinycolor(App.color.primary).toHexString();
+        //TODO: Make the map into the real map of greenhouse
+
+        var blueLighten2 = tinycolor(App.color.primary).lighten(15).toHexString();
+        var blueLighten = tinycolor(App.color.primary).lighten(8).toHexString();
+        var blue = tinycolor(App.color.primary).toHexString();
 
         //Highlight data
+        //TODO: Data weights can be shown here using AJAX
         var data = {
             "ru": "14",
             "us": "14",
@@ -156,13 +161,13 @@ var App = (() => {
         $('#map-widget').vectorMap({
             map: 'world_en',
             backgroundColor: null,
-            color: color1,
+            color: blueLighten2,
             hoverOpacity: 0.7,
-            selectedColor: color2,
+            selectedColor: blueLighten,
             enableZoom: true,
             showTooltip: true,
             values: data,
-            scaleColors: [color1, color2],
+            scaleColors: [blueLighten2, blueLighten],
             normalizeFunction: 'polynomial'
         });
     }
@@ -186,6 +191,7 @@ var App = (() => {
     }
 
     App.firstTimeLoad = () => {
+        //TODO: VERY UGLY ALGORITHM. Do some clean-up.
         var alertDivElem = document.getElementById('alert-div');
         var xhrAlertDiv = new XMLHttpRequest();
         xhrAlertDiv.addEventListener('load', function () {
@@ -197,6 +203,7 @@ var App = (() => {
     }
 
     App.ajaxApply = () => {
+        //TODO: VERY UGLY ALGORITHM. Do some clean-up.
         var xhrAlertDiv = new XMLHttpRequest();
         var alertDivElem = document.getElementById('alert-div');
         xhrAlertDiv.addEventListener('load', function () {
