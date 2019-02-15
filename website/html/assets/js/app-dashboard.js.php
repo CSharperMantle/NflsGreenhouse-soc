@@ -10,54 +10,6 @@ var App = (() => {
   
   App.dashboard = () => {
 
-    //Counter
-    function counter(){
-
-      $('[data-toggle="counter"]').each(function(i, e){
-        var _el = $(this);
-        var prefix = '';
-        var suffix = '';
-        var start = 0;
-        var end = 0;
-        var decimals = 0;
-        var duration = 2.5;
-
-        if( _el.data('prefix') ){ prefix = _el.data('prefix'); }
-
-        if( _el.data('suffix') ){ suffix = _el.data('suffix'); }
-
-        if( _el.data('start') ){ start = _el.data('start'); }
-
-        if( _el.data('end') ){ end = _el.data('end'); }
-
-        if( _el.data('decimals') ){ decimals = _el.data('decimals'); }
-
-        if( _el.data('duration') ){ duration = _el.data('duration'); }
-
-        var count = new CountUp(_el.get(0), start, end, decimals, duration, { 
-          suffix: suffix,
-          prefix: prefix,
-        });
-
-        count.start();
-      });
-    }
-
-    //Show loading class toggle
-    function toggleLoader(){
-      $('.toggle-loading').on('click',function(){
-        var parent = $(this).parents('.widget, .panel');
-        if( parent.length ){
-          parent.addClass('be-loading-active');
-
-          setTimeout(function(){
-            this.document.location.reload();
-            parent.removeClass('be-loading-active');
-          }, 300);
-        }
-      });
-    }
-
     //Top tile widgets
     function sparklines() {
 
@@ -150,12 +102,6 @@ var App = (() => {
       });
     }
 
-    //CounterUp Init
-    counter();
-
-    //Loader show
-    toggleLoader();
-
     //Row 1
     sparklines();
 
@@ -164,37 +110,7 @@ var App = (() => {
 
   };
 
-  App.dataTables = function( ){
-
-    //We use this to apply style to certain elements
-    $.extend( true, $.fn.dataTable.defaults, {
-      dom:
-        "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'f>>" +
-        "<'row be-datatable-body'<'col-sm-12'tr>>" +
-        "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-    } );
-
-    $("#table1").dataTable();
-
-    //Remove search & paging dropdown
-    $("#history-data-table").dataTable({
-      pageLength: 5,
-      dom:  "<'row be-datatable-body'<'col-sm-12'tr>>" +
-            "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-    });
-
-    //Enable toolbar button functions
-    $("#table3").dataTable({
-      buttons: [
-        'copy', 'excel', 'pdf', 'print'
-      ],
-      "lengthMenu": [[6, 10, 25, 50, -1], [6, 10, 25, 50, "All"]],
-      dom:  "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6 text-right'B>>" +
-            "<'row be-datatable-body'<'col-sm-12'tr>>" +
-            "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-    });
-
-  };
+  
 
   return App;
 })(App || {});

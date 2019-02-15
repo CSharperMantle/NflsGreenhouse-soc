@@ -257,7 +257,7 @@
           <div class="card card-table">
             <div class="card-header">历史数据
               <div class="tools dropdown">
-                <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
+                <span class="icon mdi mdi-close click-fade-out"></span>
               </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">
@@ -592,7 +592,7 @@
   <script src="assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
   <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
   <script src="assets/js/app-dashboard.js.php" type="text/javascript"></script>
-  <script src="assets/js/app-dashboard-ajax.js" type="text/javascript"></script>
+  <script src="assets/js/index.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
@@ -601,16 +601,6 @@
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.print.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    $(document).ready(() => {
-      //initialize the javascript
-      App.init();
-      App.dashboard();
-      App.firstTimeLoad();
-      App.dataTables();
-      App.ajaxApply();
-    });
-  </script>
   <script type="text/javascript">
     function fade_out(obj) {
       obj.parent().parent().parent().parent().fadeOut();

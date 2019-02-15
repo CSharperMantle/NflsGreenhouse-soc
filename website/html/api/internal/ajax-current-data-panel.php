@@ -4,18 +4,23 @@
     require '..\\..\\assets\\php\\shared_sql.php';
     require '..\\..\\assets\\php\\shared_db.php';
     require '..\\..\\assets\\php\\shared_ajax.php';
+    require '..\\..\\assets\\php\\shared_util.php';
 
     if (!isset($_POST['id'])) {
-        http_response_code(400);
-        exit();
+        terminate(400);
+    }
+
+    $id = $_POST['id'];
+
+    if (!is_numeric($id)) {
+        terminate(400);
     }
 
     try {
         $db = DBConnectionSingleton::getInstance();
     }
     catch (PDOException $e) {
-        http_response_code(500);
-        exit();
+        terminate(500);
     }
 
     $result = run_query_fetch($db, FETCH_LATEST_SQL);
@@ -24,7 +29,7 @@
     $air_light = $result['air_light'];
     $ground_hum = $result['ground_hum'];
 
-    switch ($_POST['id']) {
+    switch ($id) {
         case AjaxCurrentDataType::AIR_TEMP:
             if ($air_temp > airTempSwitchValveHigh) {
                 print_panel("空气温度", $air_temp . 'C', AlertInfo::DANGER);
@@ -71,8 +76,7 @@
             break;
         
         default:
-            http_response_code(400);
-            exit();
+            terminate(400);
             break;
     }
 ?>

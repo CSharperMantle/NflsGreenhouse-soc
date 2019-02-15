@@ -21,9 +21,9 @@
 
     function print_user_info() {
         if (isset($_SESSION['is_logged_in'])) {
-          print_user_status($_SESSION['username'], 'online');
+            print_user_status($_SESSION['username'], 'online');
         } else {
-          print_user_status('John Doe', 'offline');
+            print_user_status('John Doe', 'offline');
         }
     }
 

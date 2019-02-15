@@ -21,8 +21,8 @@
     const FETCH_AIR_LIGHT_SQL = "SELECT id, air_light, timestamp FROM data ORDER BY id DESC LIMIT 20;";
     const FETCH_GROUND_HUM_SQL = "SELECT id, ground_hum, timestamp FROM data ORDER BY id DESC LIMIT 20;";
     const FETCH_USER_EXIST_SQL = "SELECT id, username, password FROM users WHERE username=? LIMIT 1;";
-    const FETCH_COMMITS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day ASC LIMIT 10;";
-    const FETCH_ALERTS_EACH_DAY_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts WHERE alerts.is_ok!=0 GROUP BY day ORDER BY day ASC LIMIT 10;";
+    const FETCH_COMMITS_EACH_DAY_SQL = "SELECT COUNT(id) count FROM data GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d') ORDER BY DATE_FORMAT(timestamp,'%Y-%m-%d') ASC LIMIT 10;";
+    const FETCH_ALERTS_EACH_DAY_SQL = "SELECT COUNT(id) count FROM alerts WHERE alerts.is_ok!=0 GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d') ORDER BY DATE_FORMAT(timestamp,'%Y-%m-%d') ASC LIMIT 10;";
     const FETCH_TODAY_COMMITS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day DESC LIMIT 1;";
     const FETCH_TODAY_ALERTS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts WHERE is_ok!=0 GROUP BY day ORDER BY day DESC LIMIT 1;";
     const FETCH_LATEST_ALERT_SQL = "SELECT * FROM alerts WHERE alerts.id = (SELECT MAX(id) FROM alerts) LIMIT 1;";

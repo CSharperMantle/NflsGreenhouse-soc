@@ -7,8 +7,7 @@
     try {
         $db = DBConnectionSingleton::getInstance();
     } catch (PDOException $e) {
-        http_response_code(500);
-        exit();
+        terminate(500);
     }
 
     $all_commits = run_query_fetch_multi($db, FETCH_ALL_HISTORY_DATA_SQL);

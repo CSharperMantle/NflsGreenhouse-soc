@@ -13,4 +13,9 @@
         $data = stripslashes($data);
         return $data;
     }
+
+    function terminate(int $code) {
+        http_response_code($code);
+        exit();
+    }
 ?>
