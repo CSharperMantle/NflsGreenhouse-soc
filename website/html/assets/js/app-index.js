@@ -47,7 +47,7 @@ var App = (() => {
         });
     }
 
-    App.toggleLoader = function () {
+    App.toggleLoadingButton = function () {
         $('.toggle-loading').on('click', function () {
             var parent = $(this).parents('.widget, .panel');
             if (parent.length) {
@@ -61,8 +61,8 @@ var App = (() => {
         });
     }
 
-    App.toggleFadingOut = function () {
-        $('.close-button').on('click', function () {
+    App.toggleCloseButton = function () {
+        $('.toggle-close').on('click', function () {
             var parent = $(this).parents('.card, .widget, .panel');
             if (parent.length) {
                 parent.fadeOut();
@@ -225,12 +225,9 @@ var App = (() => {
         });
     }
 
-    App.fadeOut = function(elem) {
-        $(elem).fadeOut();
-    }
-
     App.dashboard = () => {
-        App.toggleLoader();
+        App.toggleLoadingButton();
+        App.toggleCloseButton();
 
         App.counter();
         App.sparkline();
