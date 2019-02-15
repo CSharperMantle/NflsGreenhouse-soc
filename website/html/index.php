@@ -197,7 +197,7 @@
               http_response_code(503);
               exit();
             }
-        ?>
+          ?>
         </div>
       </div>
 
@@ -295,7 +295,7 @@
           <div class="card be-loading" id="latest-activities">
             <div class="card-header">最新行为
               <div class="tools dropdown">
-                <span class="icon mdi mdi-close" onclick="javascript:fade_out($(this));"></span>
+                <span class="icon mdi mdi-close close-button"></span>
                 <span class="icon mdi mdi-refresh-sync toggle-loading"></span>
               </div>
             </div>
@@ -600,11 +600,6 @@
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.print.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    function fade_out(obj) {
-      obj.parent().parent().parent().parent().fadeOut();
-    }
-  </script>
 </body>
 
 </html>

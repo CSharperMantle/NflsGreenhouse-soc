@@ -10,11 +10,11 @@
         terminate(500);
     }
 
-    if (!isset($_GET['data_type'])) {
+    if (!isset($_POST['data_type'])) {
         terminate(400);
     }
 
-    $data_type = $_GET['data_type'];
+    $data_type = $_POST['data_type'];
 
     if (!is_numeric($data_type)) {
         terminate(400);

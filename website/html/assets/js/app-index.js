@@ -8,33 +8,7 @@ var App = (() => {
         AJAXTYPE_ALERTS_SPARKLINE: 1
     };
 
-    App.dataTables = () => {
 
-        //We use this to apply style to certain elements
-        $.extend(true, $.fn.dataTable.defaults, {
-            dom: "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'f>>" +
-                "<'row be-datatable-body'<'col-sm-12'tr>>" +
-                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-        });
-
-        //Remove search & paging dropdown
-        $("#history-data-table").dataTable({
-            pageLength: 5,
-            dom: "<'row be-datatable-body'<'col-sm-12'tr>>" +
-                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-        });
-
-    }
-
-    App.firstTimeLoad = () => {
-        $('#alert-div').load(App.config.AJAX_ALERT_DIV_PATH);
-    }
-
-    App.ajaxApply = () => {
-        setInterval(() => {
-            $('#alert-div').load(App.config.AJAX_ALERT_DIV_PATH);
-        }, 10000);
-    }
 
     App.counter = function () {
 
@@ -87,6 +61,15 @@ var App = (() => {
         });
     }
 
+    App.toggleFadingOut = function () {
+        $('.close-button').on('click', function () {
+            var parent = $(this).parents('.card, .widget, .panel');
+            if (parent.length) {
+                parent.fadeOut();
+            }
+        });
+    }
+
     App.sparkline = function () {
 
         var colorPrimary = App.color.primary;
@@ -114,10 +97,12 @@ var App = (() => {
             });
         });
         xhrCommitSpark.open('POST', App.config.AJAX_SPARKLINE_URI);
-        xhrCommitSpark.send({ data_type: AJAXTYPE_COMMITS_SPARKLINE });
+        xhrCommitSpark.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhrCommitSpark.send("data_type=" + App.config.AJAXTYPE_COMMITS_SPARKLINE);
 
-        
         xhrAlertSpark.addEventListener('load', function () {
+            var alertsSparkData = JSON.parse(this.responseText);
+            var alertsSparkDataFlatten = alertsSparkData.flat();
             $('#all-alerts-count-sparkline').sparkline(alertsSparkDataFlatten, {
                 type: 'bar',
                 width: '85',
@@ -129,8 +114,9 @@ var App = (() => {
             });
         });
         xhrAlertSpark.open('POST', App.config.AJAX_SPARKLINE_URI);
-        xhrAlertSpark.send({ data_type: AJAXTYPE_ALERTS_SPARKLINE });
-        
+        xhrAlertSpark.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhrAlertSpark.send("data_type=" + App.config.AJAXTYPE_ALERTS_SPARKLINE);
+
     }
 
     App.dataTables = () => {
@@ -181,6 +167,48 @@ var App = (() => {
         });
     }
 
+    App.dataTables = () => {
+
+        //We use this to apply style to certain elements
+        $.extend(true, $.fn.dataTable.defaults, {
+            dom: "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'f>>" +
+                "<'row be-datatable-body'<'col-sm-12'tr>>" +
+                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
+        });
+
+        //Remove search & paging dropdown
+        $("#history-data-table").dataTable({
+            pageLength: 5,
+            dom: "<'row be-datatable-body'<'col-sm-12'tr>>" +
+                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
+        });
+
+    }
+
+    App.firstTimeLoad = () => {
+        var alertDivElem = document.getElementById('alert-div');
+        var xhrAlertDiv = new XMLHttpRequest();
+        xhrAlertDiv.addEventListener('load', function () {
+            alertDivElem.innerHTML += this.responseText;
+            this.abort();
+        });
+        xhrAlertDiv.open('GET', App.config.AJAX_ALERT_DIV_URI);
+        xhrAlertDiv.send();
+    }
+
+    App.ajaxApply = () => {
+        var xhrAlertDiv = new XMLHttpRequest();
+        var alertDivElem = document.getElementById('alert-div');
+        xhrAlertDiv.addEventListener('load', function () {
+            alertDivElem.innerHTML += this.responseText;
+            this.abort();
+        });
+        setInterval(() => {
+            xhrAlertDiv.open('GET', App.config.AJAX_ALERT_DIV_URI);
+            xhrAlertDiv.send();
+        }, 10000);
+    }
+
     App.widgetTooltipPosition = function (id, top) {
         $('#' + id).bind("plothover", function (event, pos, item) {
             var widthToolTip = $('.tooltip-chart').width();
@@ -197,14 +225,19 @@ var App = (() => {
         });
     }
 
-    App.dashboard = () => {
-        sparkline();
-        map();
-        toggleLoader();
-        counter();
-        dataTables();
+    App.fadeOut = function(elem) {
+        $(elem).fadeOut();
+    }
 
-        firstTimeLoad();
+    App.dashboard = () => {
+        App.toggleLoader();
+
+        App.counter();
+        App.sparkline();
+        App.dataTables();
+        App.map();
+
+        App.firstTimeLoad();
     }
 
     return App;
