@@ -591,8 +591,7 @@
   <script src="assets/lib/jqvmap/jquery.vmap.min.js" type="text/javascript"></script>
   <script src="assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
   <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
-  <script src="assets/js/app-dashboard.js.php" type="text/javascript"></script>
-  <script src="assets/js/index.js" type="text/javascript"></script>
+  <script src="assets/js/app-index.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
