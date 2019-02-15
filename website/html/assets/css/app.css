@@ -10171,7 +10171,7 @@ canvas {
       margin-right: 2px; }
 
 .chart-pie-counter {
-  diplay: block;
+  display: block;
   position: absolute;
   top: 50%;
   width: 100%;
@@ -13832,6 +13832,7 @@ pre {
       z-index: 2;
       border-left: 11px solid #FFFFFF;
       -moz-transform: scale(0.9999);
+      transform: scale(0.9999);
       border-bottom: 11px solid transparent;
       border-top: 11px solid transparent; }
   .alert-icon > .message {
@@ -13895,6 +13896,7 @@ pre {
       z-index: 2;
       border-left: 11px solid #f8f8f8;
       -moz-transform: scale(0.9999);
+      transform: scale(0.9999);
       border-bottom: 11px solid transparent;
       border-top: 11px solid transparent; }
   .alert-icon.alert-icon-colored > .message {
@@ -16306,6 +16308,7 @@ form.dropzone {
     z-index: 2;
     border-bottom: 7px solid #eb6357;
     -moz-transform: scale(0.9999);
+    transform: scale(0.9999);
     border-left: 7px solid transparent;
     border-right: 7px solid transparent; }
   .parsley-errors-list.filled > li {
@@ -16597,6 +16600,7 @@ form.dropzone {
       color: #4285f4; }
       .fuelux .wizard > .steps-container > .steps li.active .chevron:before {
         -moz-transform: scale(0.9999);
+        transform: scale(0.9999);
         border-left: 14px solid #FFFFFF; }
     .fuelux .wizard > .steps-container > .steps li.complete {
       color: #FFFFFF;
@@ -16612,7 +16616,7 @@ form.dropzone {
           .fuelux .wizard > .steps-container > .steps li.complete:hover .chevron:before {
             border-left-color: #508ef5; }
     .fuelux .wizard > .steps-container > .steps li .chevron {
-      -moz-transform: scale(0.9999); }
+      -moz-transform: scale(0.9999); transform: scale(0.9999); }
   .fuelux .wizard > .steps-container > .steps.previous-disabled li.complete:hover {
     color: #FFFFFF;
     background: #4285f4; }
