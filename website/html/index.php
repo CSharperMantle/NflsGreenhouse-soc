@@ -257,7 +257,7 @@
           <div class="card card-table">
             <div class="card-header">历史数据
               <div class="tools dropdown">
-                <span class="icon mdi mdi-close click-fade-out"></span>
+                <span class="icon mdi mdi-close toggle-close"></span>
               </div><span class="card-subtitle">所有上传数据</span>
             </div>
             <div class="card-body">

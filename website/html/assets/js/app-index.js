@@ -200,7 +200,7 @@ var App = (() => {
         var xhrAlertDiv = new XMLHttpRequest();
         var alertDivElem = document.getElementById('alert-div');
         xhrAlertDiv.addEventListener('load', function () {
-            alertDivElem.innerHTML += this.responseText;
+            alertDivElem.innerHTML = this.responseText;
             this.abort();
         });
         setInterval(() => {

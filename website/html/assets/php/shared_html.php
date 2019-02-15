@@ -72,7 +72,7 @@
                             
                             "<div class=\"message\">" .
                                 "<button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">" .
-                                    "<span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>" .
+                                    "<span aria-hidden=\"true\" class=\"mdi mdi-close toggle-close\"></span>" .
                                 "</button>" .
                                 "<strong>$strong</strong> $caption" .
                             "</div>" .
@@ -83,7 +83,7 @@
                             "<div class=\"icon\"><span class=\"mdi mdi-info-outline\"></span></div>" .
                             "<div class=\"message\">" .
                                 "<button type=\"button\" data-dismiss=\"alert\" aria-label=\"忽略\" class=\"close\">" .
-                                    "<span aria-hidden=\"true\" class=\"mdi mdi-close\"></span>" .
+                                    "<span aria-hidden=\"true\" class=\"mdi mdi-close toggle-close\"></span>" .
                                 "</button>" .
                                 "<strong>$strong</strong> $caption" .
                             "</div>" .
