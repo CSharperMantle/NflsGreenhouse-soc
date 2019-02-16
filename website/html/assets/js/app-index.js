@@ -2,12 +2,11 @@ var App = (() => {
     'use strict';
 
     App.config = {
-        AJAX_ALERT_DIV_URI: 'api/internal/ajax-alert-div.php',
-        AJAX_SPARKLINE_URI: 'api/internal/ajax-sparkline-data.php',
+        AJAXURI_ALERT_DIV: 'api/internal/ajax-alert-div.php',
+        AJAXURI_SPARKLINE: 'api/internal/ajax-sparkline-data.php',
         AJAXTYPE_COMMITS_SPARKLINE: 0,
         AJAXTYPE_ALERTS_SPARKLINE: 1
     };
-
 
 
     App.counter = function () {
@@ -21,24 +20,13 @@ var App = (() => {
             var decimals = 0;
             var duration = 2.5;
 
-            if (elem.data('prefix')) {
-                prefix = elem.data('prefix');
-            }
-            if (elem.data('suffix')) {
-                suffix = elem.data('suffix');
-            }
-            if (elem.data('start')) {
-                start = elem.data('start');
-            }
-            if (elem.data('end')) {
-                end = elem.data('end');
-            }
-            if (elem.data('decimals')) {
-                decimals = elem.data('decimals');
-            }
-            if (elem.data('duration')) {
-                duration = elem.data('duration');
-            }
+            prefix = !!elem.data('prefix') ? elem.data('prefix') : prefix;
+            suffix = !!elem.data('suffix') ? elem.data('suffix') : suffix;
+            start = !!elem.data('start') ? elem.data('start') : start;
+            end = !!elem.data('end') ? elem.data('end') : end;
+            decimals = !!elem.data('decimals') ? elem.data('decimals') : decimals;
+            duration = !!elem.data('duration') ? elem.data('duration') : duration;
+
             var count = new CountUp(elem.get(0), start, end, decimals, duration, {
                 suffix: suffix,
                 prefix: prefix,
@@ -54,8 +42,8 @@ var App = (() => {
             if (parent.length) {
                 parent.addClass('be-loading-active');
 
+                //TODO: Add more accurate loader
                 setTimeout(function () {
-                    this.document.location.reload();
                     parent.removeClass('be-loading-active');
                 }, 300);
             }
@@ -79,45 +67,52 @@ var App = (() => {
         var colorSuccess = App.color.success;
         var colorDanger = App.color.danger;
 
-        var xhrCommitSpark = new XMLHttpRequest();
-        var xhrAlertSpark = new XMLHttpRequest();
-
-        xhrCommitSpark.addEventListener('load', function () {
-            var commitsSparkData = JSON.parse(this.responseText);
-            var commitsSparkDataFlatten = commitsSparkData.flat();
-            $('#all-commits-count-sparkline').sparkline(commitsSparkDataFlatten, {
-                width: '85',
-                height: '35',
-                lineColor: colorPrimary,
-                highlightSpotColor: colorPrimary,
-                highlightLineColor: colorPrimary,
-                fillColor: false,
-                spotColor: false,
-                minSpotColor: false,
-                maxSpotColor: false,
-                lineWidth: 1.15
+        $.post({
+                url: App.config.AJAXURI_SPARKLINE,
+                data: {
+                    data_type: App.config.AJAXTYPE_COMMITS_SPARKLINE
+                }
+            })
+            .then((data) => {
+                var flatten = data.flat();
+                $('#all-commits-count-sparkline').sparkline(flatten, {
+                    width: '85',
+                    height: '35',
+                    lineColor: colorPrimary,
+                    highlightSpotColor: colorPrimary,
+                    highlightLineColor: colorPrimary,
+                    fillColor: false,
+                    spotColor: false,
+                    minSpotColor: false,
+                    maxSpotColor: false,
+                    lineWidth: 1.15
+                });
+            }, ($xhr, txtStatus, err) => {
+                console.error(txtStatus);
+                console.error(err);
             });
-        });
-        xhrCommitSpark.open('POST', App.config.AJAX_SPARKLINE_URI);
-        xhrCommitSpark.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhrCommitSpark.send("data_type=" + App.config.AJAXTYPE_COMMITS_SPARKLINE);
 
-        xhrAlertSpark.addEventListener('load', function () {
-            var alertsSparkData = JSON.parse(this.responseText);
-            var alertsSparkDataFlatten = alertsSparkData.flat();
-            $('#all-alerts-count-sparkline').sparkline(alertsSparkDataFlatten, {
-                type: 'bar',
-                width: '85',
-                height: '35',
-                barWidth: 4,
-                barSpacing: 3,
-                chartRangeMin: 0,
-                barColor: colorSuccess
+        $.post({
+                url: App.config.AJAXURI_SPARKLINE,
+                data: {
+                    data_type: App.config.AJAXTYPE_ALERTS_SPARKLINE
+                }
+            })
+            .then((data) => {
+                var flatten = data.flat();
+                $('#all-alerts-count-sparkline').sparkline(flatten, {
+                    type: 'bar',
+                    width: '85',
+                    height: '35',
+                    barWidth: 4,
+                    barSpacing: 3,
+                    chartRangeMin: 0,
+                    barColor: colorSuccess
+                });
+            }, ($xhr, txtStatus, err) => {
+                console.error(txtStatus);
+                console.error(err);
             });
-        });
-        xhrAlertSpark.open('POST', App.config.AJAX_SPARKLINE_URI);
-        xhrAlertSpark.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhrAlertSpark.send("data_type=" + App.config.AJAXTYPE_ALERTS_SPARKLINE);
 
     }
 
@@ -198,7 +193,7 @@ var App = (() => {
             alertDivElem.innerHTML += this.responseText;
             this.abort();
         });
-        xhrAlertDiv.open('GET', App.config.AJAX_ALERT_DIV_URI);
+        xhrAlertDiv.open('GET', App.config.AJAXURI_ALERT_DIV);
         xhrAlertDiv.send();
     }
 
@@ -211,7 +206,7 @@ var App = (() => {
             this.abort();
         });
         setInterval(() => {
-            xhrAlertDiv.open('GET', App.config.AJAX_ALERT_DIV_URI);
+            xhrAlertDiv.open('GET', App.config.AJAXURI_ALERT_DIV);
             xhrAlertDiv.send();
         }, 10000);
     }
