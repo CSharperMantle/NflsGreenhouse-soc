@@ -69,8 +69,7 @@ var App = (() => {
 
         App.ajaxGetSparkline(
             App.config.AJAXTYPE_COMMITS_SPARKLINE,
-            '#all-commits-count-sparkline',
-            {
+            '#all-commits-count-sparkline', {
                 width: '85',
                 height: '35',
                 lineColor: colorPrimary,
@@ -85,8 +84,7 @@ var App = (() => {
 
         App.ajaxGetSparkline(
             App.config.AJAXTYPE_ALERTS_SPARKLINE,
-            '#all-alerts-count-sparkline',
-            {
+            '#all-alerts-count-sparkline', {
                 type: 'bar',
                 width: '85',
                 height: '35',
@@ -217,21 +215,21 @@ var App = (() => {
             var flatten = JSON.parse(data).flat();
             $(elem_selector).sparkline(flatten, painting_options);
         },
-        on_fail = 
+        on_fail =
         ($xhr, txtStatus, err) => {
             console.error(err);
         }
     ) => {
         $.post({
-            url: App.config.AJAXURI_SPARKLINE,
-            data: {
-                data_type: data_type
-            },
-            //HACK: Use directive text input to stringify it later
-            dataType: 'text'
-        })
-        .done(on_done)
-        .fail(on_fail);
+                url: App.config.AJAXURI_SPARKLINE,
+                data: {
+                    data_type: data_type
+                },
+                //HACK: Use directive text input to stringify it later
+                dataType: 'text'
+            })
+            .done(on_done)
+            .fail(on_fail);
     }
 
     App.dashboard = () => {
