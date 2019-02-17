@@ -67,53 +67,34 @@ var App = (() => {
         var colorSuccess = App.color.success;
         var colorDanger = App.color.danger;
 
-        $.post({
-                url: App.config.AJAXURI_SPARKLINE,
-                data: {
-                    data_type: App.config.AJAXTYPE_COMMITS_SPARKLINE
-                }
-            })
-            .then((data) => {
-                var flatten = data.flat();
-                $('#all-commits-count-sparkline').sparkline(flatten, {
-                    width: '85',
-                    height: '35',
-                    lineColor: colorPrimary,
-                    highlightSpotColor: colorPrimary,
-                    highlightLineColor: colorPrimary,
-                    fillColor: false,
-                    spotColor: false,
-                    minSpotColor: false,
-                    maxSpotColor: false,
-                    lineWidth: 1.15
-                });
-            }, ($xhr, txtStatus, err) => {
-                console.error(txtStatus);
-                console.error(err);
+        App.ajaxGetSparkline(
+            App.config.AJAXTYPE_COMMITS_SPARKLINE,
+            '#all-commits-count-sparkline',
+            {
+                width: '85',
+                height: '35',
+                lineColor: colorPrimary,
+                highlightSpotColor: colorPrimary,
+                highlightLineColor: colorPrimary,
+                fillColor: false,
+                spotColor: false,
+                minSpotColor: false,
+                maxSpotColor: false,
+                lineWidth: 1.15
             });
 
-        $.post({
-                url: App.config.AJAXURI_SPARKLINE,
-                data: {
-                    data_type: App.config.AJAXTYPE_ALERTS_SPARKLINE
-                }
-            })
-            .then((data) => {
-                var flatten = data.flat();
-                $('#all-alerts-count-sparkline').sparkline(flatten, {
-                    type: 'bar',
-                    width: '85',
-                    height: '35',
-                    barWidth: 4,
-                    barSpacing: 3,
-                    chartRangeMin: 0,
-                    barColor: colorSuccess
-                });
-            }, ($xhr, txtStatus, err) => {
-                console.error(txtStatus);
-                console.error(err);
+        App.ajaxGetSparkline(
+            App.config.AJAXTYPE_ALERTS_SPARKLINE,
+            '#all-alerts-count-sparkline',
+            {
+                type: 'bar',
+                width: '85',
+                height: '35',
+                barWidth: 4,
+                barSpacing: 3,
+                chartRangeMin: 0,
+                barColor: colorSuccess
             });
-
     }
 
     App.dataTables = () => {
@@ -225,6 +206,32 @@ var App = (() => {
                 $(".tooltip-chart").hide();
             }
         });
+    }
+
+    App.ajaxGetSparkline = (
+        data_type,
+        elem_selector,
+        painting_options,
+        on_done =
+        (data, txtStatus, $xhr) => {
+            var flatten = JSON.parse(data).flat();
+            $(elem_selector).sparkline(flatten, painting_options);
+        },
+        on_fail = 
+        ($xhr, txtStatus, err) => {
+            console.error(err);
+        }
+    ) => {
+        $.post({
+            url: App.config.AJAXURI_SPARKLINE,
+            data: {
+                data_type: data_type
+            },
+            //HACK: Use directive text input to stringify it later
+            dataType: 'text'
+        })
+        .done(on_done)
+        .fail(on_fail);
     }
 
     App.dashboard = () => {
