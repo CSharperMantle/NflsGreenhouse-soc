@@ -1,5 +1,5 @@
 <?php
-/**
+    /*
      * Copyright (c) 2018 Ningbo Foreign Language School
      * This part of program should be delivered with the whole project.
      * Partly use is not allowed.
@@ -26,5 +26,5 @@
     const FETCH_TODAY_COMMITS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM data GROUP BY day ORDER BY day DESC LIMIT 1;";
     const FETCH_TODAY_ALERTS_COUNT_SQL = "SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') day, COUNT(id) count FROM alerts WHERE is_ok!=0 GROUP BY day ORDER BY day DESC LIMIT 1;";
     const FETCH_LATEST_ALERT_SQL = "SELECT * FROM alerts WHERE alerts.id = (SELECT MAX(id) FROM alerts) LIMIT 1;";
-    const FETCH_LATEST_ALERT_TIMESTAMP_SQL = "SET @max = (SELECT MAX(id) FROM alerts); SELECT timestamp FROM alerts WHERE id=@max;";
+    const FETCH_LATEST_ALERT_TIMESTAMP_SQL = "SELECT timestamp FROM alerts ORDER BY id DESC LIMIT 1;";
 ?>

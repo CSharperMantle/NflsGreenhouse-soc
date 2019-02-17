@@ -4,8 +4,33 @@ var App = (() => {
     App.config = {
         AJAXURI_ALERT_DIV: 'api/internal/ajax-alert-div.php',
         AJAXURI_SPARKLINE: 'api/internal/ajax-sparkline-data.php',
+        AJAXURI_HISTORY_ACTIONS: 'api/internal/ajax-history-action-list.php',
         AJAXTYPE_COMMITS_SPARKLINE: 0,
-        AJAXTYPE_ALERTS_SPARKLINE: 1
+        AJAXTYPE_ALERTS_SPARKLINE: 1,
+        ELEMSELECTOR_COMMITS_SPARKLINE: '#all-commits-count-sparkline',
+        ELEMSELECTOR_ALERTS_SPARKLINE: '#all-alerts-count-sparkline',
+        ELEMSELECTOR_HISTORY_ACTION: '#history-actions',
+        SPARKLINECFG_COMMITS: {
+            width: '85',
+            height: '35',
+            lineColor: App.color.primary,
+            highlightSpotColor: App.color.primary,
+            highlightLineColor: App.color.primary,
+            fillColor: false,
+            spotColor: false,
+            minSpotColor: false,
+            maxSpotColor: false,
+            lineWidth: 1.15
+        },
+        SPARKLINECFG_ALERTS: {
+            type: 'bar',
+            width: '85',
+            height: '35',
+            barWidth: 4,
+            barSpacing: 3,
+            chartRangeMin: 0,
+            barColor: App.color.success
+        }
     };
 
 
@@ -61,37 +86,27 @@ var App = (() => {
     }
 
     App.sparkline = function () {
-        //TODO: VERY UGLY ALGORITHM. Do some clean-up.
-        var colorPrimary = App.color.primary;
-        var colorWarning = App.color.warning;
-        var colorSuccess = App.color.success;
-        var colorDanger = App.color.danger;
-
         App.ajaxGetSparkline(
             App.config.AJAXTYPE_COMMITS_SPARKLINE,
-            '#all-commits-count-sparkline', {
-                width: '85',
-                height: '35',
-                lineColor: colorPrimary,
-                highlightSpotColor: colorPrimary,
-                highlightLineColor: colorPrimary,
-                fillColor: false,
-                spotColor: false,
-                minSpotColor: false,
-                maxSpotColor: false,
-                lineWidth: 1.15
-            });
+            App.config.ELEMSELECTOR_COMMITS_SPARKLINE,
+            App.config.SPARKLINECFG_COMMITS);
 
         App.ajaxGetSparkline(
             App.config.AJAXTYPE_ALERTS_SPARKLINE,
-            '#all-alerts-count-sparkline', {
-                type: 'bar',
-                width: '85',
-                height: '35',
-                barWidth: 4,
-                barSpacing: 3,
-                chartRangeMin: 0,
-                barColor: colorSuccess
+            App.config.ELEMSELECTOR_ALERTS_SPARKLINE,
+            App.config.SPARKLINECFG_ALERTS);
+    }
+
+    App.historyActions = () => {
+        $.get({
+                url: App.config.AJAXURI_HISTORY_ACTIONS,
+                dataType: 'text'
+            })
+            .done((data, txtStatus, $xhr) => {
+                $(App.config.ELEMSELECTOR_HISTORY_ACTION).html(data);
+            })
+            .fail(($xhr, txtStatus, err) => {
+                console.error(err);
             });
     }
 
@@ -116,13 +131,13 @@ var App = (() => {
 
         //TODO: Make the map into the real map of greenhouse
 
-        var blueLighten2 = tinycolor(App.color.primary).lighten(15).toHexString();
-        var blueLighten = tinycolor(App.color.primary).lighten(8).toHexString();
-        var blue = tinycolor(App.color.primary).toHexString();
+        let blueLighten2 = tinycolor(App.color.primary).lighten(15).toHexString();
+        let blueLighten = tinycolor(App.color.primary).lighten(8).toHexString();
+        let blue = tinycolor(App.color.primary).toHexString();
 
         //Highlight data
         //TODO: Data weights can be shown here using AJAX
-        var data = {
+        let data = {
             "ru": "14",
             "us": "14",
             "ca": "10",
@@ -176,7 +191,7 @@ var App = (() => {
         xhrAlertDiv.send();
     }
 
-    App.ajaxApply = () => {
+    App.refreshTimely = () => {
         //TODO: VERY UGLY ALGORITHM. Do some clean-up.
         var xhrAlertDiv = new XMLHttpRequest();
         var alertDivElem = document.getElementById('alert-div');
@@ -206,6 +221,7 @@ var App = (() => {
         });
     }
 
+    //TODO: Simplify this function -> App.doAjax(ajax_type, url, data, dataType, on_done=func, on_fail=func)
     App.ajaxGetSparkline = (
         data_type,
         elem_selector,
@@ -238,6 +254,7 @@ var App = (() => {
 
         App.counter();
         App.sparkline();
+        App.historyActions();
         App.dataTables();
         App.map();
 
@@ -250,5 +267,5 @@ var App = (() => {
 $(document).ready(() => {
     App.init();
     App.dashboard();
-    App.ajaxApply();
+    App.refreshTimely();
 });

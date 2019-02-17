@@ -5,9 +5,11 @@
      * Partly use is not allowed.
      * Licensed under GPL-v3 Agreement
      */
-    function create_action_array(int $action_type, int $target_id, string $param) {
-        return array('action_type' => $action_type, 'target_id' => $target_id, 'param' => $param);
-    }
+    
+    require '..\\..\\assets\\php\\shared_db.php';
+    require '..\\..\\assets\\php\\shared_util.php';
+    require '..\\..\\assets\\php\\shared_sql.php';
+    require '..\\..\\assets\\php\\shared_html.php';
 
     
 ?>

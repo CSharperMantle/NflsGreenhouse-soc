@@ -1,5 +1,5 @@
 <?php
-    /**
+    /*
      * Copyright (c) 2018 Ningbo Foreign Language School
      * This part of program should be delivered with the whole project.
      * Partly use is not allowed.
@@ -130,6 +130,14 @@
         print "<div class=\"card-header\">$caption</div>";
         print "<div class=\"card-body\">$text</div>";
         print "</div>";
+    }
+
+    function print_history_action(bool $is_latest, string $time, string $action, string $description) {
+        print $is_latest ? "<li class=\"latest\">" : "<li>";
+        print "<div class=\"user-timeline-date\">$time</div>";
+        print "<div class=\"user-timeline-title\">$action</div>";
+        print "<div class=\"user-timeline-description\">$description</div>";
+        print "</li>";
     }
 
     function set_session_logged_in(string $username) {

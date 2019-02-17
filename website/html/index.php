@@ -300,7 +300,7 @@
               </div>
             </div>
             <div class="card-body">
-              <ul class="user-timeline user-timeline-compact">
+              <ul class="user-timeline user-timeline-compact" id="history-actions">
                 <li class="latest">
                   <div class="user-timeline-date">刚刚</div>
                   <div class="user-timeline-title">浇灌植物</div>
