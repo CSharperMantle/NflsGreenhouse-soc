@@ -5,11 +5,13 @@ var App = (() => {
         AJAXURI_ALERT_DIV: 'api/internal/ajax-alert-div.php',
         AJAXURI_SPARKLINE: 'api/internal/ajax-sparkline-data.php',
         AJAXURI_HISTORY_ACTIONS: 'api/internal/ajax-history-action-list.php',
+        AJAXURI_HISTORY_DATA_TABLE_BODY: 'api/internal/ajax-history-data-table-body.php',
         AJAXTYPE_COMMITS_SPARKLINE: 0,
         AJAXTYPE_ALERTS_SPARKLINE: 1,
         ELEMSELECTOR_COMMITS_SPARKLINE: '#all-commits-count-sparkline',
         ELEMSELECTOR_ALERTS_SPARKLINE: '#all-alerts-count-sparkline',
         ELEMSELECTOR_HISTORY_ACTION: '#history-actions',
+        ELEMSELECTOR_HISTORY_DATA_TABLE_BODY: '#history-data-table-body',
         SPARKLINECFG_COMMITS: {
             width: '85',
             height: '35',
@@ -161,7 +163,16 @@ var App = (() => {
     }
 
     App.dataTables = () => {
-
+        $.get({
+                url: App.config.AJAXURI_HISTORY_DATA_TABLE_BODY,
+                dataType: 'text'
+            })
+            .done((data, txtStatus, $xhr) => {
+                $(App.config.ELEMSELECTOR_HISTORY_DATA_TABLE_BODY).html(data);
+            })
+            .fail(($xhr, txtStatus, err) => {
+                console.error(err);
+            });
         //We use this to apply style to certain elements
         $.extend(true, $.fn.dataTable.defaults, {
             dom: "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'f>>" +

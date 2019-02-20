@@ -79,11 +79,11 @@
             <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
                 <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">
                   <?php print_user_name(); ?></span></a>
-              <div role="menu" class="dropdown-menu">
+                <div role="menu" class="dropdown-menu" id="user-menu">
                 <!--online away busy-->
-                <div class="user-info">
-                  <?php print_user_info(); ?>
-                </div>
+                  <div class="user-info">
+                    <?php print_user_info(); ?>
+                  </div>
                 <?php print_user_buttons(); ?>
               </div>
             </li>
@@ -271,7 +271,7 @@
                     <th>光强度</th>
                   </tr>
                 </thead>
-                <tbody id="history-data-table-tbody">
+                <tbody id="history-data-table-body">
                   <?php
                   foreach ($all_commits as $key => $value) {
                     $_air_temp = $value['air_temp'];
