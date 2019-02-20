@@ -35,7 +35,6 @@ var App = (() => {
 
 
     App.counter = function () {
-        //FIXME: Prettify vars init steps.
         $('[data-toggle="counter"]').each(function (_index, _element) {
             var elem = $(this);
             var prefix = '';
