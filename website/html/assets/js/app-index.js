@@ -111,23 +111,6 @@ var App = (() => {
             });
     }
 
-    App.dataTables = () => {
-
-        //We use this to apply style to certain elements
-        $.extend(true, $.fn.dataTable.defaults, {
-            dom: "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'f>>" +
-                "<'row be-datatable-body'<'col-sm-12'tr>>" +
-                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-        });
-
-        //Remove search & paging dropdown
-        $("#history-data-table").dataTable({
-            pageLength: 5,
-            dom: "<'row be-datatable-body'<'col-sm-12'tr>>" +
-                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-        });
-    }
-
     App.map = function () {
 
         //TODO: Make the map into the real map of greenhouse
@@ -163,30 +146,28 @@ var App = (() => {
     }
 
     App.dataTables = () => {
-        $.get({
-                url: App.config.AJAXURI_HISTORY_DATA_TABLE_BODY,
-                dataType: 'text'
-            })
-            .done((data, txtStatus, $xhr) => {
-                $(App.config.ELEMSELECTOR_HISTORY_DATA_TABLE_BODY).html(data);
-            })
-            .fail(($xhr, txtStatus, err) => {
-                console.error(err);
-            });
         //We use this to apply style to certain elements
         $.extend(true, $.fn.dataTable.defaults, {
             dom: "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'f>>" +
                 "<'row be-datatable-body'<'col-sm-12'tr>>" +
                 "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
         });
-
-        //Remove search & paging dropdown
-        $("#history-data-table").dataTable({
-            pageLength: 5,
-            dom: "<'row be-datatable-body'<'col-sm-12'tr>>" +
-                "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
-        });
-
+        
+        $.get({
+                url: App.config.AJAXURI_HISTORY_DATA_TABLE_BODY,
+                dataType: 'text'
+            })
+            .done((data, txtStatus, $xhr) => {
+                $(App.config.ELEMSELECTOR_HISTORY_DATA_TABLE_BODY).html(data);
+                $("#history-data-table").dataTable({
+                    pageLength: 5,
+                    dom: "<'row be-datatable-body'<'col-sm-12'tr>>" +
+                        "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
+                });
+            })
+            .fail(($xhr, txtStatus, err) => {
+                console.error(err);
+            });
     }
 
     App.firstTimeLoad = () => {

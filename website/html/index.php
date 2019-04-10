@@ -186,19 +186,13 @@
     <div class="be-content">
       <div class="main-content container-fluid">
         <noscript>
-          <?php
-            print_alert(AlertInfo::DANGER, '使用了不支持的设置！', 'JavaScript加载失败。大部分功能将不能正常工作。');
-          ?>
+          <div role="alert" class="alert alert-danger alert-icon">
+              <div class="icon"><span class="mdi mdi-close-circle-o"></span></div>
+              <div class="message">
+                  <strong>错误！</strong> 您没有允许JavaScript!
+              </div>
+          </div>
         </noscript>
-        <div id="alert-div">
-          <?php
-            if (isset($error_occur)) {
-              print_alert(AlertInfo::DANGER, '错误！', '加载页面时出错。页面不会正常工作。');
-              http_response_code(503);
-              exit();
-            }
-          ?>
-        </div>
       </div>
 
       <div class="row">
@@ -208,7 +202,7 @@
             <div class="data-info">
               <div class="desc">上传总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
-                <span data-toggle="counter" data-end="<?= $total_commits; ?>" class="number">
+                <span id="total-commits" data-toggle="counter" data-end="<?= $total_commits; ?>" class="number">
                   <?= $total_commits; ?></span>
               </div>
             </div>
@@ -221,7 +215,7 @@
             <div class="data-info">
               <div class="desc">报警总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
-                <span data-toggle="counter" data-end="<?= $total_alerts; ?>" class="number">
+                <span id="total-alerts" data-toggle="counter" data-end="<?= $total_alerts; ?>" class="number">
                   <?= $total_alerts; ?></span>
               </div>
             </div>
