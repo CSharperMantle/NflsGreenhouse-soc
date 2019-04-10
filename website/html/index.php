@@ -193,6 +193,7 @@
               </div>
           </div>
         </noscript>
+        <div id="alert-div"></div>
       </div>
 
       <div class="row">
