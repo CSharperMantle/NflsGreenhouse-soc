@@ -56,12 +56,14 @@
   <link rel="shortcut icon" href="assets/img/logo-fav.png">
   <title>宁波外国语学校大棚管理系统 - 仪表盘</title>
   <link rel="stylesheet" type="text/css" href="assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css" />
-  <link rel="stylesheet" type="text/css" href="assets/lib/material-design-icons/css/material-design-iconic-font.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="assets/lib/material-design-icons/css/material-design-iconic-font.min.css" />
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-  <link rel="stylesheet" type="text/css" href="assets/lib/datatables/datatables.net-bs4/css/dataTables.bootstrap4.css" />
+  <link rel="stylesheet" type="text/css"
+    href="assets/lib/datatables/datatables.net-bs4/css/dataTables.bootstrap4.css" />
   <link rel="stylesheet" type="text/css" href="assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" />
   <link rel="stylesheet" type="text/css" href="assets/lib/jqvmap/jqvmap.min.css" />
   <link rel="stylesheet" type="text/css" href="assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" />
@@ -76,24 +78,26 @@
         </div>
         <div class="be-right-navbar">
           <ul class="nav navbar-nav float-right be-user-nav">
-            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                class="nav-link dropdown-toggle">
                 <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">
                   <?php print_user_name(); ?></span></a>
-                <div role="menu" class="dropdown-menu" id="user-menu">
+              <div role="menu" class="dropdown-menu" id="user-menu">
                 <!--online away busy-->
-                  <div class="user-info">
-                    <?php print_user_info(); ?>
-                  </div>
+                <div class="user-info">
+                  <?php print_user_info(); ?>
+                </div>
                 <?php print_user_buttons(); ?>
               </div>
             </li>
           </ul>
           <div class="page-title"><span>仪表盘</span></div>
           <ul class="nav navbar-nav float-right be-icons-nav">
-            <li class="nav-item dropdown"><a href="#" role="button" aria-expanded="false" class="nav-link be-toggle-right-sidebar"><span
-                  class="icon mdi mdi-settings"></span></a></li>
-            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span
-                  class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
+            <li class="nav-item dropdown"><a href="#" role="button" aria-expanded="false"
+                class="nav-link be-toggle-right-sidebar"><span class="icon mdi mdi-settings"></span></a></li>
+            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                class="nav-link dropdown-toggle"><span class="icon mdi mdi-notifications"></span><span
+                  class="indicator"></span></a>
               <ul class="dropdown-menu be-notifications">
                 <li>
                   <div class="title">通知<span class="badge badge-pill">3</span></div>
@@ -111,8 +115,8 @@
                           <li class="notification"><a href="#">
                               <div class="image"><img src="assets/img/avatar3.png" alt="Avatar"></div>
                               <div class="notification-info">
-                                <div class="text"><span class="user-name">Joel King</span> is now following you</div><span
-                                  class="date">2 days ago</span>
+                                <div class="text"><span class="user-name">Joel King</span> is now following you</div>
+                                <span class="date">2 days ago</span>
                               </div>
                             </a></li>
                           <li class="notification"><a href="#">
@@ -125,8 +129,8 @@
                           <li class="notification"><a href="#">
                               <div class="image"><img src="assets/img/avatar5.png" alt="Avatar"></div>
                               <div class="notification-info">
-                                <span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span
-                                  class="date">5 days ago</span>
+                                <span class="text"><span class="user-name">Emily Carter</span> is now following
+                                  you</span><span class="date">5 days ago</span>
                               </div>
                             </a></li>
                         </ul>
@@ -137,15 +141,17 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span
-                  class="icon mdi mdi-apps"></span></a>
+            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                class="nav-link dropdown-toggle"><span class="icon mdi mdi-apps"></span></a>
               <ul class="dropdown-menu be-connections">
                 <li>
                   <div class="list">
                     <div class="content">
                       <div class="row">
-                        <a href="#history-data" class="connection-item"><img src="assets/img/backup.png" alt="历史数据"><span>历史数据</span></a>
-                        <a href="#latest-activities" class="connection-item"><img src="assets/img/backup.png" alt="最新行为"><span>最新行为</span></a>
+                        <a href="#history-data" class="connection-item"><img src="assets/img/backup.png"
+                            alt="历史数据"><span>历史数据</span></a>
+                        <a href="#latest-activities" class="connection-item"><img src="assets/img/backup.png"
+                            alt="最新行为"><span>最新行为</span></a>
                       </div>
                     </div>
                   </div>
@@ -166,7 +172,8 @@
                 <li class="divider">菜单</li>
                 <li class="active"><a href="index.php"><i class="icon mdi mdi-home"></i><span>仪表盘</span></a>
                 </li>
-                <li class=""><a href="pages-detailed-data.php"><i class="icon mdi mdi-chart-donut"></i><span>详细数据</span></a>
+                <li class=""><a href="pages-detailed-data.php"><i
+                      class="icon mdi mdi-chart-donut"></i><span>详细数据</span></a>
                 </li>
               </ul>
             </div>
@@ -187,10 +194,10 @@
       <div class="main-content container-fluid">
         <noscript>
           <div role="alert" class="alert alert-danger alert-icon">
-              <div class="icon"><span class="mdi mdi-close-circle-o"></span></div>
-              <div class="message">
-                  <strong>错误！</strong> 您没有允许JavaScript!
-              </div>
+            <div class="icon"><span class="mdi mdi-close-circle-o"></span></div>
+            <div class="message">
+              <strong>错误！</strong> 您没有允许JavaScript!
+            </div>
           </div>
         </noscript>
         <div id="alert-div"></div>
@@ -204,7 +211,7 @@
               <div class="desc">上传总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
                 <span id="total-commits" data-toggle="counter" data-end="<?= $total_commits; ?>" class="number">
-                  <?= $total_commits; ?></span>
+                  0</span>
               </div>
             </div>
           </div>
@@ -217,7 +224,7 @@
               <div class="desc">报警总数</div>
               <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span>
                 <span id="total-alerts" data-toggle="counter" data-end="<?= $total_alerts; ?>" class="number">
-                  <?= $total_alerts; ?></span>
+                  0</span>
               </div>
             </div>
           </div>
@@ -309,7 +316,8 @@
             </div>
             <div class="be-spinner">
               <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
+                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle">
+                </circle>
               </svg>
             </div>
           </div>
@@ -335,7 +343,8 @@
             </div>
             <div class="be-spinner">
               <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
+                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle">
+                </circle>
               </svg>
             </div>
           </div>
@@ -365,12 +374,12 @@
                     <h2>Recent</h2>
                     <div class="contact-list contact-list-recent">
                       <div class="user"><a href="#"><img src="assets/img/avatar1.png" alt="Avatar">
-                          <div class="user-data"><span class="status away"></span><span class="name">Claire Sassu</span><span
-                              class="message">Can you share the...</span></div>
+                          <div class="user-data"><span class="status away"></span><span class="name">Claire
+                              Sassu</span><span class="message">Can you share the...</span></div>
                         </a></div>
                       <div class="user"><a href="#"><img src="assets/img/avatar2.png" alt="Avatar">
-                          <div class="user-data"><span class="status"></span><span class="name">Maggie jackson</span><span
-                              class="message">I confirmed the info.</span></div>
+                          <div class="user-data"><span class="status"></span><span class="name">Maggie
+                              jackson</span><span class="message">I confirmed the info.</span></div>
                         </a></div>
                       <div class="user"><a href="#"><img src="assets/img/avatar3.png" alt="Avatar">
                           <div class="user-data"><span class="status offline"></span><span class="name">Joel King
@@ -380,10 +389,12 @@
                     <h2>Contacts</h2>
                     <div class="contact-list">
                       <div class="user"><a href="#"><img src="assets/img/avatar4.png" alt="Avatar">
-                          <div class="user-data2"><span class="status"></span><span class="name">Mike Bolthort</span></div>
+                          <div class="user-data2"><span class="status"></span><span class="name">Mike Bolthort</span>
+                          </div>
                         </a></div>
                       <div class="user"><a href="#"><img src="assets/img/avatar5.png" alt="Avatar">
-                          <div class="user-data2"><span class="status"></span><span class="name">Maggie jackson</span></div>
+                          <div class="user-data2"><span class="status"></span><span class="name">Maggie jackson</span>
+                          </div>
                         </a></div>
                       <div class="user"><a href="#"><img src="assets/img/avatar6.png" alt="Avatar">
                           <div class="user-data2"><span class="status offline"></span><span class="name">Jhon
@@ -428,7 +439,8 @@
               </div>
               <div class="chat-input">
                 <div class="input-wrapper"><span class="photo mdi mdi-camera"></span>
-                  <input type="text" placeholder="Message..." name="q" autocomplete="off"><span class="send-msg mdi mdi-mail-send"></span>
+                  <input type="text" placeholder="Message..." name="q" autocomplete="off"><span
+                    class="send-msg mdi mdi-mail-send"></span>
                 </div>
               </div>
             </div>
@@ -440,19 +452,23 @@
                   <div class="todo-content"><span class="category-title">Today</span>
                     <ul class="todo-list">
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
-                          <input type="checkbox" checked="" class="custom-control-input"><span class="custom-control-label">Initialize
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
+                          <input type="checkbox" checked="" class="custom-control-input"><span
+                            class="custom-control-label">Initialize
                             the project</span>
                         </label>
                       </li>
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
                           <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Create
                             the main structure </span>
                         </label>
                       </li>
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
                           <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Updates
                             changes to GitHub </span>
                         </label>
@@ -460,26 +476,32 @@
                     </ul><span class="category-title">Tomorrow</span>
                     <ul class="todo-list">
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
-                          <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Initialize
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
+                          <input type="checkbox" class="custom-control-input"><span
+                            class="custom-control-label">Initialize
                             the project </span>
                         </label>
                       </li>
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
                           <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Create
                             the main structure </span>
                         </label>
                       </li>
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
                           <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Updates
                             changes to GitHub </span>
                         </label>
                       </li>
                       <li>
-                        <label class="custom-checkbox custom-control custom-control-sm"><span class="delete mdi mdi-delete"></span>
-                          <input type="checkbox" class="custom-control-input"><span title="This task is too long to be displayed in a normal space!"
+                        <label class="custom-checkbox custom-control custom-control-sm"><span
+                            class="delete mdi mdi-delete"></span>
+                          <input type="checkbox" class="custom-control-input"><span
+                            title="This task is too long to be displayed in a normal space!"
                             class="custom-control-label">This task is too long to be displayed in a normal space!
                           </span>
                         </label>
@@ -576,12 +598,14 @@
   <script src="assets/lib/chartjs/Chart.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net/js/jquery.dataTables.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" type="text/javascript"></script>
-  <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+  <script src="assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript">
+  </script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.flash.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.print.min.js" type="text/javascript"></script>
   <script src="assets/lib/datatables/datatables.net-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
-  <script src="assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+  <script src="assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" type="text/javascript">
+  </script>
   <script src="assets/js/app.min.js" type="text/javascript"></script>
   <script src="assets/js/app-index.js" type="text/javascript"></script>
 </body>

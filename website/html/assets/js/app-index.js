@@ -19,6 +19,8 @@ var App = (() => {
         ELEMSELECTOR_HISTORY_DATA_TABLE_BODY: '#history-data-table-body',
         ELEMSELECTOR_TOTAL_COMMITS: '#total-commits',
         ELEMSELECTOR_TOTAL_ALERTS: '#total-alerts',
+        ELEMSELECTOR_TOGGLE_LOADING: '.toggle-loading',
+        ELEMSELECTOR_TOGGLE_CLOSE: '.toggle-close',
 
         SPARKLINECFG_COMMITS: {
             width: '85',
@@ -71,7 +73,7 @@ var App = (() => {
 
     App.toggleLoadingButton = function () {
         //TODO: Prevent the use of jQuery. Use DOM-based funcs instead.
-        $('.toggle-loading').on('click', function () {
+        $(App.config.ELEMSELECTOR_TOGGLE_LOADING).on('click', function () {
             var parent = $(this).parents('.widget, .panel');
             if (parent.length) {
                 parent.addClass('be-loading-active');
@@ -86,7 +88,7 @@ var App = (() => {
 
     App.toggleCloseButton = function () {
         //TODO: Prevent the use of jQuery. Use DOM-based funcs instead.
-        $('.toggle-close').on('click', function () {
+        $(App.config.ELEMSELECTOR_TOGGLE_CLOSE).on('click', function () {
             var parent = $(this).parents('.card, .widget, .panel');
             if (parent.length) {
                 parent.fadeOut();
@@ -95,6 +97,8 @@ var App = (() => {
     }
 
     App.numericData = () => {
+        $()
+
         $.post({
                 url: App.config.AJAXURI_NUMERIC,
                 data: {
