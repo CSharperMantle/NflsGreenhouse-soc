@@ -6,12 +6,20 @@ var App = (() => {
         AJAXURI_SPARKLINE: 'api/internal/ajax-sparkline-data.php',
         AJAXURI_HISTORY_ACTIONS: 'api/internal/ajax-history-action-list.php',
         AJAXURI_HISTORY_DATA_TABLE_BODY: 'api/internal/ajax-history-data-table-body.php',
+        AJAXURI_NUMERIC: 'api/internal/ajax-numeric.php',
+
         AJAXTYPE_COMMITS_SPARKLINE: 0,
         AJAXTYPE_ALERTS_SPARKLINE: 1,
+        AJAXTYPE_TOTAL_COMMITS: 0,
+        AJAXTYPE_TOTAL_ALERTS: 1,
+
         ELEMSELECTOR_COMMITS_SPARKLINE: '#all-commits-count-sparkline',
         ELEMSELECTOR_ALERTS_SPARKLINE: '#all-alerts-count-sparkline',
         ELEMSELECTOR_HISTORY_ACTION: '#history-actions',
         ELEMSELECTOR_HISTORY_DATA_TABLE_BODY: '#history-data-table-body',
+        ELEMSELECTOR_TOTAL_COMMITS: '#total-commits',
+        ELEMSELECTOR_TOTAL_ALERTS: '#total-alerts',
+
         SPARKLINECFG_COMMITS: {
             width: '85',
             height: '35',
@@ -86,7 +94,39 @@ var App = (() => {
         });
     }
 
-    App.sparkline = function () {
+    App.numericData = () => {
+        $.post({
+                url: App.config.AJAXURI_NUMERIC,
+                data: {
+                    data_type: AJAXTYPE_TOTAL_COMMITS
+                },
+                //HACK: Use directive text input to stringify it later
+                dataType: 'text'
+            })
+            .done((data, txtStatus, $xhr) => {
+                $(App.config.ELEMSELECTOR_TOTAL_COMMITS).html(data);
+            })
+            .fail(($xhr, txtStatus, err) => {
+                console.error(err);
+            });
+
+        $.post({
+                url: App.config.AJAXURI_NUMERIC,
+                data: {
+                    data_type: AJAXTYPE_TOTAL_ALERTS
+                },
+                //HACK: Use directive text input to stringify it later
+                dataType: 'text'
+            })
+            .done((data, txtStatus, $xhr) => {
+                $(App.config.ELEMSELECTOR_TOTAL_ALERTS).html(data);
+            })
+            .fail(($xhr, txtStatus, err) => {
+                console.error(err);
+            });
+    }
+
+    App.sparkline = () => {
         App.ajaxGetSparkline(
             App.config.AJAXTYPE_COMMITS_SPARKLINE,
             App.config.ELEMSELECTOR_COMMITS_SPARKLINE,
@@ -152,7 +192,7 @@ var App = (() => {
                 "<'row be-datatable-body'<'col-sm-12'tr>>" +
                 "<'row be-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
         });
-        
+
         $.get({
                 url: App.config.AJAXURI_HISTORY_DATA_TABLE_BODY,
                 dataType: 'text'
@@ -182,7 +222,7 @@ var App = (() => {
         xhrAlertDiv.send();
     }
 
-    App.refreshTimely = () => {
+    App.refreshAlertDivTimely = () => {
         //TODO: VERY UGLY ALGORITHM. Do some clean-up.
         var xhrAlertDiv = new XMLHttpRequest();
         var alertDivElem = document.getElementById('alert-div');
@@ -243,6 +283,7 @@ var App = (() => {
         App.toggleLoadingButton();
         App.toggleCloseButton();
 
+        App.numericData();
         App.counter();
         App.sparkline();
         App.historyActions();
@@ -258,5 +299,5 @@ var App = (() => {
 $(document).ready(() => {
     App.init();
     App.dashboard();
-    App.refreshTimely();
+    App.refreshAlertDivTimely();
 });
