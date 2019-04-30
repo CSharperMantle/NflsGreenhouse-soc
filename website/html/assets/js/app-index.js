@@ -47,14 +47,14 @@ var App = (() => {
 
 
     App.counter = function () {
-        $('[data-toggle="counter"]').each(function (_index, _element) {
-            var elem = $(this);
-            var prefix = '';
-            var suffix = '';
-            var start = 0;
-            var end = 0;
-            var decimals = 0;
-            var duration = 2.5;
+        $('[data-toggle="counter"]').each(function (index, $element) {
+            let elem = $(this);
+            let prefix = '';
+            let suffix = '';
+            let start = 0;
+            let end = 0;
+            let decimals = 0;
+            let duration = 2.5;
 
             prefix = !!elem.data('prefix') ? elem.data('prefix') : prefix;
             suffix = !!elem.data('suffix') ? elem.data('suffix') : suffix;
@@ -63,7 +63,7 @@ var App = (() => {
             decimals = !!elem.data('decimals') ? elem.data('decimals') : decimals;
             duration = !!elem.data('duration') ? elem.data('duration') : duration;
 
-            var count = new CountUp(elem.get(0), start, end, decimals, duration, {
+            let count = new CountUp(elem.get(0), start, end, decimals, duration, {
                 suffix: suffix,
                 prefix: prefix,
             });
@@ -89,7 +89,7 @@ var App = (() => {
     App.toggleCloseButton = function () {
         //TODO: Prevent the use of jQuery. Use DOM-based funcs instead.
         $(App.config.ELEMSELECTOR_TOGGLE_CLOSE).on('click', function () {
-            var parent = $(this).parents('.card, .widget, .panel');
+            let parent = $(this).parents('.card, .widget, .panel');
             if (parent.length) {
                 parent.fadeOut();
             }
@@ -216,8 +216,8 @@ var App = (() => {
 
     App.firstTimeLoad = () => {
         //TODO: VERY UGLY ALGORITHM. Do some clean-up.
-        var alertDivElem = document.getElementById('alert-div');
-        var xhrAlertDiv = new XMLHttpRequest();
+        let alertDivElem = document.getElementById('alert-div');
+        let xhrAlertDiv = new XMLHttpRequest();
         xhrAlertDiv.addEventListener('load', function () {
             alertDivElem.innerHTML += this.responseText;
             this.abort();
@@ -228,8 +228,8 @@ var App = (() => {
 
     App.refreshAlertDivTimely = () => {
         //TODO: VERY UGLY ALGORITHM. Do some clean-up.
-        var xhrAlertDiv = new XMLHttpRequest();
-        var alertDivElem = document.getElementById('alert-div');
+        let xhrAlertDiv = new XMLHttpRequest();
+        let alertDivElem = document.getElementById('alert-div');
         xhrAlertDiv.addEventListener('load', function () {
             alertDivElem.innerHTML = this.responseText;
             this.abort();
@@ -242,7 +242,7 @@ var App = (() => {
 
     App.widgetTooltipPosition = function (id, top) {
         $('#' + id).bind("plothover", function (event, pos, item) {
-            var widthToolTip = $('.tooltip-chart').width();
+            let widthToolTip = $('.tooltip-chart').width();
             if (item) {
                 $(".tooltip-chart")
                     .css({
@@ -263,7 +263,7 @@ var App = (() => {
         painting_options,
         on_done =
         (data, txtStatus, $xhr) => {
-            var flatten = JSON.parse(data).flat();
+            let flatten = JSON.parse(data).flat();
             $(elem_selector).sparkline(flatten, painting_options);
         },
         on_fail =
