@@ -1,7 +1,7 @@
 {
   "name": "nfls-watering",
   "version": "1.0.0",
-  "description": "This project is developed to be an automatic greenhouse controller.\r ## Installation\r ### Requirements\r * Required `PHP7+`\r * Required `session.auto_start=1`\r * Required settings in Apache: `ErrorDocument 404 .../NflsWatering/website/html/pages-404.html`\r ## API\r APIs are provided in RESTful or XML-like styles.\r ```\r website |--api\r         |   |--v1.0 = SOAP APIs\r         |   |   |--upload.php\r         |   |--v1.1 = RESTful APIs\r         |   |   |--upload.php\r         |   |--v2.0 = RESTful APIs, master-slave seperated\r         |   |   |--upload.php\r         |   |   |--fetch.php\r         |   |--internal = Internal APIs\r ```\r ## Acknowledgement\r ### Libs in use\r * `HttpParser` in C by Joyent Inc. and other Node contributors\r * `LiquidCrystal_I2C` in Arduino C++ by Frank de Brabander\r * `PacketParser` in C++ by Mantle Jonse and iRed_K\r * `ProtoThreads` in C by Adam Dunkels\r * `cJSON` in C by Dave Gamble and other cJSON contributors",
+  "description": "This project is developed to be an automatic greenhouse controller.",
   "main": "website/index.html",
   "directories": {
     "lib": "lib"
