@@ -21,6 +21,7 @@ var App = (() => {
         ELEMSELECTOR_TOTAL_ALERTS: '#total-alerts',
         ELEMSELECTOR_TOGGLE_LOADING: '.toggle-loading',
         ELEMSELECTOR_TOGGLE_CLOSE: '.toggle-close',
+        ELEMSELECTOR_UPDATED_DATETIME: '.updated-datetime',
 
         SPARKLINECFG_COMMITS: {
             width: '85',
@@ -97,12 +98,12 @@ var App = (() => {
     }
 
     App.numericData = () => {
-        $()
+        $(App.config.ELEMSELECTOR_UPDATED_DATETIME).html(new Date().toLocaleString());
 
         $.post({
                 url: App.config.AJAXURI_NUMERIC,
                 data: {
-                    data_type: AJAXTYPE_TOTAL_COMMITS
+                    data_type: App.config.AJAXTYPE_TOTAL_COMMITS
                 },
                 //HACK: Use directive text input to stringify it later
                 dataType: 'text'
@@ -117,7 +118,7 @@ var App = (() => {
         $.post({
                 url: App.config.AJAXURI_NUMERIC,
                 data: {
-                    data_type: AJAXTYPE_TOTAL_ALERTS
+                    data_type: App.config.AJAXTYPE_TOTAL_ALERTS
                 },
                 //HACK: Use directive text input to stringify it later
                 dataType: 'text'
@@ -216,6 +217,16 @@ var App = (() => {
 
     App.firstTimeLoad = () => {
         //TODO: VERY UGLY ALGORITHM. Do some clean-up.
+        App.toggleLoadingButton();
+        App.toggleCloseButton();
+
+        App.numericData();
+        App.counter();
+        App.sparkline();
+        App.historyActions();
+        App.dataTables();
+        App.map();
+
         var alertDivElem = document.getElementById('alert-div');
         var xhrAlertDiv = new XMLHttpRequest();
         xhrAlertDiv.addEventListener('load', function () {
@@ -284,16 +295,6 @@ var App = (() => {
     }
 
     App.dashboard = () => {
-        App.toggleLoadingButton();
-        App.toggleCloseButton();
-
-        App.numericData();
-        App.counter();
-        App.sparkline();
-        App.historyActions();
-        App.dataTables();
-        App.map();
-
         App.firstTimeLoad();
     }
 

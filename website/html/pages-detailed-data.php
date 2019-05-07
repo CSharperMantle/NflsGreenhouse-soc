@@ -282,7 +282,7 @@
                         </a></div>
                       <div class="user"><a href="#"><img src="assets/img/avatar3.png" alt="Avatar">
                           <div class="user-data"><span class="status offline"></span><span class="name">Joel King
-                            </span><span class="message">Ready for the meeti...</span></div>
+                            </span><span class="message">Ready for the meeting...</span></div>
                         </a></div>
                     </div>
                     <h2>Contacts</h2>

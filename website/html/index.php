@@ -180,7 +180,7 @@
           </div>
         </div>
         <div class="progress-widget">
-          <div class="progress-data">
+          <div class="progress-data updated-datetime">
             <?= '页面更新时间: ' . date('H:m:s'); ?>
           </div>
           <div class="progress-data"><span class="progress-value">50%</span><span class="name">完善程度</span></div>
@@ -383,7 +383,7 @@
                         </a></div>
                       <div class="user"><a href="#"><img src="assets/img/avatar3.png" alt="Avatar">
                           <div class="user-data"><span class="status offline"></span><span class="name">Joel King
-                            </span><span class="message">Ready for the meeti...</span></div>
+                            </span><span class="message">Ready for the meeting...</span></div>
                         </a></div>
                     </div>
                     <h2>Contacts</h2>
