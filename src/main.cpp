@@ -80,9 +80,6 @@ float currentAirHum = 0;
 int currentLightValue = 0;
 int currentGroundHum = 0;
 
-pt uploadSensorData_ctrl = pt();
-pt maintainEthernet_ctrl = pt();
-
 void clearResetScreen(LiquidCrystal_I2C *lcd) {
     lcd->home();
     lcd->clear();
@@ -256,23 +253,6 @@ void initDht() {
     CONST_CAST(logger, Logger *)->Info("Done.");
 }
 
-PT_THREAD(maintainEthernet(pt *pt)) {
-    PT_BEGIN(pt);
-    CONST_CAST(logger, Logger *)->Info("Maintaining Ethernet connection");
-    Ethernet.maintain();
-    PT_YIELD(pt);
-    CONST_CAST(logger, Logger *)->Info("Done.");
-    PT_TIMER_DELAY(pt, maintainEthernetInterval);
-    PT_END(pt);
-}
-
-PT_THREAD(uploadSensorData(pt *pt)) {
-    PT_BEGIN(pt);
-    
-    PT_TIMER_DELAY(pt, uploadInterval);
-    PT_END(pt);
-}
-
 void setup() {
     //Startup scripts
     initSerial();
@@ -280,8 +260,6 @@ void setup() {
     printLicenseInfo();
     initEthernet();
     initDht();
-    PT_INIT(&uploadSensorData_ctrl);
-    PT_INIT(&maintainEthernet_ctrl);
 
     CONST_CAST(logger, Logger *)->Info("Init done.");
 }
@@ -326,4 +304,8 @@ void loop() {
         webUploader->flush();
         webUploader->stop();
     }
+    
+    CONST_CAST(logger, Logger *)->Info("Maintaining Ethernet connection");
+    Ethernet.maintain();
+    CONST_CAST(logger, Logger *)->Info("Done.");
 }
