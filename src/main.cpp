@@ -268,6 +268,25 @@ PT_THREAD(maintainEthernet(pt *pt)) {
 
 PT_THREAD(uploadSensorData(pt *pt)) {
     PT_BEGIN(pt);
+    
+    PT_TIMER_DELAY(pt, uploadInterval);
+    PT_END(pt);
+}
+
+void setup() {
+    //Startup scripts
+    initSerial();
+    initLcd();
+    printLicenseInfo();
+    initEthernet();
+    initDht();
+    PT_INIT(&uploadSensorData_ctrl);
+    PT_INIT(&maintainEthernet_ctrl);
+
+    CONST_CAST(logger, Logger *)->Info("Init done.");
+}
+
+void loop() {
     currentGroundHum = analogRead(groundHumSensorPin);
     currentLightValue = analogRead(lightSensorPin);
     currentAirTemp = airSensor->getTemperature();
@@ -282,7 +301,7 @@ PT_THREAD(uploadSensorData(pt *pt)) {
                 + String("&air_light=") + String(currentLightValue) \
                 + String("&ground_hum=") + String(currentGroundHum) \
                 + String(" HTTP/1.1\r\n" \
-                "Accept: application/xml\r\n" \
+                "Accept: application/json\r\n" \
                 "Host: ") + String(webServerAddress) + String(":") + String(webServerPort) + String("\r\n") + String( \
                 "User-Agent: arduino/mega2560\r\n" \
                 "Connection: close\r\n" \
@@ -307,24 +326,4 @@ PT_THREAD(uploadSensorData(pt *pt)) {
         webUploader->flush();
         webUploader->stop();
     }
-    PT_TIMER_DELAY(pt, uploadInterval);
-    PT_END(pt);
-}
-
-void setup() {
-    //Startup scripts
-    initSerial();
-    initLcd();
-    printLicenseInfo();
-    initEthernet();
-    initDht();
-    PT_INIT(&uploadSensorData_ctrl);
-    PT_INIT(&maintainEthernet_ctrl);
-
-    CONST_CAST(logger, Logger *)->Info("Init done.");
-}
-
-void loop() {
-    uploadSensorData(&uploadSensorData_ctrl);
-    maintainEthernet(&maintainEthernet_ctrl);
 }

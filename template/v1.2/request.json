@@ -1,0 +1,41 @@
+{
+    "version": "1.2.0",
+    "timestamp":
+    {
+        "hour": 12,
+        "minute": 44,
+        "second": 21
+    },
+    "data":
+    [
+        {
+            "data_type": 0,
+            "data_content": 124
+        },
+        {
+            "data_type": 1,
+            "data_content": 423
+        },
+        {
+            "data_type": 2,
+            "data_content": 183
+        },
+        {
+            "data_type": 3,
+            "data_content": 1020
+        }
+    ],
+    "devices":
+    [
+        {
+            "device_id": 0,
+            "device_ip": "192.168.1.100",
+            "status": 0
+        },
+        {
+            "device_id": 1,
+            "device_ip": "192.168.1.101",
+            "status": 1
+        }
+    ]
+}
