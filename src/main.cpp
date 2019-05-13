@@ -298,7 +298,6 @@ void loop() {
         webUploader->stop();
         CONST_CAST(logger, Logger *)->Info("Done. Connection closed.");
         delay(1000);
-        break;
     } else {
         CONST_CAST(logger, Logger *)->Error("Connection broke.");
         webUploader->flush();
