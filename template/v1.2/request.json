@@ -37,5 +37,16 @@
             "device_ip": "192.168.1.101",
             "status": 1
         }
+    ],
+    "state":
+    [
+        {
+            "pin_id": 22,
+            "state": 0
+        },
+        {
+            "pin_id": 23,
+            "state": 1
+        }
     ]
 }
