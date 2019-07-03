@@ -1,26 +1,13 @@
-# Greenhouse Project of Ningbo Foreign Language School
-## Introduction
-This project is developed to be an automatic greenhouse controller.
-## Installation
-### Requirements
-* Required `PHP7+`
-* Required `session.auto_start=1`
-* Required settings in Apache: `ErrorDocument 404 .../NflsWatering/website/html/pages-404.html`
-## API
-APIs are provided in RESTful or XML-like styles.
-```
-website |--api
-        |   |--v1.0 = SOAP APIs
-        |   |   |--upload.php
-        |   |--v1.1 = RESTful APIs
-        |   |   |--upload.php
-        |   |--v2.0 = RESTful APIs, master-slave seperated
-        |   |   |--upload.php
-        |   |   |--fetch.php
-        |   |--internal = Internal APIs
-```
+# Smart Greenhouse Project of NFLS - SoC Module
+
+## General introduction
+The Smart Greenhouse Project is built for NFLS. This project is a part of NFLS' Smart Campus roadmap.
+This project consists of 3 modules, the SoC module, the Website module and the Distributed Data Collection module.
+
+## Introduction to this module
+This module contains the essential code for Greenhouse Controller. It co-operates with Website module.
+
 ## Acknowledgement
-### Libs in use
 * `HttpParser` in C by Joyent Inc. and other Node contributors
 * `LiquidCrystal_I2C` in Arduino C++ by Frank de Brabander
 * `PacketParser` in C++ by Mantle Jonse and iRed_K
