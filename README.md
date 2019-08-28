@@ -1,4 +1,5 @@
 # Smart Greenhouse Project of NFLS - SoC Module
+[![Build Status](https://travis-ci.com/CSharperMantle/NflsGreenhouse-soc.svg?branch=master)](https://travis-ci.com/CSharperMantle/NflsGreenhouse-soc)
 
 ## General introduction
 The Smart Greenhouse Project is built for NFLS. This project is a part of NFLS' Smart Campus roadmap.
