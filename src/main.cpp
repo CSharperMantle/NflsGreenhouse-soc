@@ -399,12 +399,10 @@ void loop() {
         web_uploader.print(buf);
         FREE_HEAP(buf);
 
-        {
-            String respond = String();
-            String str = web_uploader.readString();
-            http_parser_init(&req_res_parser, HTTP_RESPONSE);
-            http_parser_execute(&req_res_parser, &req_res_parser_settings, respond.c_str(), strlen(respond.c_str()));
-        }
+        String respond = web_uploader.readString();
+        http_parser_init(&req_res_parser, HTTP_RESPONSE);
+        http_parser_execute(&req_res_parser, &req_res_parser_settings, respond.c_str(), strlen(respond.c_str()));
+        
         logger.Info("Done. Connection closed.");
         delay(1000);
     } else {
