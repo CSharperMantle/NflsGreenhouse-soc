@@ -29,6 +29,8 @@ if (ptr) { \
 
 #define CONST_CAST(src, dst_type) (const_cast<dst_type>(src))
 
+#define HTTP_PARSER_CALLBACK(name_args) int name_args 
+
 #ifdef __cplusplus
 }
 #endif
