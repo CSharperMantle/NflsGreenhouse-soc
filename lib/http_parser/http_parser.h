@@ -26,8 +26,8 @@ extern "C" {
 
 /* Also update SONAME in the Makefile whenever you change these. */
 #define HTTP_PARSER_VERSION_MAJOR 2
-#define HTTP_PARSER_VERSION_MINOR 8
-#define HTTP_PARSER_VERSION_PATCH 1
+#define HTTP_PARSER_VERSION_MINOR 9
+#define HTTP_PARSER_VERSION_PATCH 2
 
 #include <stddef.h>
 #if defined(_WIN32) && !defined(__MINGW32__) && \
@@ -60,11 +60,7 @@ typedef unsigned __int64 uint64_t;
  * to a very large number (e.g. -DHTTP_MAX_HEADER_SIZE=0x7fffffff)
  */
 #ifndef HTTP_MAX_HEADER_SIZE
-# define HTTP_MAX_HEADER_SIZE (80L*1024L)
-#endif
-
-#ifndef HTTP_PARSER_CALLBACK
-# define HTTP_PARSER_CALLBACK(name_args) long name_args 
+# define HTTP_MAX_HEADER_SIZE (80*1024)
 #endif
 
 typedef struct http_parser http_parser;
@@ -89,71 +85,71 @@ typedef struct http_parser_settings http_parser_settings;
  * many times for each string. E.G. you might get 10 callbacks for "on_url"
  * each providing just a few characters more data.
  */
-typedef long (*http_data_cb) (http_parser*, const char *at, size_t length);
-typedef long (*http_cb) (http_parser*);
+typedef int (*http_data_cb) (http_parser*, const char *at, size_t length);
+typedef int (*http_cb) (http_parser*);
 
 
 /* Status Codes */
 #define HTTP_STATUS_MAP(XX)                                                 \
-  XX(100L, CONTINUE,                        Continue)                        \
-  XX(101L, SWITCHING_PROTOCOLS,             Switching Protocols)             \
-  XX(102L, PROCESSING,                      Processing)                      \
-  XX(200L, OK,                              OK)                              \
-  XX(201L, CREATED,                         Created)                         \
-  XX(202L, ACCEPTED,                        Accepted)                        \
-  XX(203L, NON_AUTHORITATIVE_INFORMATION,   Non-Authoritative Information)   \
-  XX(204L, NO_CONTENT,                      No Content)                      \
-  XX(205L, RESET_CONTENT,                   Reset Content)                   \
-  XX(206L, PARTIAL_CONTENT,                 Partial Content)                 \
-  XX(207L, MULTI_STATUS,                    Multi-Status)                    \
-  XX(208L, ALREADY_REPORTED,                Already Reported)                \
-  XX(226L, IM_USED,                         IM Used)                         \
-  XX(300L, MULTIPLE_CHOICES,                Multiple Choices)                \
-  XX(301L, MOVED_PERMANENTLY,               Moved Permanently)               \
-  XX(302L, FOUND,                           Found)                           \
-  XX(303L, SEE_OTHER,                       See Other)                       \
-  XX(304L, NOT_MODIFIED,                    Not Modified)                    \
-  XX(305L, USE_PROXY,                       Use Proxy)                       \
-  XX(307L, TEMPORARY_REDIRECT,              Temporary Redirect)              \
-  XX(308L, PERMANENT_REDIRECT,              Permanent Redirect)              \
-  XX(400L, BAD_REQUEST,                     Bad Request)                     \
-  XX(401L, UNAUTHORIZED,                    Unauthorized)                    \
-  XX(402L, PAYMENT_REQUIRED,                Payment Required)                \
-  XX(403L, FORBIDDEN,                       Forbidden)                       \
-  XX(404L, NOT_FOUND,                       Not Found)                       \
-  XX(405L, METHOD_NOT_ALLOWED,              Method Not Allowed)              \
-  XX(406L, NOT_ACCEPTABLE,                  Not Acceptable)                  \
-  XX(407L, PROXY_AUTHENTICATION_REQUIRED,   Proxy Authentication Required)   \
-  XX(408L, REQUEST_TIMEOUT,                 Request Timeout)                 \
-  XX(409L, CONFLICT,                        Conflict)                        \
-  XX(410L, GONE,                            Gone)                            \
-  XX(411L, LENGTH_REQUIRED,                 Length Required)                 \
-  XX(412L, PRECONDITION_FAILED,             Precondition Failed)             \
-  XX(413L, PAYLOAD_TOO_LARGE,               Payload Too Large)               \
-  XX(414L, URI_TOO_LONG,                    URI Too Long)                    \
-  XX(415L, UNSUPPORTED_MEDIA_TYPE,          Unsupported Media Type)          \
-  XX(416L, RANGE_NOT_SATISFIABLE,           Range Not Satisfiable)           \
-  XX(417L, EXPECTATION_FAILED,              Expectation Failed)              \
-  XX(421L, MISDIRECTED_REQUEST,             Misdirected Request)             \
-  XX(422L, UNPROCESSABLE_ENTITY,            Unprocessable Entity)            \
-  XX(423L, LOCKED,                          Locked)                          \
-  XX(424L, FAILED_DEPENDENCY,               Failed Dependency)               \
-  XX(426L, UPGRADE_REQUIRED,                Upgrade Required)                \
-  XX(428L, PRECONDITION_REQUIRED,           Precondition Required)           \
-  XX(429L, TOO_MANY_REQUESTS,               Too Many Requests)               \
-  XX(431L, REQUEST_HEADER_FIELDS_TOO_LARGE, Request Header Fields Too Large) \
-  XX(451L, UNAVAILABLE_FOR_LEGAL_REASONS,   Unavailable For Legal Reasons)   \
-  XX(500L, INTERNAL_SERVER_ERROR,           Internal Server Error)           \
-  XX(501L, NOT_IMPLEMENTED,                 Not Implemented)                 \
-  XX(502L, BAD_GATEWAY,                     Bad Gateway)                     \
-  XX(503L, SERVICE_UNAVAILABLE,             Service Unavailable)             \
-  XX(504L, GATEWAY_TIMEOUT,                 Gateway Timeout)                 \
-  XX(505L, HTTP_VERSION_NOT_SUPPORTED,      HTTP Version Not Supported)      \
-  XX(506L, VARIANT_ALSO_NEGOTIATES,         Variant Also Negotiates)         \
-  XX(507L, INSUFFICIENT_STORAGE,            Insufficient Storage)            \
-  XX(508L, LOOP_DETECTED,                   Loop Detected)                   \
-  XX(510L, NOT_EXTENDED,                    Not Extended)                    \
-  XX(511L, NETWORK_AUTHENTICATION_REQUIRED, Network Authentication Required) \
+  XX(100, CONTINUE,                        Continue)                        \
+  XX(101, SWITCHING_PROTOCOLS,             Switching Protocols)             \
+  XX(102, PROCESSING,                      Processing)                      \
+  XX(200, OK,                              OK)                              \
+  XX(201, CREATED,                         Created)                         \
+  XX(202, ACCEPTED,                        Accepted)                        \
+  XX(203, NON_AUTHORITATIVE_INFORMATION,   Non-Authoritative Information)   \
+  XX(204, NO_CONTENT,                      No Content)                      \
+  XX(205, RESET_CONTENT,                   Reset Content)                   \
+  XX(206, PARTIAL_CONTENT,                 Partial Content)                 \
+  XX(207, MULTI_STATUS,                    Multi-Status)                    \
+  XX(208, ALREADY_REPORTED,                Already Reported)                \
+  XX(226, IM_USED,                         IM Used)                         \
+  XX(300, MULTIPLE_CHOICES,                Multiple Choices)                \
+  XX(301, MOVED_PERMANENTLY,               Moved Permanently)               \
+  XX(302, FOUND,                           Found)                           \
+  XX(303, SEE_OTHER,                       See Other)                       \
+  XX(304, NOT_MODIFIED,                    Not Modified)                    \
+  XX(305, USE_PROXY,                       Use Proxy)                       \
+  XX(307, TEMPORARY_REDIRECT,              Temporary Redirect)              \
+  XX(308, PERMANENT_REDIRECT,              Permanent Redirect)              \
+  XX(400, BAD_REQUEST,                     Bad Request)                     \
+  XX(401, UNAUTHORIZED,                    Unauthorized)                    \
+  XX(402, PAYMENT_REQUIRED,                Payment Required)                \
+  XX(403, FORBIDDEN,                       Forbidden)                       \
+  XX(404, NOT_FOUND,                       Not Found)                       \
+  XX(405, METHOD_NOT_ALLOWED,              Method Not Allowed)              \
+  XX(406, NOT_ACCEPTABLE,                  Not Acceptable)                  \
+  XX(407, PROXY_AUTHENTICATION_REQUIRED,   Proxy Authentication Required)   \
+  XX(408, REQUEST_TIMEOUT,                 Request Timeout)                 \
+  XX(409, CONFLICT,                        Conflict)                        \
+  XX(410, GONE,                            Gone)                            \
+  XX(411, LENGTH_REQUIRED,                 Length Required)                 \
+  XX(412, PRECONDITION_FAILED,             Precondition Failed)             \
+  XX(413, PAYLOAD_TOO_LARGE,               Payload Too Large)               \
+  XX(414, URI_TOO_LONG,                    URI Too Long)                    \
+  XX(415, UNSUPPORTED_MEDIA_TYPE,          Unsupported Media Type)          \
+  XX(416, RANGE_NOT_SATISFIABLE,           Range Not Satisfiable)           \
+  XX(417, EXPECTATION_FAILED,              Expectation Failed)              \
+  XX(421, MISDIRECTED_REQUEST,             Misdirected Request)             \
+  XX(422, UNPROCESSABLE_ENTITY,            Unprocessable Entity)            \
+  XX(423, LOCKED,                          Locked)                          \
+  XX(424, FAILED_DEPENDENCY,               Failed Dependency)               \
+  XX(426, UPGRADE_REQUIRED,                Upgrade Required)                \
+  XX(428, PRECONDITION_REQUIRED,           Precondition Required)           \
+  XX(429, TOO_MANY_REQUESTS,               Too Many Requests)               \
+  XX(431, REQUEST_HEADER_FIELDS_TOO_LARGE, Request Header Fields Too Large) \
+  XX(451, UNAVAILABLE_FOR_LEGAL_REASONS,   Unavailable For Legal Reasons)   \
+  XX(500, INTERNAL_SERVER_ERROR,           Internal Server Error)           \
+  XX(501, NOT_IMPLEMENTED,                 Not Implemented)                 \
+  XX(502, BAD_GATEWAY,                     Bad Gateway)                     \
+  XX(503, SERVICE_UNAVAILABLE,             Service Unavailable)             \
+  XX(504, GATEWAY_TIMEOUT,                 Gateway Timeout)                 \
+  XX(505, HTTP_VERSION_NOT_SUPPORTED,      HTTP Version Not Supported)      \
+  XX(506, VARIANT_ALSO_NEGOTIATES,         Variant Also Negotiates)         \
+  XX(507, INSUFFICIENT_STORAGE,            Insufficient Storage)            \
+  XX(508, LOOP_DETECTED,                   Loop Detected)                   \
+  XX(510, NOT_EXTENDED,                    Not Extended)                    \
+  XX(511, NETWORK_AUTHENTICATION_REQUIRED, Network Authentication Required) \
 
 enum http_status
   {
@@ -165,48 +161,48 @@ enum http_status
 
 /* Request Methods */
 #define HTTP_METHOD_MAP(XX)         \
-  XX(0L,  DELETE,      DELETE)       \
-  XX(1L,  GET,         GET)          \
-  XX(2L,  HEAD,        HEAD)         \
-  XX(3L,  POST,        POST)         \
-  XX(4L,  PUT,         PUT)          \
+  XX(0,  DELETE,      DELETE)       \
+  XX(1,  GET,         GET)          \
+  XX(2,  HEAD,        HEAD)         \
+  XX(3,  POST,        POST)         \
+  XX(4,  PUT,         PUT)          \
   /* pathological */                \
-  XX(5L,  CONNECT,     CONNECT)      \
-  XX(6L,  OPTIONS,     OPTIONS)      \
-  XX(7L,  TRACE,       TRACE)        \
+  XX(5,  CONNECT,     CONNECT)      \
+  XX(6,  OPTIONS,     OPTIONS)      \
+  XX(7,  TRACE,       TRACE)        \
   /* WebDAV */                      \
-  XX(8L,  COPY,        COPY)         \
-  XX(9L,  LOCK,        LOCK)         \
-  XX(10L, MKCOL,       MKCOL)        \
-  XX(11L, MOVE,        MOVE)         \
-  XX(12L, PROPFIND,    PROPFIND)     \
-  XX(13L, PROPPATCH,   PROPPATCH)    \
-  XX(14L, SEARCH,      SEARCH)       \
-  XX(15L, UNLOCK,      UNLOCK)       \
-  XX(16L, BIND,        BIND)         \
-  XX(17L, REBIND,      REBIND)       \
-  XX(18L, UNBIND,      UNBIND)       \
-  XX(19L, ACL,         ACL)          \
+  XX(8,  COPY,        COPY)         \
+  XX(9,  LOCK,        LOCK)         \
+  XX(10, MKCOL,       MKCOL)        \
+  XX(11, MOVE,        MOVE)         \
+  XX(12, PROPFIND,    PROPFIND)     \
+  XX(13, PROPPATCH,   PROPPATCH)    \
+  XX(14, SEARCH,      SEARCH)       \
+  XX(15, UNLOCK,      UNLOCK)       \
+  XX(16, BIND,        BIND)         \
+  XX(17, REBIND,      REBIND)       \
+  XX(18, UNBIND,      UNBIND)       \
+  XX(19, ACL,         ACL)          \
   /* subversion */                  \
-  XX(20L, REPORT,      REPORT)       \
-  XX(21L, MKACTIVITY,  MKACTIVITY)   \
-  XX(22L, CHECKOUT,    CHECKOUT)     \
-  XX(23L, MERGE,       MERGE)        \
+  XX(20, REPORT,      REPORT)       \
+  XX(21, MKACTIVITY,  MKACTIVITY)   \
+  XX(22, CHECKOUT,    CHECKOUT)     \
+  XX(23, MERGE,       MERGE)        \
   /* upnp */                        \
-  XX(24L, MSEARCH,     M-SEARCH)     \
-  XX(25L, NOTIFY,      NOTIFY)       \
-  XX(26L, SUBSCRIBE,   SUBSCRIBE)    \
-  XX(27L, UNSUBSCRIBE, UNSUBSCRIBE)  \
+  XX(24, MSEARCH,     M-SEARCH)     \
+  XX(25, NOTIFY,      NOTIFY)       \
+  XX(26, SUBSCRIBE,   SUBSCRIBE)    \
+  XX(27, UNSUBSCRIBE, UNSUBSCRIBE)  \
   /* RFC-5789 */                    \
-  XX(28L, PATCH,       PATCH)        \
-  XX(29L, PURGE,       PURGE)        \
+  XX(28, PATCH,       PATCH)        \
+  XX(29, PURGE,       PURGE)        \
   /* CalDAV */                      \
-  XX(30L, MKCALENDAR,  MKCALENDAR)   \
+  XX(30, MKCALENDAR,  MKCALENDAR)   \
   /* RFC-2068, section 19.6.1.2 */  \
-  XX(31L, LINK,        LINK)         \
-  XX(32L, UNLINK,      UNLINK)       \
+  XX(31, LINK,        LINK)         \
+  XX(32, UNLINK,      UNLINK)       \
   /* icecast */                     \
-  XX(33L, SOURCE,      SOURCE)       \
+  XX(33, SOURCE,      SOURCE)       \
 
 enum http_method
   {
@@ -296,12 +292,12 @@ enum http_errno {
 
 struct http_parser {
   /** PRIVATE **/
-  unsigned long type : 2;         /* enum http_parser_type */
-  unsigned long flags : 8;        /* F_* values from 'flags' enum; semi-public */
-  unsigned long state : 7;        /* enum state from http_parser.c */
-  unsigned long header_state : 7; /* enum header_state from http_parser.c */
-  unsigned long index : 7;        /* index into current matcher */
-  unsigned long lenient_http_headers : 1;
+  unsigned int type : 2;         /* enum http_parser_type */
+  unsigned int flags : 8;        /* F_* values from 'flags' enum; semi-public */
+  unsigned int state : 7;        /* enum state from http_parser.c */
+  unsigned int header_state : 7; /* enum header_state from http_parser.c */
+  unsigned int index : 7;        /* index into current matcher */
+  unsigned int lenient_http_headers : 1;
 
   uint32_t nread;          /* # bytes read in various scenarios */
   uint64_t content_length; /* # bytes in body (0 if no Content-Length header) */
@@ -309,16 +305,16 @@ struct http_parser {
   /** READ-ONLY **/
   unsigned short http_major;
   unsigned short http_minor;
-  unsigned long status_code : 16; /* responses only */
-  unsigned long method : 8;       /* requests only */
-  unsigned long http_errno : 7;
+  unsigned int status_code : 16; /* responses only */
+  unsigned int method : 8;       /* requests only */
+  unsigned int http_errno : 7;
 
   /* 1 = Upgrade header was present and the parser has exited because of that.
    * 0 = No upgrade header present.
    * Should be checked when http_parser_execute() returns in addition to
    * error checking.
    */
-  unsigned long upgrade : 1;
+  unsigned int upgrade : 1;
 
   /** PUBLIC **/
   void *data; /* A pointer to get hook to the "connection" or "socket" object */
@@ -343,14 +339,14 @@ struct http_parser_settings {
 
 
 enum http_parser_url_fields
-  { UF_SCHEMA           = 0L
-  , UF_HOST             = 1L
-  , UF_PORT             = 2L
-  , UF_PATH             = 3L
-  , UF_QUERY            = 4L
-  , UF_FRAGMENT         = 5L
-  , UF_USERINFO         = 6L
-  , UF_MAX              = 7L
+  { UF_SCHEMA           = 0
+  , UF_HOST             = 1
+  , UF_PORT             = 2
+  , UF_PATH             = 3
+  , UF_QUERY            = 4
+  , UF_FRAGMENT         = 5
+  , UF_USERINFO         = 6
+  , UF_MAX              = 7
   };
 
 
@@ -406,10 +402,13 @@ size_t http_parser_execute(http_parser *parser,
  * If you are the server, respond with the "Connection: close" header.
  * If you are the client, close the connection.
  */
-long http_should_keep_alive(const http_parser *parser);
+int http_should_keep_alive(const http_parser *parser);
 
 /* Returns a string version of the HTTP method. */
 const char *http_method_str(enum http_method m);
+
+/* Returns a string version of the HTTP status code. */
+const char *http_status_str(enum http_status s);
 
 /* Return a string name of the given error */
 const char *http_errno_name(enum http_errno err);
@@ -421,15 +420,18 @@ const char *http_errno_description(enum http_errno err);
 void http_parser_url_init(struct http_parser_url *u);
 
 /* Parse a URL; return nonzero on failure */
-long http_parser_parse_url(const char *buf, size_t buflen,
-                          long is_connect,
+int http_parser_parse_url(const char *buf, size_t buflen,
+                          int is_connect,
                           struct http_parser_url *u);
 
 /* Pause or un-pause the parser; a nonzero value pauses */
-void http_parser_pause(http_parser *parser, long paused);
+void http_parser_pause(http_parser *parser, int paused);
 
 /* Checks if this is the final chunk of the body. */
-long http_body_is_final(const http_parser *parser);
+int http_body_is_final(const http_parser *parser);
+
+/* Change the maximum header size provided at compile time. */
+void http_parser_set_max_header_size(uint32_t size);
 
 #ifdef __cplusplus
 }
