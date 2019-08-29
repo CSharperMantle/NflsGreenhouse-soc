@@ -26,6 +26,7 @@
 #include <logger.hpp>
 #include <http_parser.h>
 #include "marco.hpp"
+#include "helper.hpp"
 
 const PROGMEM int offlineAirTempSwitchValveLow = 10;
 const PROGMEM int offlineAirTempSwitchValveHigh = 30;
@@ -333,63 +334,21 @@ void loop() {
         cJSON_AddItemToArray(data, data_light_value);
         cJSON_AddItemToArray(data, data_ground_hum);
 
-        cJSON *state = cJSON_AddArrayToObject(root, "state");
-        cJSON *state_water = cJSON_CreateObject();         
-        cJSON *state_fan_one = cJSON_CreateObject();
-        cJSON *state_fan_two = cJSON_CreateObject();
-        cJSON *state_air = cJSON_CreateObject();
-        cJSON *state_windows_side_open = cJSON_CreateObject();
-        cJSON *state_windows_side_close = cJSON_CreateObject();
-        cJSON *state_windows_one_open = cJSON_CreateObject();
-        cJSON *state_windows_one_close = cJSON_CreateObject();
-        cJSON *state_windows_two_open = cJSON_CreateObject();
-        cJSON *state_windows_two_close = cJSON_CreateObject();
-        cJSON *state_sheet_outer_open = cJSON_CreateObject();
-        cJSON *state_sheet_outer_close = cJSON_CreateObject();
-        cJSON *state_sheet_inner_open = cJSON_CreateObject();
-        cJSON *state_sheet_inner_close = cJSON_CreateObject();
-        cJSON_AddItemToObject(state_water, "pin_id", cJSON_CreateNumber(22));
-        cJSON_AddItemToObject(state_water, "state", cJSON_CreateNumber(pinState[0]));
-        cJSON_AddItemToObject(state_fan_one, "pin_id", cJSON_CreateNumber(23));
-        cJSON_AddItemToObject(state_fan_one, "state", cJSON_CreateNumber(pinState[1]));
-        cJSON_AddItemToObject(state_fan_two, "pin_id", cJSON_CreateNumber(24));
-        cJSON_AddItemToObject(state_fan_two, "state", cJSON_CreateNumber(pinState[2]));
-        cJSON_AddItemToObject(state_air, "pin_id", cJSON_CreateNumber(25));
-        cJSON_AddItemToObject(state_air, "state", cJSON_CreateNumber(pinState[3]));
-        cJSON_AddItemToObject(state_windows_side_open, "pin_id", cJSON_CreateNumber(26));
-        cJSON_AddItemToObject(state_windows_side_open, "state", cJSON_CreateNumber(pinState[4]));
-        cJSON_AddItemToObject(state_windows_side_close, "pin_id", cJSON_CreateNumber(27));
-        cJSON_AddItemToObject(state_windows_side_close, "state", cJSON_CreateNumber(pinState[5]));
-        cJSON_AddItemToObject(state_windows_one_open, "pin_id", cJSON_CreateNumber(28));
-        cJSON_AddItemToObject(state_windows_one_open, "state", cJSON_CreateNumber(pinState[6]));
-        cJSON_AddItemToObject(state_windows_one_close, "pin_id", cJSON_CreateNumber(29));
-        cJSON_AddItemToObject(state_windows_one_close, "state", cJSON_CreateNumber(pinState[7]));
-        cJSON_AddItemToObject(state_windows_two_open, "pin_id", cJSON_CreateNumber(30));
-        cJSON_AddItemToObject(state_windows_two_open, "state", cJSON_CreateNumber(pinState[8]));
-        cJSON_AddItemToObject(state_windows_two_close, "pin_id", cJSON_CreateNumber(31));
-        cJSON_AddItemToObject(state_windows_two_close, "state", cJSON_CreateNumber(pinState[9]));
-        cJSON_AddItemToObject(state_sheet_outer_open, "pin_id", cJSON_CreateNumber(32));
-        cJSON_AddItemToObject(state_sheet_outer_open, "state", cJSON_CreateNumber(pinState[10]));
-        cJSON_AddItemToObject(state_sheet_outer_close, "pin_id", cJSON_CreateNumber(33));
-        cJSON_AddItemToObject(state_sheet_outer_close, "state", cJSON_CreateNumber(pinState[11]));
-        cJSON_AddItemToObject(state_sheet_inner_open, "pin_id", cJSON_CreateNumber(34));
-        cJSON_AddItemToObject(state_sheet_inner_open, "state", cJSON_CreateNumber(pinState[12]));
-        cJSON_AddItemToObject(state_sheet_inner_close, "pin_id", cJSON_CreateNumber(35));
-        cJSON_AddItemToObject(state_sheet_inner_close, "state", cJSON_CreateNumber(pinState[13]));
-        cJSON_AddItemToArray(state, state_water);        
-        cJSON_AddItemToArray(state, state_fan_one);
-        cJSON_AddItemToArray(state, state_fan_two);
-        cJSON_AddItemToArray(state, state_air);
-        cJSON_AddItemToArray(state, state_windows_side_open);
-        cJSON_AddItemToArray(state, state_windows_side_close);
-        cJSON_AddItemToArray(state, state_windows_one_open);
-        cJSON_AddItemToArray(state, state_windows_one_close);
-        cJSON_AddItemToArray(state, state_windows_two_open);
-        cJSON_AddItemToArray(state, state_windows_two_close);
-        cJSON_AddItemToArray(state, state_sheet_outer_open);
-        cJSON_AddItemToArray(state, state_sheet_outer_close);
-        cJSON_AddItemToArray(state, state_sheet_inner_open);
-        cJSON_AddItemToArray(state, state_sheet_inner_close);
+        cJSON *state_arr = cJSON_AddArrayToObject(root, "state_arr");
+        hlp_cJSON_appendPinStateToArray(state_arr, waterPumpPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, fanOnePin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, fanTwoPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, airCoolerPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, sideWindowOpenPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, sideWindowClosePin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, topWindowOneOpenPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, topWindowOneClosePin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, topWindowTwoOpenPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, topWindowTwoClosePin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, skySheetOuterOpenPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, skySheetOuterClosePin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, skySheetInnerOpenPin, pinState);
+        hlp_cJSON_appendPinStateToArray(state_arr, skySheetInnerClosePin, pinState);
 
         size_t packet_len = snprintf(NULL, 0, postPacketTemplate,
                 webServerAddress, cJSON_Print(root)) + 1; // +1 for the terminating NULL
@@ -398,6 +357,9 @@ void loop() {
                 webServerAddress, cJSON_Print(root));
         web_uploader.print(buf);
         FREE_HEAP(buf);
+
+        cJSON_Delete(root);
+        root = NULL;
 
         String respond = web_uploader.readString();
         http_parser_init(&req_res_parser, HTTP_RESPONSE);
