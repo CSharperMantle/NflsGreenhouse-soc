@@ -316,23 +316,11 @@ void loop() {
         cJSON_AddItemToObject(timestamp, "minute", cJSON_CreateNumber(calen.tm_min));
         cJSON_AddItemToObject(timestamp, "second", cJSON_CreateNumber(calen.tm_sec));
 
-        cJSON *data = cJSON_AddArrayToObject(root, "data");
-        cJSON *data_air_temp = cJSON_CreateObject();
-        cJSON *data_air_hum = cJSON_CreateObject();
-        cJSON *data_light_value = cJSON_CreateObject();
-        cJSON *data_ground_hum = cJSON_CreateObject();
-        cJSON_AddItemToObject(data_air_temp, "data_type", cJSON_CreateNumber(0));
-        cJSON_AddItemToObject(data_air_temp, "data_content", cJSON_CreateNumber(currentAirTemp));
-        cJSON_AddItemToObject(data_air_hum, "data_type", cJSON_CreateNumber(1));
-        cJSON_AddItemToObject(data_air_hum, "data_content", cJSON_CreateNumber(currentAirHum));
-        cJSON_AddItemToObject(data_light_value, "data_type", cJSON_CreateNumber(2));
-        cJSON_AddItemToObject(data_light_value, "data_content", cJSON_CreateNumber(currentLightValue));
-        cJSON_AddItemToObject(data_ground_hum, "data_type", cJSON_CreateNumber(3));
-        cJSON_AddItemToObject(data_ground_hum, "data_content", cJSON_CreateNumber(currentGroundHum));
-        cJSON_AddItemToArray(data, data_air_temp);
-        cJSON_AddItemToArray(data, data_air_hum);
-        cJSON_AddItemToArray(data, data_light_value);
-        cJSON_AddItemToArray(data, data_ground_hum);
+        cJSON *data_arr = cJSON_AddArrayToObject(root, "data");
+        hlp_cJSON_appendSensorDataToArray(data_arr, 0, currentAirTemp);
+        hlp_cJSON_appendSensorDataToArray(data_arr, 1, currentAirHum);
+        hlp_cJSON_appendSensorDataToArray(data_arr, 2, currentLightValue);
+        hlp_cJSON_appendSensorDataToArray(data_arr, 3, currentGroundHum);
 
         cJSON *state_arr = cJSON_AddArrayToObject(root, "state_arr");
         hlp_cJSON_appendPinStateToArray(state_arr, waterPumpPin, pinState);
