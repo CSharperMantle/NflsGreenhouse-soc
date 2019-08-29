@@ -120,18 +120,18 @@ void parseJsonCJson(const char *str) {
         {
             case ActionType::RELAY_ACTION: 
             {
-                    int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
-                    int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
-                    pinMode(target_id, OUTPUT);
-                    if (param == 0) {
-                        logger.Debug(String("OFF action on ") + String(target_id));
-                        digitalWrite(target_id, LOW);
-                        pinState[target_id] = false;
-                    } else {
-                        logger.Debug(String("ON action on ") + String(target_id));
-                        digitalWrite(target_id, HIGH);
-                        pinState[target_id] = true;
-                    }
+                int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
+                int param = atoi(cJSON_GetObjectItemCaseSensitive(each_action, "param")->valuestring);
+                pinMode(target_id, OUTPUT);
+                if (param == 0) {
+                    logger.Debug(String("OFF action on ") + String(target_id));
+                    digitalWrite(target_id, LOW);
+                    pinState[target_id] = false;
+                } else {
+                    logger.Debug(String("ON action on ") + String(target_id));
+                    digitalWrite(target_id, HIGH);
+                    pinState[target_id] = true;
+                }
             }
             break;
             case ActionType::DEVICE_ACTION:
@@ -159,7 +159,7 @@ void parseJsonCJson(const char *str) {
                 //TODO: Add retransmitter
                 logger.Debug("RETRANS action");
             }
-                break;
+            break;
             case ActionType::LCD_BACKLIGHT_SET: 
             {
                     int target_id = cJSON_GetObjectItemCaseSensitive(each_action, "target_id")->valueint;
@@ -172,7 +172,7 @@ void parseJsonCJson(const char *str) {
             {
                 logger.Debug(String("Unknown JSON action received: ") + String(action_type));
             }
-                break;
+            break;
         }
     }
     logger.Debug("    ACTIVITIES EXECUTED");
