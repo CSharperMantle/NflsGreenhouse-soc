@@ -16,12 +16,8 @@ public:
         this->serial = pHardwareSerial;
         this->loggingLevel = loggingLevel;
     }
-    Logger(HardwareSerial hardwareSerial, LoggingLevel loggingLevel) {
-        this->serial = &hardwareSerial;
-        this->loggingLevel = loggingLevel;
-    }
     ~Logger() {
-        this->serial = NULL;
+        this->serial = nullptr;
     }
 
     void Info(const char *str) {
@@ -58,7 +54,7 @@ public:
             this->serial->println(String("[ERROR]>> ") + str);
     }
 private:
-    HardwareSerial *serial = NULL;
+    HardwareSerial *serial = nullptr;
     LoggingLevel loggingLevel = LoggingLevel::ERROR;
 };
 

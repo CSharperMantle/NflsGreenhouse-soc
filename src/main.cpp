@@ -86,7 +86,7 @@ EthernetClient web_uploader;
 http_parser_settings req_res_parser_settings;
 http_parser req_res_parser;
 struct ServerResponse {
-    char *body = NULL;
+    char *body = nullptr;
 };
 ServerResponse server_response;
 Logger logger(&Serial, LoggingLevel::INFO);
@@ -339,7 +339,7 @@ void loop() {
         hlp_cJSON_appendPinStateToArray(state_arr, skySheetInnerOpenPin, pinState);
         hlp_cJSON_appendPinStateToArray(state_arr, skySheetInnerClosePin, pinState);
 
-        size_t packet_len = snprintf(NULL, 0, postPacketTemplate,
+        size_t packet_len = snprintf(nullptr, 0, postPacketTemplate,
                 webServerAddress, cJSON_Print(root)) + 1; // +1 for the terminating NULL
         char *buf = MALLOC_HEAP(packet_len, char);
         snprintf(buf, packet_len, postPacketTemplate,
@@ -348,7 +348,7 @@ void loop() {
         FREE_HEAP(buf);
 
         cJSON_Delete(root);
-        root = NULL;
+        root = nullptr;
 
         String respond = web_uploader.readString();
         http_parser_init(&req_res_parser, HTTP_RESPONSE);
